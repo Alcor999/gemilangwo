@@ -1,0 +1,258 @@
+================================================================================
+                         JAWABAN PERTANYAAN
+================================================================================
+
+PERTANYAAN:
+  "Pending review ini masuk kemana?"
+  (Where do pending reviews go?)
+
+================================================================================
+                              JAWABAN:
+================================================================================
+
+ADMIN DASHBOARD → TESTIMONIAL APPROVALS
+Path: /admin/testimonials
+
+================================================================================
+CARA AKSES:
+================================================================================
+
+1. Login sebagai Admin
+2. Lihat Sidebar → Bagian "Media & Content"
+3. Klik "⭐ Testimonial Approvals"
+4. Atau langsung buka: http://127.0.0.1:8000/admin/testimonials
+
+================================================================================
+TAMPILAN DASHBOARD:
+================================================================================
+
+[ADMIN DASHBOARD]
+├── Tab 1: PENDING REVIEW (Orange Badge)
+│   ├── Menampilkan testimonial yang menunggu persetujuan
+│   ├── Kolom-kolom: Thumbnail, Title, Customer, Rating, Timestamp
+│   ├── Tombol Aksi:
+│   │   ├── 👁️  View   → Lihat detail lengkap
+│   │   ├── ✅ Approve → Terbitkan di homepage
+│   │   └── ❌ Reject  → Hapus testimoni
+│   │
+│   └── Pagination: 15 item per halaman
+│
+└── Tab 2: PUBLISHED (Green Badge)
+    ├── Menampilkan testimonial yang sudah disetujui
+    ├── Kolom-kolom: Thumbnail, Title, Customer, Rating, Views
+    ├── Tombol Aksi:
+    │   ├── 👁️  View      → Lihat detail lengkap
+    │   ├── ⭐ Feature   → Jadikan unggulan di homepage
+    │   └── 🗑️  Delete    → Hapus testimonial
+    │
+    └── Pagination: 15 item per halaman
+
+================================================================================
+STATUS FLOW:
+================================================================================
+
+Customer Submit Testimonial
+         ↓
+    is_active = 0
+         ↓
+   "Pending Review"
+   (Orange Badge)
+         ↓
+Admin Melihat di Dashboard
+   /admin/testimonials
+         ↓
+    PILIHAN:
+    ├─→ APPROVE
+    │    └─→ is_active = 1
+    │         └─→ "Published"
+    │              └─→ Muncul di Homepage
+    │
+    └─→ REJECT
+         └─→ Deleted from Database
+              └─→ Video File Dihapus
+
+================================================================================
+FITUR ADMIN:
+================================================================================
+
+PENDING REVIEW TAB:
+  ✅ Lihat semua testimonial yang menunggu
+  ✅ Klik kartu untuk lihat detail lengkap
+  ✅ Tombol Approve untuk terbitkan
+  ✅ Tombol Reject untuk hapus dengan alasan (opsional)
+  ✅ Lihat customer, rating, deskripsi preview
+
+PUBLISHED TAB:
+  ✅ Lihat semua testimonial yang sudah disetujui
+  ✅ Lihat view count berapa kali ditonton
+  ✅ Tombol Feature untuk jadikan unggulan
+  ✅ Tombol Unfeature untuk bukan unggulan lagi
+  ✅ Tombol Delete untuk hapus testimonial
+
+DETAIL PAGE:
+  ✅ Preview full video (YouTube atau upload)
+  ✅ Lihat customer info dengan avatar
+  ✅ Rating 5 bintang
+  ✅ Full deskripsi testimonial
+  ✅ Link ke order pelanggan
+  ✅ View count counter
+  ✅ Status badges
+
+================================================================================
+DATABASE FIELDS:
+================================================================================
+
+Kolom Penting di Table video_testimonials:
+
+is_active = 0 (FALSE)
+  → Status: "Pending Review" (Orange)
+  → Lokasi: Pending Review tab di Admin Dashboard
+  → Aksi: Approve atau Reject
+
+is_active = 1 (TRUE)
+  → Status: "Published" (Green)
+  → Lokasi: Published tab di Admin Dashboard
+  → Lokasi: Homepage di section "Our Couples' Stories"
+  → Aksi: Feature, Unfeature, atau Delete
+
+is_featured = 1 (TRUE)
+  → Status: "Featured" (Star Badge ⭐)
+  → Lokasi: Featured section di homepage
+  → Aksi: Unfeature untuk hilangkan
+
+================================================================================
+FITUR LENGKAP:
+================================================================================
+
+✅ APPROVE (Setujui & Terbitkan)
+   - Tombol: "✅ Approve"
+   - Action: Set is_active = true
+   - Hasil: Testimonial muncul di homepage
+   - AJAX: Tidak perlu refresh halaman
+
+✅ REJECT (Tolak & Hapus)
+   - Tombol: "❌ Reject"
+   - Modal: Tanyakan alasan (opsional)
+   - Action: Delete dari database
+   - Hasil: Video file otomatis terhapus
+
+✅ FEATURE (Jadikan Unggulan)
+   - Tombol: "⭐ Feature"
+   - Action: Set is_featured = true
+   - Hasil: Muncul di featured section homepage
+   - Bisa di-feature sebelum atau sesudah approval
+
+✅ UNFEATURE (Buka Featured)
+   - Tombol: "⭐ Unfeature"
+   - Action: Set is_featured = false
+   - Hasil: Hilang dari featured section
+   - Tetap published di homepage
+
+✅ DELETE (Hapus Permanen)
+   - Tombol: "🗑️ Delete"
+   - Modal: Confirmation dialog
+   - Action: Hapus dari database
+   - Hasil: Video dan thumbnail file dihapus
+
+================================================================================
+CONTOH ALUR:
+================================================================================
+
+SCENARIO 1: Approve Testimonial
+───────────────────────────────
+1. Admin buka /admin/testimonials
+2. Lihat "Pending Review" tab
+3. Lihat kartu: "Our Dream Wedding!" dari "Budi Santoso" (5 bintang)
+4. Klik tombol "✅ Approve"
+5. AJAX request → is_active = true
+6. Testimonial pindah ke "Published" tab
+7. Muncul di homepage section "Our Couples' Stories"
+
+SCENARIO 2: Reject Testimonial
+───────────────────────────────
+1. Admin buka /admin/testimonials
+2. Lihat testimonial di "Pending Review"
+3. Klik "❌ Reject"
+4. Modal terbuka: "Alasan penolakan (opsional)?"
+5. Isi alasan jika perlu
+6. Klik "Reject & Delete"
+7. Testimonial dihapus dari database
+8. Video file otomatis terhapus
+
+SCENARIO 3: Feature Testimonial
+────────────────────────────────
+1. Admin buka /admin/testimonials
+2. Lihat testimonial di "Published" tab
+3. Klik "⭐ Feature"
+4. Testimonial mendapat badge ⭐
+5. Muncul di featured section homepage
+6. Bisa "Unfeature" kapan saja
+
+================================================================================
+ROUTE & URL:
+================================================================================
+
+/admin/testimonials
+  → Index: Lihat semua testimonial (pending & published)
+  → Methods: index()
+
+/admin/testimonials/{id}
+  → Show: Lihat detail satu testimonial
+  → Methods: show()
+
+POST /admin/testimonials/{id}/approve
+  → Approve: Terbitkan testimonial
+  → Methods: approve()
+
+POST /admin/testimonials/{id}/reject
+  → Reject: Hapus testimonial
+  → Methods: reject()
+
+POST /admin/testimonials/{id}/feature
+  → Feature: Jadikan unggulan
+  → Methods: feature()
+
+POST /admin/testimonials/{id}/unfeature
+  → Unfeature: Buka unggulan
+  → Methods: unfeature()
+
+================================================================================
+INTEGRASI KE SISTEM:
+================================================================================
+
+HOMEPAGE:
+  - Section: "Our Couples' Stories"
+  - Query: where(is_active, true)->latest()->limit(6)
+  - Display: Card grid dengan thumbnail, rating, nama customer
+  - Interaksi: Click → GLightbox modal → Play video
+
+CUSTOMER DASHBOARD (My Testimonials):
+  - Show: Semua testimonial milik customer
+  - Status: Pending Review atau Published
+  - Badge: "Pending Review" (orange) atau "Featured" (star)
+  - Actions: Edit atau Delete
+
+ADMIN SIDEBAR:
+  - Menu: "⭐ Testimonial Approvals"
+  - Section: "Media & Content"
+  - Link: route('admin.testimonials.index')
+
+================================================================================
+KEAMANAN:
+================================================================================
+
+✅ Authentication: Login diperlukan
+✅ Authorization: Hanya admin yang bisa akses
+✅ CSRF Protection: Token di semua form
+✅ Input Validation: Semua input divalidasi
+✅ File Security: File type & size checking
+✅ Cleanup: File otomatis dihapus saat delete
+
+================================================================================
+STATUS: ✅ PRODUCTION READY
+================================================================================
+
+Sistem Testimonial Approval sudah lengkap dan siap digunakan.
+Admin dapat mengelola testimonial pelanggan dengan interface yang user-friendly.
+
+================================================================================
