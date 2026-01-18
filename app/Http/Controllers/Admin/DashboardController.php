@@ -15,7 +15,7 @@ class DashboardController extends Controller
         $total_orders = Order::count();
         $total_customers = User::where('role', 'customer')->count();
         $total_packages = Package::count();
-        $total_revenue = Order::where('status', 'completed')->sum('total_price');
+        $total_revenue = Order::whereIn('status', ['confirmed', 'completed'])->sum('total_price');
         
         $recent_orders = Order::with(['user', 'package'])
             ->latest()

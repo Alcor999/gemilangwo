@@ -285,6 +285,48 @@ class CalendarController extends Controller
     }
 
     /**
+     * Export single calendar event to iCal
+     */
+    public function exportEvent(CalendarEvent $event)
+    {
+        // Check if user is authorized (owner of the order)
+        if ($event->order->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        $startDate = $event->event_start ?? $event->event_date;
+        $endDate = $event->event_end ?? $event->event_date;
+
+        $content = "BEGIN:VCALENDAR\r\n";
+        $content .= "VERSION:2.0\r\n";
+        $content .= "PRODID:-//Wedding App//My Wedding Event//EN\r\n";
+        $content .= "CALSCALE:GREGORIAN\r\n";
+        $content .= "METHOD:PUBLISH\r\n";
+        $content .= "X-WR-CALNAME:" . $this->escapeString($event->package->name) . "\r\n";
+        $content .= "X-WR-TIMEZONE:Asia/Jakarta\r\n";
+        $content .= "BEGIN:VEVENT\r\n";
+        $content .= "UID:event-" . $event->id . "@gemilangwo.com\r\n";
+        $content .= "DTSTAMP:" . now()->format('Ymd\THis\Z') . "\r\n";
+        $content .= "DTSTART;VALUE=DATE:" . $startDate->format('Ymd') . "\r\n";
+        $content .= "DTEND;VALUE=DATE:" . $endDate->addDay()->format('Ymd') . "\r\n";
+        $content .= "SUMMARY:" . $this->escapeString("Acara: " . $event->package->name) . "\r\n";
+        $content .= "DESCRIPTION:" . $this->escapeString($this->buildEventDescription($event)) . "\r\n";
+        $content .= "LOCATION:" . $this->escapeString($event->order->event_location ?? '') . "\r\n";
+        $content .= "STATUS:CONFIRMED\r\n";
+        $content .= "TRANSP:OPAQUE\r\n";
+        $content .= "COLOR:#22c55e\r\n";
+        $content .= "END:VEVENT\r\n";
+        $content .= "END:VCALENDAR\r\n";
+
+        $filename = "event-" . $event->id . "-" . $event->event_date->format('Y-m-d') . ".ics";
+
+        return response($content, 200)
+            ->header('Content-Type', 'text/calendar')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"')
+            ->header('Pragma', 'no-cache');
+    }
+
+    /**
      * Generate booking heatmap data
      */
     private function generateBookingHeatmap($packageId, $startOfMonth, $endOfMonth, $blockedDates, $confirmedEvents)

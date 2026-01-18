@@ -59,7 +59,7 @@
 
                 <div style="margin-bottom: 1.5rem;">
                     <p style="font-size: 0.875rem; color: #64748b; margin: 0 0 0.5rem; text-transform: uppercase; font-weight: 600;">💰 Harga Paket</p>
-                    <p style="font-size: 1.5rem; font-weight: 700; color: #10b981; margin: 0;">Rp {{ number_format($event->package->base_price, 0, ',', '.') }}</p>
+                    <p style="font-size: 1.5rem; font-weight: 700; color: #10b981; margin: 0;">Rp {{ number_format($event->package->price, 0, ',', '.') }}</p>
                 </div>
 
                 <div style="margin-bottom: 1.5rem;">
