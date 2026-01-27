@@ -83,6 +83,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::post('/orders/{order}/cancel', [AdminOrderController::class, 'cancel'])->name('orders.cancel');
     
+    // Payment Verification (integrated in orders)
+    Route::post('/payments/{payment}/approve', [AdminOrderController::class, 'approvePayment'])->name('payments.approve');
+    Route::post('/payments/{payment}/reject', [AdminOrderController::class, 'rejectPayment'])->name('payments.reject');
+    
     // User Management
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
     Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
@@ -142,6 +146,14 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
     Route::post('/orders', [CustomerOrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [CustomerOrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/cancel', [CustomerOrderController::class, 'cancel'])->name('orders.cancel');
+    
+    // Payment Routes
+    Route::get('/orders/{order}/payment', [CustomerOrderController::class, 'payment'])->name('orders.payment');
+    Route::post('/orders/{order}/select-bank', [CustomerOrderController::class, 'selectBank'])->name('orders.selectBank');
+    Route::get('/orders/{order}/payment-confirm', [CustomerOrderController::class, 'paymentConfirm'])->name('orders.paymentConfirm');
+    
+    // Notification (Midtrans backward compatibility)
+    Route::post('/orders/payment/notification', [CustomerOrderController::class, 'notification'])->name('orders.notification');
     
     // Reviews
     Route::get('/reviews', [CustomerReviewController::class, 'index'])->name('reviews.index');

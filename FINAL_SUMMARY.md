@@ -178,9 +178,9 @@ gemilangwo/
 ## 🎨 Design Highlights
 
 ### Colors
-- **Primary**: #8b5cf6 (Purple)
-- **Secondary**: #ec4899 (Pink)
-- **Gradient**: Purple → Pink
+- **Primary**: #b8860b (Gold)
+- **Secondary**: #8b7355 (Brown)
+- **Gradient**: Gold → Brown
 
 ### Typography
 - Font: Poppins (Google Fonts)

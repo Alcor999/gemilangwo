@@ -16,9 +16,14 @@ class Payment extends Model
     protected $fillable = [
         'order_id',
         'payment_id',
+        'bank_id',
         'payment_method',
         'amount',
         'status',
+        'payment_proof_path',
+        'verification_status',
+        'verified_by',
+        'verification_notes',
         'midtrans_response',
         'paid_at',
     ];
@@ -66,6 +71,16 @@ class Payment extends Model
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
+    }
+
+    public function verifiedBy()
+    {
+        return $this->belongsTo(User::class, 'verified_by');
     }
 
     // Methods

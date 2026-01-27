@@ -35,10 +35,16 @@ class PackageController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'max_guests' => 'nullable|integer|min:1',
-            'features' => 'nullable|json',
+            'features' => 'nullable|array',
+            'features.*' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|in:active,inactive',
         ]);
+
+        // Convert features array to JSON
+        if (isset($validated['features']) && is_array($validated['features'])) {
+            $validated['features'] = json_encode(array_filter($validated['features']));
+        }
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -71,10 +77,16 @@ class PackageController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'max_guests' => 'nullable|integer|min:1',
-            'features' => 'nullable|json',
+            'features' => 'nullable|array',
+            'features.*' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|in:active,inactive',
         ]);
+
+        // Convert features array to JSON
+        if (isset($validated['features']) && is_array($validated['features'])) {
+            $validated['features'] = json_encode(array_filter($validated['features']));
+        }
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');

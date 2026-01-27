@@ -113,7 +113,7 @@
 
 <style>
     .bg-gradient {
-        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+        background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%);
     }
 </style>
 @endsection

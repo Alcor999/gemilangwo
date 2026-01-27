@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #8b5cf6;
-            --secondary-color: #ec4899;
+            --primary-color: #b8860b;
+            --secondary-color: #8b7355;
         }
         
         * {
@@ -130,7 +130,7 @@
         }
 
         .sidebar .nav-link.active {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(184, 134, 11, 0.1) 0%, rgba(139, 115, 85, 0.05) 100%);
             color: var(--primary-color);
             border-left-color: var(--primary-color);
             font-weight: 600;
@@ -191,7 +191,7 @@
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+            background: linear-gradient(135deg, #a67c52 0%, #c9a96e 100%);
         }
 
         .badge-status {

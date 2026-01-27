@@ -115,7 +115,7 @@
 
 <style>
     .bg-gradient {
-        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+        background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%);
     }
 
     .rating-input {
@@ -163,8 +163,8 @@
 
     #title:focus,
     #content:focus {
-        border-color: #8b5cf6;
-        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        border-color: #b8860b;
+        box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.1);
     }
 
     .form-control-lg {

@@ -6,13 +6,13 @@
     <style>
         body { font-family: Arial, sans-serif; color: #333; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%); color: white; padding: 30px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
+        .header { background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%); color: white; padding: 30px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
         .content { padding: 20px; background: #f9f9f9; border-radius: 8px; }
-        .info-box { background: white; padding: 15px; border-left: 4px solid #8b5cf6; margin: 20px 0; }
+        .info-box { background: white; padding: 15px; border-left: 4px solid #b8860b; margin: 20px 0; }
         table { width: 100%; border-collapse: collapse; }
         table td { padding: 8px; border-bottom: 1px solid #eee; }
         table td:first-child { font-weight: bold; width: 30%; }
-        .button { display: inline-block; background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+        .button { display: inline-block; background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
         .divider { border: none; border-top: 1px solid #ddd; margin: 20px 0; }
         .footer { text-align: center; color: #666; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; }
         .success-badge { background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 4px; font-size: 12px; }

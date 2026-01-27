@@ -48,18 +48,103 @@
 
                     <hr>
 
-                    <h6 class="mb-3">Payment</h6>
+                    <h6 class="mb-3">Payment & Verification</h6>
                     <div class="row">
                         <div class="col-md-12">
                             @if($order->payment)
-                                <p><strong>Payment Status:</strong> <span class="badge bg-{{ $order->payment->isSuccess() ? 'success' : 'warning' }}">{{ ucfirst($order->payment->status) }}</span></p>
-                                <p><strong>Payment Method:</strong> {{ ucfirst(str_replace('_', ' ', $order->payment->payment_method ?? 'N/A')) }}</p>
-                                <p><strong>Amount:</strong> Rp {{ number_format($order->payment->amount, 0, ',', '.') }}</p>
-                                @if($order->payment->paid_at)
-                                    <p><strong>Paid On:</strong> {{ $order->payment->paid_at->format('d M Y H:i') }}</p>
-                                @endif
+                                <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #b8860b;">
+                                    <!-- Payment Header -->
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <p class="mb-1"><strong>Payment Status:</strong> <span class="badge bg-{{ $order->payment->isSuccess() ? 'success' : 'warning' }}">{{ ucfirst($order->payment->status) }}</span></p>
+                                            <p class="mb-1"><strong>Payment Method:</strong> {{ ucfirst(str_replace('_', ' ', $order->payment->payment_method ?? 'N/A')) }}</p>
+                                        </div>
+                                        <div>
+                                            <span class="badge bg-{{ $order->payment->verification_status === 'verified' ? 'success' : ($order->payment->verification_status === 'rejected' ? 'danger' : 'warning') }}">
+                                                {{ ucfirst($order->payment->verification_status) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Payment Amount -->
+                                    <p class="mb-2"><strong>Amount:</strong> Rp {{ number_format($order->payment->amount, 0, ',', '.') }}</p>
+
+                                    <!-- Bank Info (if manual transfer) -->
+                                    @if($order->payment->bank)
+                                        <div style="background: white; padding: 1rem; border-radius: 6px; margin: 1rem 0;">
+                                            <p class="mb-1"><strong>Bank:</strong> {{ $order->payment->bank->name }}</p>
+                                            <p class="mb-1"><strong>Account:</strong> {{ $order->payment->bank->account_number }}</p>
+                                            <p class="mb-0"><strong>Account Holder:</strong> {{ $order->payment->bank->account_holder }}</p>
+                                        </div>
+                                    @endif
+
+                                    <!-- Paid At -->
+                                    @if($order->payment->paid_at)
+                                        <p class="mb-2"><strong>Paid On:</strong> {{ $order->payment->paid_at->format('d M Y H:i') }}</p>
+                                    @endif
+
+                                    <!-- Verification Section -->
+                                    @if($order->payment->verification_status === 'pending')
+                                        <div style="border-top: 1px solid #dee2e6; padding-top: 1rem; margin-top: 1rem;">
+                                            <h6 class="mb-3"><i class="fas fa-check-circle me-2"></i>Verify Payment</h6>
+                                            
+                                            <!-- Approval Form -->
+                                            <form action="{{ route('admin.payments.approve', $order->payment->id) }}" method="POST" class="mb-2">
+                                                @csrf
+                                                <div class="mb-2">
+                                                    <textarea name="notes" class="form-control form-control-sm" rows="2" placeholder="Verification notes (optional)"></textarea>
+                                                </div>
+                                                <button type="submit" class="btn btn-sm btn-success w-100" onclick="return confirm('Approve this payment?');">
+                                                    <i class="fas fa-check me-1"></i>Approve Payment
+                                                </button>
+                                            </form>
+
+                                            <!-- Rejection Form -->
+                                            <button type="button" class="btn btn-sm btn-danger w-100" data-bs-toggle="collapse" data-bs-target="#rejectForm">
+                                                <i class="fas fa-times me-1"></i>Reject Payment
+                                            </button>
+
+                                            <div class="collapse mt-2" id="rejectForm">
+                                                <form action="{{ route('admin.payments.reject', $order->payment->id) }}" method="POST">
+                                                    @csrf
+                                                    <div class="mb-2">
+                                                        <textarea name="reason" class="form-control form-control-sm" rows="2" placeholder="Reason for rejection" required></textarea>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-sm btn-danger w-100" onclick="return confirm('Reject this payment? Customer will be notified.');">
+                                                        <i class="fas fa-times me-1"></i>Confirm Rejection
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    @elseif($order->payment->verification_status === 'verified')
+                                        <div style="border-top: 1px solid #dee2e6; padding-top: 1rem; margin-top: 1rem;">
+                                            <div class="alert alert-success mb-0">
+                                                <strong><i class="fas fa-check-circle me-2"></i>Payment Verified</strong><br>
+                                                <small>
+                                                    Verified by: <strong>{{ $order->payment->verifiedBy?->name ?? 'System' }}</strong><br>
+                                                    @if($order->payment->verification_notes)
+                                                        Notes: {{ $order->payment->verification_notes }}
+                                                    @endif
+                                                </small>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div style="border-top: 1px solid #dee2e6; padding-top: 1rem; margin-top: 1rem;">
+                                            <div class="alert alert-danger mb-0">
+                                                <strong><i class="fas fa-times-circle me-2"></i>Payment Rejected</strong><br>
+                                                <small>
+                                                    Rejected by: <strong>{{ $order->payment->verifiedBy?->name ?? 'System' }}</strong><br>
+                                                    Reason: {{ $order->payment->verification_notes }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
                             @else
-                                <p class="text-muted">No payment yet</p>
+                                <div class="alert alert-info mb-0">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    No payment yet
+                                </div>
                             @endif
                         </div>
                     </div>

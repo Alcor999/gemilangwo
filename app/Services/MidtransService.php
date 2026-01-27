@@ -32,12 +32,12 @@ class MidtransService
         $customer_details = [
             'first_name' => $order->user->name,
             'email' => $order->user->email,
-            'phone' => $order->user->phone,
+            'phone' => $order->user->phone ?? '628123456789',  // Default if null
         ];
 
         $item_details = [
             [
-                'id' => $order->package->id,
+                'id' => 'pkg-' . $order->package->id,
                 'price' => (int)$order->package->price,
                 'quantity' => 1,
                 'name' => $order->package->name,
@@ -54,19 +54,30 @@ class MidtransService
             ];
         }
 
+        // Bank transfer configuration with VA
+        $bank_transfer = [
+            'bank' => 'bni',
+            'free_text' => [
+                'inquiry' => [
+                    'en' => 'Thank you for your wedding order',
+                ],
+            ],
+        ];
+
         $payload = [
             'transaction_details' => $transaction_details,
             'customer_details' => $customer_details,
             'item_details' => $item_details,
-            // Enable common payment methods
+            // Enable bank transfer with VA first for better compatibility
+            'bank_transfer' => $bank_transfer,
             'enabled_payments' => [
-                'credit_card',
                 'bank_transfer',
-                'bank_bca',
                 'bank_bni',
+                'bank_bca',
                 'bank_mandiri',
                 'bank_cimb',
                 'bank_bri',
+                'credit_card',
                 'echannel',
                 'permata',
                 'akulaku',
@@ -87,16 +98,16 @@ class MidtransService
      */
     public function handleNotification($notification)
     {
-        $transaction_status = $notification->transaction_status;
-        $payment_type = $notification->payment_type;
-        $order_id = $notification->order_id;
-        $transaction_id = $notification->transaction_id;
+        $transaction_status = $notification->transaction_status ?? null;
+        $payment_type = $notification->payment_type ?? null;
+        $order_id = $notification->order_id ?? null;
+        $transaction_id = $notification->transaction_id ?? null;
 
         // Find payment by order number (order_id in Midtrans = order_number)
         $order = Order::where('order_number', $order_id)->first();
 
         if (!$order) {
-            throw new \Exception('Order not found');
+            throw new \Exception('Order not found for order_id: ' . $order_id);
         }
 
         $payment = $order->payment;
@@ -108,6 +119,18 @@ class MidtransService
 
         $payment->payment_method = $payment_type;
         $payment->midtrans_response = (array)$notification;
+
+        // Handle bank transfer with VA
+        if ($payment_type === 'bank_transfer' || $payment_type === 'echannel') {
+            // Store VA details if available
+            if (isset($notification->va_numbers)) {
+                foreach ($notification->va_numbers as $va) {
+                    $payment->va_number = $va->va_number ?? null;
+                    $payment->bank = $va->bank ?? null;
+                    break;  // Store first VA
+                }
+            }
+        }
 
         if ($transaction_status == 'capture' || $transaction_status == 'settlement') {
             $payment->status = 'success';

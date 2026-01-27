@@ -67,6 +67,34 @@
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label">Package Features *</label>
+                            <div id="features-container">
+                                @php
+                                    $features = is_array($package->features) 
+                                        ? $package->features 
+                                        : json_decode($package->features, true) ?? [];
+                                @endphp
+                                @forelse($features as $feature)
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control feature-input" value="{{ $feature }}" name="features[]">
+                                        <button class="btn btn-outline-danger remove-feature" type="button">Remove</button>
+                                    </div>
+                                @empty
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control feature-input" placeholder="e.g., Dekorasi Mewah" name="features[]">
+                                        <button class="btn btn-outline-danger remove-feature" type="button">Remove</button>
+                                    </div>
+                                @endforelse
+                            </div>
+                            <button class="btn btn-sm btn-success" type="button" id="add-feature">
+                                <i class="fas fa-plus"></i> Add Feature
+                            </button>
+                            @error('features')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
                             <label for="status" class="form-label">Status *</label>
                             <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
                                 <option value="active" {{ old('status', $package->status) === 'active' ? 'selected' : '' }}>Active</option>
@@ -91,4 +119,28 @@
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('add-feature').addEventListener('click', function() {
+    const container = document.getElementById('features-container');
+    const newFeature = document.createElement('div');
+    newFeature.className = 'input-group mb-2';
+    newFeature.innerHTML = `
+        <input type="text" class="form-control feature-input" placeholder="e.g., Catering Berkualitas (3 Menu)" name="features[]">
+        <button class="btn btn-outline-danger remove-feature" type="button">Remove</button>
+    `;
+    container.appendChild(newFeature);
+    
+    newFeature.querySelector('.remove-feature').addEventListener('click', function() {
+        newFeature.remove();
+    });
+});
+
+// Remove feature functionality
+document.querySelectorAll('.remove-feature').forEach(btn => {
+    btn.addEventListener('click', function() {
+        this.parentElement.remove();
+    });
+});
+</script>
 @endsection

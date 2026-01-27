@@ -4,10 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Payment;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    protected $paymentService;
+
+    public function __construct(PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
     /**
      * Display a listing of all orders
      */
@@ -57,5 +65,43 @@ class OrderController extends Controller
 
         return redirect()->back()
             ->with('error', 'Cannot cancel an order that is not pending');
+    }
+
+    /**
+     * Approve payment
+     */
+    public function approvePayment(Request $request, Payment $payment)
+    {
+        $validated = $request->validate([
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $this->paymentService->verifyPayment(
+            $payment,
+            auth()->user(),
+            $validated['notes']
+        );
+
+        return redirect()->back()
+            ->with('success', 'Payment approved successfully');
+    }
+
+    /**
+     * Reject payment
+     */
+    public function rejectPayment(Request $request, Payment $payment)
+    {
+        $validated = $request->validate([
+            'reason' => 'required|string|max:500',
+        ]);
+
+        $this->paymentService->rejectPayment(
+            $payment,
+            auth()->user(),
+            $validated['reason']
+        );
+
+        return redirect()->back()
+            ->with('success', 'Payment rejected successfully');
     }
 }

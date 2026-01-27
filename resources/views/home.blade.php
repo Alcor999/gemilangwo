@@ -20,8 +20,8 @@
         }
 
         :root {
-            --primary: #8b5cf6;
-            --secondary: #ec4899;
+            --primary: #b8860b;
+            --secondary: #8b7355;
             --dark: #1f2937;
             --light: #f9fafb;
             --border-color: #e5e7eb;
@@ -150,12 +150,12 @@
         .package-card:hover {
             transform: translateY(-10px);
             border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+            box-shadow: 0 20px 40px rgba(184, 134, 11, 0.15);
         }
 
         .package-card.featured {
             border-color: var(--secondary);
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(139, 115, 85, 0.05) 0%, rgba(184, 134, 11, 0.05) 100%);
             transform: scale(1.05);
         }
 
@@ -289,7 +289,7 @@
 
         .package-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 25px rgba(184, 134, 11, 0.3);
         }
 
         /* Footer */
@@ -474,7 +474,7 @@
 
         .package-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 25px rgba(184, 134, 11, 0.3);
             color: white;
         }
 
@@ -485,7 +485,7 @@
         /* Why Choose Us Section */
         .features-section {
             padding: 5rem 0;
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(184, 134, 11, 0.05) 0%, rgba(139, 115, 85, 0.05) 100%);
         }
 
         .feature-item {

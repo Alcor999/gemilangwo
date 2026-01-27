@@ -16,7 +16,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+        background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%);
         padding: 1rem;
     }
 
@@ -25,7 +25,7 @@
         max-width: 450px;
         background: white;
         border-radius: 16px;
-        box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2);
+        box-shadow: 0 20px 60px rgba(184, 134, 11, 0.2);
         overflow: hidden;
         animation: slideUp 0.4s ease;
     }
@@ -42,7 +42,7 @@
     }
 
     .login-header {
-        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+        background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%);
         padding: 2.5rem 2rem;
         text-align: center;
         color: white;
@@ -113,7 +113,7 @@
         background-color: #f3f4f6;
         border: none;
         padding: 0 1rem;
-        color: #8b5cf6;
+        color: #b8860b;
         width: 45px;
         display: flex;
         align-items: center;
@@ -132,7 +132,7 @@
     .form-control:focus {
         outline: none;
         background-color: white;
-        box-shadow: inset 0 0 0 2px rgba(139, 92, 246, 0.2);
+        box-shadow: inset 0 0 0 2px rgba(184, 134, 11, 0.2);
     }
 
     .form-check {
@@ -149,13 +149,13 @@
     }
 
     .form-check-input:checked {
-        background-color: #8b5cf6;
-        border-color: #8b5cf6;
+        background-color: #b8860b;
+        border-color: #b8860b;
     }
 
     .form-check-input:focus {
-        box-shadow: 0 0 0 0.25rem rgba(139, 92, 246, 0.25);
-        border-color: #8b5cf6;
+        box-shadow: 0 0 0 0.25rem rgba(184, 134, 11, 0.25);
+        border-color: #b8860b;
     }
 
     .form-check-label {
@@ -170,19 +170,19 @@
         padding: 0.875rem 1.5rem;
         font-size: 1.05rem;
         font-weight: 600;
-        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+        background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%);
         color: white;
         border: none;
         border-radius: 8px;
         cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        box-shadow: 0 4px 15px rgba(184, 134, 11, 0.3);
         margin-bottom: 1.5rem;
     }
 
     .btn-login:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        box-shadow: 0 6px 20px rgba(184, 134, 11, 0.4);
     }
 
     .btn-login:active {
@@ -203,7 +203,7 @@
     }
 
     .login-register a {
-        color: #8b5cf6;
+        color: #b8860b;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.2s ease;
@@ -215,14 +215,14 @@
 
     .login-info {
         background-color: #f8f5ff;
-        border-left: 4px solid #8b5cf6;
+        border-left: 4px solid #b8860b;
         border-radius: 6px;
         padding: 1rem;
         margin-bottom: 1.5rem;
     }
 
     .login-info-title {
-        color: #8b5cf6;
+        color: #b8860b;
         font-size: 0.95rem;
         font-weight: 700;
         margin-bottom: 1rem;

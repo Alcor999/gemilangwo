@@ -141,7 +141,7 @@
     <!-- Sidebar -->
     <div style="display: flex; flex-direction: column; gap: 1.5rem;">
         <!-- Stats Card -->
-        <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); border-radius: 0.5rem; color: white; padding: 1.5rem;">
+        <div style="background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%); border-radius: 0.5rem; color: white; padding: 1.5rem;">
             <h3 style="font-size: 0.875rem; font-weight: 600; opacity: 0.95; margin: 0 0 1rem; text-transform: uppercase; letter-spacing: 0.05em;">📊 Statistik</h3>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                 <div>

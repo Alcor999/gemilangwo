@@ -213,7 +213,7 @@ class ICalExportService
             'unavailable' => '#ef4444', // Red
             'maintenance' => '#f97316', // Orange
             'reserved' => '#eab308',    // Yellow
-            'personal' => '#a855f7',    // Purple
+            'personal' => '#b8860b',    // Gold
             default => '#6b7280',       // Gray
         };
     }

@@ -189,7 +189,7 @@
     }
 
     .card-title {
-        color: #8b5cf6;
+        color: #b8860b;
         font-weight: 600;
     }
 </style>

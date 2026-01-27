@@ -46,7 +46,7 @@ class AvailabilityController extends Controller
                     'title' => 'Booking: ' . $order->user->name,
                     'start' => $order->created_at->toDateString(),
                     'end' => $order->created_at->addDays(1)->toDateString(),
-                    'backgroundColor' => '#8b5cf6',
+                    'backgroundColor' => '#b8860b',
                 ];
             });
 

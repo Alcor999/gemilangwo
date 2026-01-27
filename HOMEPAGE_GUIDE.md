@@ -44,9 +44,9 @@
 
 ### Colors & Branding
 ```
-Primary: #8b5cf6 (Purple)
-Secondary: #ec4899 (Pink)
-Gradient: Linear gradient (Purple → Pink)
+Primary: #b8860b (Gold)
+Secondary: #8b7355 (Brown)
+Gradient: Linear gradient (Gold → Brown)
 Font: Poppins (Google Fonts)
 ```
 
@@ -216,8 +216,8 @@ After homepage testing:
 ### Change Brand Colors
 In `home.blade.php`, find:
 ```css
---primary: #8b5cf6;
---secondary: #ec4899;
+--primary: #b8860b;
+--secondary: #8b7355;
 ```
 Change to your preferred colors.
 

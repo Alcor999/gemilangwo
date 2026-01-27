@@ -5,16 +5,20 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Package;
+use App\Models\Bank;
 use App\Services\MidtransService;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
     protected $midtransService;
+    protected $paymentService;
 
-    public function __construct(MidtransService $midtransService)
+    public function __construct(MidtransService $midtransService, PaymentService $paymentService)
     {
         $this->midtransService = $midtransService;
+        $this->paymentService = $paymentService;
     }
 
     /**
@@ -74,11 +78,14 @@ class OrderController extends Controller
                 ->with('error', 'Guest count exceeds package maximum of ' . $package->max_guests);
         }
 
-        // Create order
+        // Create order with compatible order number for Midtrans VA
+        // Format: WO-<timestamp>-<random> but keep it shorter for VA compatibility
+        $orderNumber = 'WO-' . substr(time(), -8) . rand(10, 99);
+        
         $order = Order::create([
             'user_id' => auth()->id(),
             'package_id' => $validated['package_id'],
-            'order_number' => 'WO-' . time() . '-' . rand(1000, 9999),
+            'order_number' => $orderNumber,
             'event_date' => $validated['event_date'],
             'event_location' => $validated['event_location'],
             'guest_count' => $validated['guest_count'],
@@ -92,7 +99,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Show payment page
+     * Show payment page with bank selection
      */
     public function payment(Order $order)
     {
@@ -105,21 +112,65 @@ class OrderController extends Controller
                 ->with('error', 'This order cannot be paid');
         }
 
-        try {
-            $snapToken = $this->midtransService->createSnapToken($order);
-            return view('customer.orders.payment', [
-                'order' => $order,
-                'snap_token' => $snapToken,
-                'client_key' => config('midtrans.client_key'),
-            ]);
-        } catch (\Exception $e) {
-            return redirect()->route('customer.orders.show', $order->id)
-                ->with('error', 'Failed to create payment: ' . $e->getMessage());
-        }
+        // Get active banks
+        $banks = Bank::where('active', true)->get();
+
+        return view('customer.orders.payment-manual', [
+            'order' => $order,
+            'banks' => $banks,
+        ]);
     }
 
     /**
-     * Handle Midtrans notification
+     * Process manual payment selection
+     */
+    public function selectBank(Request $request, Order $order)
+    {
+        if ($order->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        $validated = $request->validate([
+            'bank_id' => 'required|exists:banks,id',
+        ]);
+
+        $bank = Bank::findOrFail($validated['bank_id']);
+
+        // Create payment record
+        $payment = $this->paymentService->createManualPayment($order, $bank);
+
+        return redirect()->route('customer.orders.paymentConfirm', ['order' => $order->id])
+            ->with('success', 'Bank dipilih. Silakan transfer sesuai instruksi.');
+    }
+
+    /**
+     * Show payment confirmation page
+     */
+    public function paymentConfirm(Order $order)
+    {
+        if ($order->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        $payment = $order->payment;
+        if (!$payment || $payment->payment_method !== 'bank_transfer') {
+            return redirect()->route('customer.orders.payment', $order->id)
+                ->with('error', 'Invalid payment record');
+        }
+
+        $bank = $payment->bank;
+        $whatsappLink = $this->paymentService->generateWhatsAppLink($order, $bank);
+
+        return view('customer.orders.payment-confirm', [
+            'order' => $order,
+            'payment' => $payment,
+            'bank' => $bank,
+            'whatsappLink' => $whatsappLink,
+        ]);
+    }
+
+    /**
+     * Handle Midtrans notification (keep for backwards compatibility)
      */
     public function notification(Request $request)
     {
