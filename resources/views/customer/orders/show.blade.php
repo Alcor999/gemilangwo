@@ -33,10 +33,23 @@
                             <p><strong>{{ $order->package->name }}</strong></p>
                         </div>
                         <div class="col-md-6">
-                            <h6 class="text-muted">Package Price</h6>
-                            <p>Rp {{ number_format($order->package->price, 0, ',', '.') }}</p>
+                            <h6 class="text-muted">Harga Paket (Dasar)</h6>
+                            <p>Rp {{ number_format($order->package->getDiscountedPrice(), 0, ',', '.') }}</p>
                         </div>
                     </div>
+
+                    @if($order->orderVendors->count() > 0)
+                        <hr>
+                        <h6 class="text-muted mb-2">Vendor Terpilih</h6>
+                        <ul class="list-group list-group-flush mb-3">
+                            @foreach($order->orderVendors as $ov)
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <span><strong>{{ $ov->vendor_category_name }}:</strong> {{ $ov->vendor_name }}</span>
+                                    <span>Rp {{ number_format($ov->price, 0, ',', '.') }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
 
                     <hr>
 

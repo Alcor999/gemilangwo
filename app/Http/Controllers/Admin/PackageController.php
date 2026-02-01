@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Package;
+use App\Models\VendorCategory;
 use Illuminate\Http\Request;
 
 class PackageController extends Controller
@@ -22,7 +23,8 @@ class PackageController extends Controller
      */
     public function create()
     {
-        return view('admin.packages.create');
+        $vendorCategories = VendorCategory::where('is_active', true)->orderBy('sort_order')->get();
+        return view('admin.packages.create', compact('vendorCategories'));
     }
 
     /**
@@ -53,7 +55,8 @@ class PackageController extends Controller
             $validated['image'] = 'packages/' . $imageName;
         }
 
-        Package::create($validated);
+        $package = Package::create($validated);
+        $package->vendorCategories()->sync($request->vendor_category_ids ?? []);
 
         return redirect()->route('admin.packages.index')
             ->with('success', 'Package created successfully');
@@ -64,7 +67,9 @@ class PackageController extends Controller
      */
     public function edit(Package $package)
     {
-        return view('admin.packages.edit', ['package' => $package]);
+        $package->load('vendorCategories');
+        $vendorCategories = VendorCategory::where('is_active', true)->orderBy('sort_order')->get();
+        return view('admin.packages.edit', ['package' => $package, 'vendorCategories' => $vendorCategories]);
     }
 
     /**
@@ -96,6 +101,7 @@ class PackageController extends Controller
         }
 
         $package->update($validated);
+        $package->vendorCategories()->sync($request->vendor_category_ids ?? []);
 
         return redirect()->route('admin.packages.index')
             ->with('success', 'Package updated successfully');

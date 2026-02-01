@@ -95,6 +95,24 @@
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label">Kategori Vendor Wajib Dipilih Customer</label>
+                            <p class="text-muted small">Centang kategori vendor yang harus dipilih customer saat memesan paket ini.</p>
+                            <div class="border rounded p-3">
+                                @forelse(($vendorCategories ?? []) as $vc)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="vendor_category_ids[]" value="{{ $vc->id }}" id="vc{{ $vc->id }}"
+                                            {{ in_array($vc->id, $package->vendorCategories->pluck('id')->toArray()) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="vc{{ $vc->id }}">
+                                            {{ $vc->name }}
+                                        </label>
+                                    </div>
+                                @empty
+                                    <p class="text-muted mb-0">Belum ada kategori vendor. <a href="{{ route('admin.vendor-categories.index') }}">Kelola kategori vendor</a></p>
+                                @endforelse
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="status" class="form-label">Status *</label>
                             <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
                                 <option value="active" {{ old('status', $package->status) === 'active' ? 'selected' : '' }}>Active</option>

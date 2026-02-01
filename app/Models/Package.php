@@ -158,6 +158,22 @@ class Package extends Model
         return $this->hasMany(CalendarEvent::class);
     }
 
+    public function vendorCategories()
+    {
+        return $this->belongsToMany(VendorCategory::class, 'package_vendor_category');
+    }
+
+    public function requiredVendorCategories()
+    {
+        return $this->belongsToMany(VendorCategory::class, 'package_vendor_category')
+            ->where('vendor_categories.is_active', true);
+    }
+
+    public function hasVendorSelection(): bool
+    {
+        return $this->vendorCategories()->exists();
+    }
+
     public function confirmedCalendarEvents()
     {
         return $this->calendarEvents()->where('is_confirmed', true);

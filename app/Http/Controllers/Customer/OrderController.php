@@ -43,7 +43,7 @@ class OrderController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $order->load(['package', 'payment', 'reviews']);
+        $order->load(['package', 'payment', 'reviews', 'orderVendors']);
         return view('customer.orders.show', ['order' => $order]);
     }
 
@@ -52,7 +52,9 @@ class OrderController extends Controller
      */
     public function create()
     {
-        $packages = Package::where('status', 'active')->get();
+        $packages = Package::where('status', 'active')
+            ->with(['requiredVendorCategories.vendors'])
+            ->get();
         return view('customer.orders.create', ['packages' => $packages]);
     }
 
@@ -67,21 +69,45 @@ class OrderController extends Controller
             'event_location' => 'required|string|max:255',
             'guest_count' => 'required|integer|min:1',
             'special_request' => 'nullable|string',
+            'vendors' => 'nullable|array',
+            'vendors.*' => 'exists:vendors,id',
         ]);
 
-        $package = Package::findOrFail($validated['package_id']);
+        $package = Package::with('requiredVendorCategories.vendors')->findOrFail($validated['package_id']);
 
-        // Validate guest count doesn't exceed package maximum
+        // Validate guest count
         if ($package->max_guests && $validated['guest_count'] > $package->max_guests) {
             return redirect()->back()
                 ->withInput()
                 ->with('error', 'Guest count exceeds package maximum of ' . $package->max_guests);
         }
 
-        // Create order with compatible order number for Midtrans VA
-        // Format: WO-<timestamp>-<random> but keep it shorter for VA compatibility
+        // Calculate total: package base + vendor prices
+        $totalPrice = $package->getDiscountedPrice();
+        $selectedVendors = [];
+
+        foreach ($package->requiredVendorCategories as $category) {
+            $vendorId = $validated['vendors'][$category->id] ?? null;
+            if (!$vendorId) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Silakan pilih vendor untuk kategori: ' . $category->name);
+            }
+            $vendor = $category->vendors->firstWhere('id', $vendorId);
+            if (!$vendor) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Vendor tidak valid untuk kategori: ' . $category->name);
+            }
+            $totalPrice += (float) $vendor->price;
+            $selectedVendors[] = [
+                'vendor' => $vendor,
+                'category' => $category,
+            ];
+        }
+
         $orderNumber = 'WO-' . substr(time(), -8) . rand(10, 99);
-        
+
         $order = Order::create([
             'user_id' => auth()->id(),
             'package_id' => $validated['package_id'],
@@ -90,12 +116,22 @@ class OrderController extends Controller
             'event_location' => $validated['event_location'],
             'guest_count' => $validated['guest_count'],
             'special_request' => $validated['special_request'] ?? null,
-            'total_price' => $package->price,
+            'total_price' => $totalPrice,
             'status' => 'pending',
         ]);
 
+        foreach ($selectedVendors as $sv) {
+            $order->orderVendors()->create([
+                'vendor_id' => $sv['vendor']->id,
+                'vendor_category_id' => $sv['category']->id,
+                'vendor_name' => $sv['vendor']->name,
+                'vendor_category_name' => $sv['category']->name,
+                'price' => $sv['vendor']->price,
+            ]);
+        }
+
         return redirect()->route('customer.orders.show', $order->id)
-            ->with('success', 'Order created successfully. Please proceed to payment.');
+            ->with('success', 'Pesanan berhasil dibuat. Silakan lanjutkan pembayaran.');
     }
 
     /**

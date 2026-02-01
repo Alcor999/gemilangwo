@@ -440,6 +440,9 @@
                         <a class="nav-link {{ Route::currentRouteName() == 'admin.discounts.index' ? 'active' : '' }}" href="{{ route('admin.discounts.index') }}">
                             <i class="fas fa-tag"></i> Discounts & Promos
                         </a>
+                        <a class="nav-link {{ str_contains(Route::currentRouteName() ?? '', 'admin.vendor') ? 'active' : '' }}" href="{{ route('admin.vendor-categories.index') }}">
+                            <i class="fas fa-store"></i> Vendors
+                        </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'admin.reviews.index' ? 'active' : '' }}" href="{{ route('admin.reviews.index') }}">
                             <i class="fas fa-star"></i> Reviews
                         </a>
@@ -449,7 +452,7 @@
                         <a class="nav-link {{ Route::currentRouteName() == 'admin.users.index' ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
                             <i class="fas fa-users"></i> Users
                         </a>
-                        <a class="nav-link {{ strpos(Route::currentRouteName(), 'admin.support') !== false ? 'active' : '' }}" href="{{ route('admin.support.tickets.index') }}">
+                        <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'admin.support') !== false ? 'active' : '' }}" href="{{ route('admin.support.tickets.index') }}">
                             <i class="fas fa-headset"></i> Support Tickets
                         </a>
                         
@@ -457,15 +460,15 @@
                         <hr style="margin: 0.5rem 0; border-color: #e9ecef;">
                         
                         <!-- Media & Content -->
-                        <a class="nav-link {{ strpos(Route::currentRouteName(), 'admin.videos') !== false ? 'active' : '' }}" href="{{ route('admin.videos.index') }}">
+                        <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'admin.videos') !== false ? 'active' : '' }}" href="{{ route('admin.videos.index') }}">
                             <i class="fas fa-video"></i> Video Gallery
                         </a>
-                        <a class="nav-link {{ strpos(Route::currentRouteName(), 'admin.testimonials') !== false ? 'active' : '' }}" href="{{ route('admin.testimonials.index') }}">
+                        <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'admin.testimonials') !== false ? 'active' : '' }}" href="{{ route('admin.testimonials.index') }}">
                             <i class="fas fa-star"></i> Testimonial Approvals
                         </a>
                         
                         <!-- Analytics -->
-                        <a class="nav-link {{ strpos(Route::currentRouteName(), 'admin.analytics') !== false ? 'active' : '' }}" href="{{ route('admin.analytics.dashboard') }}">
+                        <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'admin.analytics') !== false ? 'active' : '' }}" href="{{ route('admin.analytics.dashboard') }}">
                             <i class="fas fa-chart-pie"></i> Analytics
                         </a>
                         
@@ -483,7 +486,7 @@
                         <a class="nav-link {{ Route::currentRouteName() == 'owner.dashboard' ? 'active' : '' }}" href="{{ route('owner.dashboard') }}">
                             <i class="fas fa-chart-line"></i> Dashboard
                         </a>
-                        <a class="nav-link {{ strpos(Route::currentRouteName(), 'owner.analytics') !== false ? 'active' : '' }}" href="{{ route('owner.analytics.dashboard') }}">
+                        <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'owner.analytics') !== false ? 'active' : '' }}" href="{{ route('owner.analytics.dashboard') }}">
                             <i class="fas fa-chart-pie"></i> Analytics
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'owner.statistics' ? 'active' : '' }}" href="{{ route('owner.statistics') }}">
@@ -497,7 +500,7 @@
                         <hr style="margin: 0.5rem 0; border-color: #e9ecef;">
                         
                         <!-- Calendar Management -->
-                        <a class="nav-link {{ strpos(Route::currentRouteName(), 'owner.calendar') !== false ? 'active' : '' }}" href="{{ route('owner.calendar.index') }}">
+                        <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'owner.calendar') !== false ? 'active' : '' }}" href="{{ route('owner.calendar.index') }}">
                             <i class="fas fa-calendar-alt"></i> Calendar & Booking
                         </a>
                     @else
@@ -525,7 +528,7 @@
                         <a class="nav-link {{ Route::currentRouteName() == 'customer.reviews.index' ? 'active' : '' }}" href="{{ route('customer.reviews.index') }}">
                             <i class="fas fa-star"></i> My Reviews
                         </a>
-                        <a class="nav-link {{ strpos(Route::currentRouteName(), 'customer.testimonials') !== false ? 'active' : '' }}" href="{{ route('customer.testimonials.index') }}">
+                        <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'customer.testimonials') !== false ? 'active' : '' }}" href="{{ route('customer.testimonials.index') }}">
                             <i class="fas fa-video"></i> My Testimonials
                         </a>
                         
@@ -533,12 +536,12 @@
                         <hr style="margin: 0.5rem 0; border-color: #e9ecef;">
                         
                         <!-- Calendar & Events -->
-                        <a class="nav-link {{ strpos(Route::currentRouteName(), 'customer.calendar') !== false ? 'active' : '' }}" href="{{ route('customer.calendar.confirmation') }}">
+                        <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'customer.calendar') !== false ? 'active' : '' }}" href="{{ route('customer.calendar.confirmation') }}">
                             <i class="fas fa-calendar-check"></i> My Events
                         </a>
                         
                         <!-- Support & Communication -->
-                        <a class="nav-link {{ strpos(Route::currentRouteName(), 'customer.support.tickets') !== false ? 'active' : '' }}" href="{{ route('customer.support.tickets.index') }}">
+                        <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'customer.support.tickets') !== false ? 'active' : '' }}" href="{{ route('customer.support.tickets.index') }}">
                             <i class="fas fa-headset"></i> Support Tickets
                         </a>
                     @endif
@@ -561,6 +564,13 @@
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show animate-alert" role="alert">
                     <i class="fas fa-check-circle"></i> {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif

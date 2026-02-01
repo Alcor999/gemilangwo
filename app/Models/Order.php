@@ -126,6 +126,16 @@ class Order extends Model
         return $this->hasMany(VideoTestimonial::class);
     }
 
+    public function orderVendors()
+    {
+        return $this->hasMany(OrderVendor::class);
+    }
+
+    public function selectedVendors()
+    {
+        return $this->hasMany(OrderVendor::class);
+    }
+
     // Accessors
     public function isPending(): bool
     {

@@ -40,6 +40,20 @@
                         </div>
                     </div>
 
+                    @if($order->orderVendors && $order->orderVendors->count() > 0)
+                        <hr>
+                        <h6 class="mb-2">Vendor Terpilih</h6>
+                        <ul class="list-group list-group-flush mb-0">
+                            @foreach($order->orderVendors as $ov)
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-1">
+                                    <span><strong>{{ $ov->vendor_category_name }}:</strong> {{ $ov->vendor_name }}</span>
+                                    <span>Rp {{ number_format($ov->price, 0, ',', '.') }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                        <hr>
+                    @endif
+
                     @if($order->special_request)
                         <hr>
                         <h6>Special Requests</h6>

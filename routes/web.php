@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\SupportController as AdminSupportController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
+use App\Http\Controllers\Admin\VendorCategoryController as AdminVendorCategoryController;
+use App\Http\Controllers\Admin\VendorController as AdminVendorController;
 use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
 use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
 use App\Http\Controllers\Customer\PackageController as CustomerPackageController;
@@ -57,6 +59,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::get('/export', [AdminAnalyticsController::class, 'export'])->name('export');
     });
     
+    // Vendor Management
+    Route::resource('vendor-categories', AdminVendorCategoryController::class)->except(['show']);
+    Route::resource('vendors', AdminVendorController::class)->except(['show']);
+
     // Package Management
     Route::get('/packages', [AdminPackageController::class, 'index'])->name('packages.index');
     Route::get('/packages/create', [AdminPackageController::class, 'create'])->name('packages.create');
