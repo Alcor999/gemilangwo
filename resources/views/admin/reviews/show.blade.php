@@ -173,11 +173,14 @@
                                 <i class="fas fa-check"></i> Approve Review
                             </button>
                         </form>
-                        <form action="{{ route('admin.reviews.reject', $review) }}" method="POST"
-                              onsubmit="return confirm('Are you sure you want to reject this review?');">
+                        <form action="{{ route('admin.reviews.reject', $review) }}" method="POST" class="mb-2">
                             @csrf
-                            <button type="submit" class="btn btn-danger w-100 btn-sm">
-                                <i class="fas fa-trash"></i> Reject Review
+                            <button type="button" class="btn btn-danger w-100 btn-sm"
+                                data-confirm="Apakah Anda yakin ingin menolak review ini?"
+                                data-confirm-title="Tolak Review"
+                                data-confirm-btn="Ya, Tolak"
+                                data-confirm-danger="1">
+                                <i class="fas fa-times"></i> Tolak Review
                             </button>
                         </form>
                     @else
@@ -187,12 +190,15 @@
                                 <i class="fas fa-star"></i> {{ $review->is_featured ? 'Unfeature' : 'Feature as Testimonial' }}
                             </button>
                         </form>
-                        <form action="{{ route('admin.reviews.destroy', $review) }}" method="POST"
-                              onsubmit="return confirm('Are you sure you want to delete this review?');">
+                        <form action="{{ route('admin.reviews.destroy', $review) }}" method="POST" class="mb-0">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger w-100 btn-sm">
-                                <i class="fas fa-trash"></i> Delete Review
+                            <button type="button" class="btn btn-outline-danger w-100 btn-sm"
+                                data-confirm="Apakah Anda yakin ingin menghapus review ini secara permanen?"
+                                data-confirm-title="Hapus Review"
+                                data-confirm-btn="Ya, Hapus"
+                                data-confirm-danger="1">
+                                <i class="fas fa-trash"></i> Hapus Review
                             </button>
                         </form>
                     @endif

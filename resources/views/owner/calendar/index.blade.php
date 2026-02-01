@@ -173,10 +173,14 @@
                                 @endif
                                 <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
                                     <a href="{{ route('owner.calendar.blocked.edit', $blocked) }}" style="color: #6366f1; text-decoration: none; font-size: 0.75rem; font-weight: 600;">✏️ Edit</a>
-                                    <form action="{{ route('owner.calendar.blocked.destroy', $blocked) }}" method="POST" style="display: inline;">
+                                    <form action="{{ route('owner.calendar.blocked.destroy', $blocked) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Hapus tanggal terblokir ini?')" style="color: #ef4444; text-decoration: none; font-size: 0.75rem; font-weight: 600; background: none; border: none; cursor: pointer; padding: 0;">🗑️ Hapus</button>
+                                        <button type="button" class="btn btn-link btn-sm text-danger p-0" style="font-size: 0.75rem; font-weight: 600;"
+                                            data-confirm="Apakah Anda yakin ingin menghapus tanggal terblokir ini?"
+                                            data-confirm-title="Hapus Tanggal Terblokir"
+                                            data-confirm-btn="Ya, Hapus"
+                                            data-confirm-danger="1">🗑️ Hapus</button>
                                     </form>
                                 </div>
                             </div>

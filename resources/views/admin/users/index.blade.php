@@ -55,10 +55,14 @@
                                         <a href="{{ route('admin.users.show', $user) }}" class="btn btn-info" title="View">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <form action="{{ route('admin.users.deactivate', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('Deactivate user?')">
+                                        <form action="{{ route('admin.users.deactivate', $user) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger" title="Deactivate">
+                                            <button type="button" class="btn btn-danger" title="Nonaktifkan"
+                                                data-confirm="Apakah Anda yakin ingin menonaktifkan user &quot;{{ $user->name }}&quot;? User tidak akan bisa login."
+                                                data-confirm-title="Nonaktifkan User"
+                                                data-confirm-btn="Ya, Nonaktifkan"
+                                                data-confirm-danger="1">
                                                 <i class="fas fa-ban"></i>
                                             </button>
                                         </form>

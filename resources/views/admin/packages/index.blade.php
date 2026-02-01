@@ -41,13 +41,17 @@
                             </td>
                             <td>{{ $package->created_at->format('d M Y') }}</td>
                             <td>
-                                <a href="{{ route('admin.packages.edit', $package->id) }}" class="btn btn-sm btn-warning">
+                                <a href="{{ route('admin.packages.edit', $package->id) }}" class="btn btn-sm btn-warning" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.packages.destroy', $package->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure?');">
+                                <form action="{{ route('admin.packages.destroy', $package->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">
+                                    <button type="button" class="btn btn-sm btn-danger" 
+                                        data-confirm="Apakah Anda yakin ingin menghapus paket &quot;{{ $package->name }}&quot;? Tindakan ini tidak dapat dibatalkan."
+                                        data-confirm-title="Hapus Paket"
+                                        data-confirm-btn="Ya, Hapus"
+                                        data-confirm-danger="1" title="Hapus">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>

@@ -100,10 +100,14 @@
                                 <a href="{{ route('admin.discounts.edit', $discount) }}" class="btn btn-sm btn-warning" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.discounts.destroy', $discount) }}" method="POST" style="display: inline;">
+                                <form action="{{ route('admin.discounts.destroy', $discount) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')" title="Delete">
+                                    <button type="button" class="btn btn-sm btn-danger" title="Hapus"
+                                        data-confirm="Apakah Anda yakin ingin menghapus diskon &quot;{{ $discount->name }}&quot;?"
+                                        data-confirm-title="Hapus Diskon"
+                                        data-confirm-btn="Ya, Hapus"
+                                        data-confirm-danger="1">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>

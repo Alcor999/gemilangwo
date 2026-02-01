@@ -94,7 +94,7 @@
                                                 <div class="mb-2">
                                                     <textarea name="notes" class="form-control form-control-sm" rows="2" placeholder="Verification notes (optional)"></textarea>
                                                 </div>
-                                                <button type="submit" class="btn btn-sm btn-success w-100" onclick="return confirm('Approve this payment?');">
+                                                <button type="submit" class="btn btn-sm btn-success w-100" onclick="return confirm('Setujui pembayaran ini?');">
                                                     <i class="fas fa-check me-1"></i>Approve Payment
                                                 </button>
                                             </form>
@@ -188,9 +188,13 @@
                     </div>
 
                     @if($order->isPending())
-                        <form action="{{ route('admin.orders.cancel', $order->id) }}" method="POST" onsubmit="return confirm('Cancel this order?');">
+                        <form action="{{ route('admin.orders.cancel', $order->id) }}" method="POST" class="mb-0">
                             @csrf
-                            <button type="submit" class="btn btn-sm btn-danger w-100">Cancel Order</button>
+                            <button type="button" class="btn btn-sm btn-danger w-100"
+                                data-confirm="Apakah Anda yakin ingin membatalkan pesanan ini?"
+                                data-confirm-title="Batalkan Pesanan"
+                                data-confirm-btn="Ya, Batalkan"
+                                data-confirm-danger="1">Batalkan Pesanan</button>
                         </form>
                     @endif
                 </div>

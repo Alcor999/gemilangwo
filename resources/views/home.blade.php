@@ -77,6 +77,35 @@
             color: white;
             padding: 6rem 0;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 50%);
+            animation: heroShine 15s ease-in-out infinite;
+        }
+        @keyframes heroShine {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-25%, -25%); }
+        }
+        .hero-section h1 {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        .hero-section p {
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+        .hero-section .btn-primary-custom {
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .hero-section h1 {
@@ -151,6 +180,26 @@
             transform: translateY(-10px);
             border-color: var(--primary);
             box-shadow: 0 20px 40px rgba(184, 134, 11, 0.15);
+        }
+        .packages-section .col-md-6,
+        .packages-section .col-lg-4 {
+            animation: cardFadeIn 0.6s ease-out both;
+        }
+        .packages-section .col-md-6:nth-child(1),
+        .packages-section .col-lg-4:nth-child(1) { animation-delay: 0.1s; }
+        .packages-section .col-md-6:nth-child(2),
+        .packages-section .col-lg-4:nth-child(2) { animation-delay: 0.2s; }
+        .packages-section .col-md-6:nth-child(3),
+        .packages-section .col-lg-4:nth-child(3) { animation-delay: 0.3s; }
+        .packages-section .col-md-6:nth-child(4),
+        .packages-section .col-lg-4:nth-child(4) { animation-delay: 0.4s; }
+        .packages-section .col-md-6:nth-child(5),
+        .packages-section .col-lg-4:nth-child(5) { animation-delay: 0.5s; }
+        .packages-section .col-md-6:nth-child(6),
+        .packages-section .col-lg-4:nth-child(6) { animation-delay: 0.6s; }
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .package-card.featured {
@@ -464,12 +513,6 @@
             footer {
                 padding: 2rem 1rem 0.5rem;
             }
-        }
-            width: 100%;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
         }
 
         .package-btn:hover {

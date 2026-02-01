@@ -20,10 +20,17 @@
                                     <i class="fas fa-image text-muted fa-3x"></i>
                                 </div>
                             @endif
-                            <button type="button" class="btn btn-danger btn-sm position-absolute top-2 end-2" 
-                                    onclick="removeFromWishlist({{ $wishlist->id }})">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <form action="{{ route('customer.wishlist.remove', $wishlist) }}" method="POST" class="position-absolute top-2 end-2">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="btn btn-danger btn-sm"
+                                    data-confirm="Hapus &quot;{{ $wishlist->package->name }}&quot; dari wishlist?"
+                                    data-confirm-title="Hapus dari Wishlist"
+                                    data-confirm-btn="Ya, Hapus"
+                                    data-confirm-danger="1">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title fw-bold">{{ $wishlist->package->name }}</h5>
@@ -81,21 +88,4 @@
     @endif
 </div>
 
-<script>
-function removeFromWishlist(wishlistId) {
-    if (confirm('Hapus dari wishlist?')) {
-        fetch(`/customer/wishlist/${wishlistId}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            if (response.ok) {
-                location.reload();
-            }
-        });
-    }
-}
-</script>
 @endsection

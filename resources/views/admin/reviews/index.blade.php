@@ -173,11 +173,14 @@
                                                 <i class="fas fa-check"></i>
                                             </button>
                                         </form>
-                                        <form action="{{ route('admin.reviews.reject', $review) }}" method="POST" class="d-inline"
-                                              onsubmit="return confirm('Are you sure you want to reject this review?');">
+                                        <form action="{{ route('admin.reviews.reject', $review) }}" method="POST" class="d-inline">
                                             @csrf
-                                            <button type="submit" class="btn btn-outline-danger" title="Reject">
-                                                <i class="fas fa-trash"></i>
+                                            <button type="button" class="btn btn-outline-danger" title="Tolak"
+                                                data-confirm="Apakah Anda yakin ingin menolak review ini?"
+                                                data-confirm-title="Tolak Review"
+                                                data-confirm-btn="Ya, Tolak"
+                                                data-confirm-danger="1">
+                                                <i class="fas fa-times"></i>
                                             </button>
                                         </form>
                                     @else
@@ -188,11 +191,14 @@
                                                 <i class="fas fa-star"></i>
                                             </button>
                                         </form>
-                                        <form action="{{ route('admin.reviews.destroy', $review) }}" method="POST" class="d-inline"
-                                              onsubmit="return confirm('Are you sure you want to delete this review?');">
+                                        <form action="{{ route('admin.reviews.destroy', $review) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-outline-danger" title="Delete">
+                                            <button type="button" class="btn btn-outline-danger" title="Hapus"
+                                                data-confirm="Apakah Anda yakin ingin menghapus review ini secara permanen?"
+                                                data-confirm-title="Hapus Review"
+                                                data-confirm-btn="Ya, Hapus"
+                                                data-confirm-danger="1">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>

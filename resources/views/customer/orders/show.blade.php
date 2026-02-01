@@ -110,10 +110,14 @@
                     <div class="card-body">
                         <h5 class="card-title">Quick Actions</h5>
                         @if($order->isPending())
-                            <form action="{{ route('customer.orders.cancel', $order->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this order?');">
+                            <form action="{{ route('customer.orders.cancel', $order->id) }}" method="POST" class="mb-0">
                                 @csrf
-                                <button type="submit" class="btn btn-danger w-100">
-                                    <i class="fas fa-times"></i> Cancel Order
+                                <button type="button" class="btn btn-danger w-100"
+                                    data-confirm="Apakah Anda yakin ingin membatalkan pesanan ini? Tindakan ini tidak dapat dibatalkan."
+                                    data-confirm-title="Batalkan Pesanan"
+                                    data-confirm-btn="Ya, Batalkan"
+                                    data-confirm-danger="1">
+                                    <i class="fas fa-times"></i> Batalkan Pesanan
                                 </button>
                             </form>
                         @else

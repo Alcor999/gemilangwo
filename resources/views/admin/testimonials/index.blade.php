@@ -81,7 +81,7 @@
                                             <i class="fas fa-eye me-1"></i> View
                                         </a>
                                         <button type="button" class="btn btn-sm btn-success flex-grow-1" 
-                                                onclick="approveTestimonial({{ $testimonial->id }})">
+                                                data-bs-toggle="modal" data-bs-target="#approveModal{{ $testimonial->id }}">
                                             <i class="fas fa-check me-1"></i> Approve
                                         </button>
                                         <button type="button" class="btn btn-sm btn-danger flex-grow-1" 
@@ -89,6 +89,27 @@
                                                 data-bs-target="#rejectModal{{ $testimonial->id }}">
                                             <i class="fas fa-times me-1"></i> Reject
                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Approve Modal -->
+                            <div class="modal fade" id="approveModal{{ $testimonial->id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header border-success">
+                                            <h5 class="modal-title">Setujui Testimonial</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Apakah Anda yakin ingin menyetujui testimonial <strong>"{{ $testimonial->title }}"</strong> dari <strong>{{ $testimonial->user->name }}</strong>? Testimonial akan dipublikasikan secara langsung.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <button type="button" class="btn btn-success" onclick="doApproveTestimonial({{ $testimonial->id }})">
+                                                <i class="fas fa-check me-1"></i> Ya, Setujui
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -274,23 +295,25 @@
 </div>
 
 <script>
-function approveTestimonial(id) {
-    if (confirm('Approve this testimonial? It will be published immediately.')) {
-        fetch(`/admin/testimonials/${id}/approve`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
+function doApproveTestimonial(id) {
+    const modal = bootstrap.Modal.getInstance(document.getElementById('approveModal' + id));
+    if (modal) modal.hide();
+    fetch(`/admin/testimonials/${id}/approve`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (typeof showToast === 'function') showToast('Testimonial berhasil disetujui!', 'success');
+            location.reload();
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }
 </script>
 @endsection

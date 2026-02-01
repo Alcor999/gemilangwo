@@ -166,12 +166,15 @@
                         <a href="{{ route('admin.discounts.edit', $discount) }}" class="btn btn-warning btn-sm">
                             <i class="fas fa-edit"></i> Edit
                         </a>
-                        <form action="{{ route('admin.discounts.destroy', $discount) }}" method="POST">
+                        <form action="{{ route('admin.discounts.destroy', $discount) }}" method="POST" class="mb-0">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm w-100" 
-                                    onclick="return confirm('Are you sure?')">
-                                <i class="fas fa-trash"></i> Delete
+                            <button type="button" class="btn btn-danger btn-sm w-100"
+                                data-confirm="Apakah Anda yakin ingin menghapus diskon &quot;{{ $discount->name }}&quot;? Tindakan ini tidak dapat dibatalkan."
+                                data-confirm-title="Hapus Diskon"
+                                data-confirm-btn="Ya, Hapus"
+                                data-confirm-danger="1">
+                                <i class="fas fa-trash"></i> Hapus
                             </button>
                         </form>
                     </div>
