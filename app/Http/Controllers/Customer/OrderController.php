@@ -152,7 +152,10 @@ class OrderController extends Controller
             abort(403, 'Unauthorized');
         }
 
+        // Reload order with payment, bank, and package relationship
+        $order = $order->load('payment.bank', 'package');
         $payment = $order->payment;
+        
         if (!$payment || $payment->payment_method !== 'bank_transfer') {
             return redirect()->route('customer.orders.payment', $order->id)
                 ->with('error', 'Invalid payment record');

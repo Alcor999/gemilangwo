@@ -109,6 +109,7 @@
                         <i class="fas fa-bank me-2"></i>Rekening Tujuan Transfer
                     </h6>
 
+                    @if ($bank)
                     <div class="account-box">
                         <div class="account-field">
                             <div class="account-label">Bank</div>
@@ -135,13 +136,19 @@
                             <div class="account-value" style="color: #b8860b;">Rp {{ number_format($order->total_price, 0, ',', '.') }}</div>
                         </div>
 
-                        @if ($bank->instruction)
+                        @if ($bank && $bank->instruction)
                             <div class="account-field">
                                 <div class="account-label">Catatan Transfer</div>
                                 <small class="text-muted">{{ $bank->instruction }}</small>
                             </div>
                         @endif
                     </div>
+                    @else
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Bank information not found. Please contact support.
+                        </div>
+                    @endif
 
                     <!-- Important Notes -->
                     <div class="alert alert-info border-0">
@@ -156,9 +163,15 @@
 
                     <!-- Action Buttons -->
                     <div class="button-group">
-                        <a href="{{ $whatsappLink }}" target="_blank" class="btn btn-whatsapp flex-grow-1">
-                            <i class="fab fa-whatsapp me-2"></i>Hubungi via WhatsApp
-                        </a>
+                        @if ($whatsappLink)
+                            <a href="{{ $whatsappLink }}" target="_blank" class="btn btn-whatsapp flex-grow-1">
+                                <i class="fab fa-whatsapp me-2"></i>Hubungi via WhatsApp
+                            </a>
+                        @else
+                            <button class="btn btn-whatsapp flex-grow-1" disabled>
+                                <i class="fab fa-whatsapp me-2"></i>WhatsApp Unavailable
+                            </button>
+                        @endif
                     </div>
 
                     <div class="mt-3">

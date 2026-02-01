@@ -40,20 +40,34 @@ class PaymentService
     /**
      * Generate WhatsApp message link
      */
-    public function generateWhatsAppLink($order, $bank, $adminPhone = null)
+    public function generateWhatsAppLink($order, $bank = null, $adminPhone = null)
     {
-        // Default admin phone - ganti sesuai nomor WhatsApp Anda
-        $adminPhone = $adminPhone ?? env('ADMIN_WHATSAPP_NUMBER', '6281234567890');
-        
-        $message = "Halo, saya ingin konfirmasi pembayaran untuk order {$order->order_number}.\n";
-        $message .= "Paket: {$order->package->name}\n";
-        $message .= "Jumlah: Rp " . number_format($order->total_price, 0, ',', '.') . "\n";
-        $message .= "Bank: {$bank->name} ({$bank->account_number})";
+        try {
+            if (!$bank) {
+                return null;
+            }
 
-        // Encode message untuk WhatsApp URL
-        $encodedMessage = urlencode($message);
-        
-        return "https://wa.me/{$adminPhone}?text={$encodedMessage}";
+            // Default admin phone - ganti sesuai nomor WhatsApp Anda
+            $adminPhone = $adminPhone ?? env('ADMIN_WHATSAPP_NUMBER', '6281234567890');
+            
+            // Ensure order has package loaded
+            if (!$order->package) {
+                $order->load('package');
+            }
+            
+            $message = "Halo, saya ingin konfirmasi pembayaran untuk order {$order->order_number}.\n";
+            $message .= "Paket: {$order->package->name}\n";
+            $message .= "Jumlah: Rp " . number_format($order->total_price, 0, ',', '.') . "\n";
+            $message .= "Bank: {$bank->name} ({$bank->account_number})";
+
+            // Encode message untuk WhatsApp URL
+            $encodedMessage = urlencode($message);
+            
+            return "https://wa.me/{$adminPhone}?text={$encodedMessage}";
+        } catch (\Exception $e) {
+            \Log::error('WhatsApp link generation error: ' . $e->getMessage());
+            return null;
+        }
     }
 
     /**
