@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Login - Gemilang WO')
+@section('title', 'Masuk - Gemilang WO')
 
 @section('styles')
 <style>
@@ -374,7 +374,7 @@
                 <i class="fas fa-ring"></i>
             </div>
             <h2>Gemilang WO</h2>
-            <p>Login to Your Account</p>
+            <p>Masuk ke Akun Anda</p>
         </div>
 
         <!-- Body -->
@@ -382,7 +382,7 @@
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <i class="fas fa-exclamation-circle me-2"></i>
-                    <strong>Error!</strong> Login failed. Please check your credentials.
+                    <strong>Kesalahan!</strong> Gagal masuk. Silakan periksa kredensial Anda.
                 </div>
             @endif
 
@@ -391,7 +391,7 @@
 
                 <!-- Email Field -->
                 <div class="form-group">
-                    <label for="email" class="form-label">Email Address</label>
+                    <label for="email" class="form-label">Alamat Email</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="fas fa-envelope"></i>
@@ -408,7 +408,7 @@
 
                 <!-- Password Field -->
                 <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
+                    <label for="password" class="form-label">Kata Sandi</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="fas fa-lock"></i>
@@ -416,7 +416,7 @@
                         <input id="password" type="password" 
                                class="form-control @error('password') is-invalid @enderror" 
                                name="password" required autocomplete="current-password"
-                               placeholder="Enter your password">
+                               placeholder="Masukkan kata sandi Anda">
                     </div>
                     @error('password')
                         <span class="invalid-feedback">{{ $message }}</span>
@@ -428,13 +428,13 @@
                     <input type="checkbox" class="form-check-input" name="remember" id="remember" 
                            {{ old('remember') ? 'checked' : '' }}>
                     <label class="form-check-label" for="remember">
-                        Remember me for next time
+                        Ingat saya untuk lain waktu
                     </label>
                 </div>
 
                 <!-- Login Button -->
                 <button type="submit" class="btn-login">
-                    <i class="fas fa-sign-in-alt me-2"></i> Login to Gemilang WO
+                    <i class="fas fa-sign-in-alt me-2"></i> Masuk ke Gemilang WO
                 </button>
             </form>
 
@@ -443,14 +443,14 @@
 
             <!-- Register Link -->
             <p class="login-register">
-                Don't have an account yet?<br>
-                <a href="{{ route('register') }}">Register here</a>
+                Belum punya akun?<br>
+                <a href="{{ route('register') }}">Daftar di sini</a>
             </p>
 
             <!-- Test Accounts Info -->
             <div class="login-info">
                 <p class="login-info-title">
-                    <i class="fas fa-info-circle me-2"></i>Test Accounts
+                    <i class="fas fa-info-circle me-2"></i>Akun Uji Coba
                 </p>
                 <div class="login-info-content">
                     <div class="info-item">
@@ -466,7 +466,7 @@
                         <span class="info-value">budi@gemilangwo.test</span>
                     </div>
                     <div class="info-item" style="border-top: 1px solid #e5e7eb; margin-top: 0.75rem; padding-top: 0.75rem;">
-                        <span class="info-label">Password:</span>
+                        <span class="info-label">Kata Sandi:</span>
                         <span class="info-value">password123</span>
                     </div>
                 </div>
@@ -474,7 +474,7 @@
 
             <!-- Back to Home -->
             <a href="{{ route('home') }}" class="login-back-link">
-                <i class="fas fa-arrow-left me-2"></i>Back to Home
+                <i class="fas fa-arrow-left me-2"></i>Kembali ke Beranda
             </a>
         </div>
     </div>

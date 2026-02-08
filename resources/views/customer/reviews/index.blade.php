@@ -41,27 +41,27 @@
                             <!-- Status Badge -->
                             <div class="mb-3">
                                 @if($review->is_approved)
-                                    <span class="badge bg-success">Approved</span>
+                                    <span class="badge bg-success">Disetujui</span>
                                 @elseif($review->is_approved === false)
-                                    <span class="badge bg-danger">Rejected</span>
+                                    <span class="badge bg-danger">Ditolak</span>
                                 @else
-                                    <span class="badge bg-warning">Pending Review</span>
+                                    <span class="badge bg-warning">Menunggu Tinjauan</span>
                                 @endif
 
                                 @if($review->is_featured)
-                                    <span class="badge bg-info ms-1"><i class="fas fa-star"></i> Featured</span>
+                                    <span class="badge bg-info ms-1"><i class="fas fa-star"></i> Unggulan</span>
                                 @endif
                             </div>
 
                             <!-- Helpful Count -->
                             <small class="text-muted">
-                                <i class="fas fa-thumbs-up"></i> {{ $review->helpful_count }} helpful
+                                <i class="fas fa-thumbs-up"></i> {{ $review->helpful_count }} membantu
                             </small>
 
                             <!-- View Full Link -->
                             <div class="mt-3">
                                 <a href="{{ route('customer.packages.show', $review->package) }}" class="btn btn-sm btn-outline-primary">
-                                    View Package
+                                    Lihat Paket
                                 </a>
                             </div>
                         </div>
@@ -77,7 +77,7 @@
     @else
         <div class="alert alert-info" role="alert">
             <i class="fas fa-info-circle me-2"></i>
-            You haven't written any reviews yet. <a href="{{ route('customer.orders.index') }}">Check your completed orders</a> to leave a review!
+            Anda belum menulis ulasan. <a href="{{ route('customer.orders.index') }}">Cek pesanan yang sudah selesai</a> untuk meninggalkan ulasan!
         </div>
     @endif
 </div>

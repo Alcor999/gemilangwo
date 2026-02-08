@@ -70,7 +70,7 @@
         </div>
     @else
         <div class="alert alert-info">
-            You haven't made any bookings yet. <a href="{{ route('customer.packages.index') }}">Browse our packages</a> and create your first booking!
+            Anda belum melakukan pemesanan. <a href="{{ route('customer.packages.index') }}">Lihat paket kami</a> dan buat pemesanan pertama Anda!
         </div>
     @endif
 </div>

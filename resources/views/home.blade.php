@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Wedding Organizer - Professional Event Planning Services</title>
+    <title>Penyelenggara Pernikahan - Layanan Perencanaan Acara Profesional</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -209,7 +209,7 @@
         }
 
         .package-card.featured::before {
-            content: "POPULAR";
+            content: "POPULER";
             position: absolute;
             top: -10px;
             right: -40px;
@@ -606,26 +606,26 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#packages">Packages</a>
+                        <a class="nav-link" href="#packages">Paket</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#features">Why Us</a>
+                        <a class="nav-link" href="#features">Mengapa Kami</a>
                     </li>
                     @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isOwner() ? route('owner.dashboard') : route('customer.dashboard')) }}">
-                                Dashboard
+                                Dasbor
                             </a>
                         </li>
                         <li class="nav-item">
                             <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                                 @csrf
-                                <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">Logout</button>
+                                <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">Keluar</button>
                             </form>
                         </li>
                     @else
                         <li class="nav-item">
-                            <a href="{{ route('login') }}" class="btn btn-login">Login</a>
+                            <a href="{{ route('login') }}" class="btn btn-login">Masuk</a>
                         </li>
                     @endauth
                 </ul>
@@ -636,15 +636,15 @@
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="container">
-            <h1>Create Your Perfect Wedding Day</h1>
-            <p>Professional wedding planning and organization services tailored to your dreams</p>
+            <h1>Wujudkan Hari Pernikahan Impian Anda</h1>
+            <p>Layanan perencanaan dan pengelolaan pernikahan profesional sesuai impian Anda</p>
             @auth
                 <a href="{{ route('customer.packages.index') }}" class="btn btn-primary-custom">
-                    <i class="fas fa-calendar-check"></i> Start Planning
+                    <i class="fas fa-calendar-check"></i> Mulai Rencanakan
                 </a>
             @else
                 <a href="{{ route('login') }}" class="btn btn-primary-custom">
-                    <i class="fas fa-sign-in-alt"></i> Login to Book
+                    <i class="fas fa-sign-in-alt"></i> Masuk untuk Memesan
                 </a>
             @endauth
         </div>
@@ -654,8 +654,8 @@
     <section class="packages-section" id="packages">
         <div class="container">
             <div class="section-title">
-                <h2>Our Wedding Packages</h2>
-                <p>Choose the perfect package for your special day</p>
+                <h2>Paket Pernikahan Kami</h2>
+                <p>Pilih paket yang paling sesuai untuk hari spesial Anda</p>
             </div>
 
             <div class="row g-4">
@@ -667,7 +667,7 @@
                                     <i class="fas fa-heart"></i>
                                 </div>
                                 <h3 class="package-name">{{ $package->name }}</h3>
-                                <p class="package-desc">Perfect for your celebration</p>
+                                <p class="package-desc">Cocok untuk perayaan Anda</p>
                             </div>
 
                             @php
@@ -679,9 +679,9 @@
                             @if ($discount)
                                 <div class="discount-badge flash-sale">
                                     @if ($discount->type === 'percentage')
-                                        <i class="fas fa-fire"></i> {{ $discount->value }}% OFF
+                                        <i class="fas fa-fire"></i> {{ $discount->value }}% DISKON
                                     @else
-                                        <i class="fas fa-fire"></i> Save Rp {{ number_format($discount->value, 0, ',', '.') }}
+                                        <i class="fas fa-fire"></i> Hemat Rp {{ number_format($discount->value, 0, ',', '.') }}
                                     @endif
                                 </div>
                                 <div class="package-price-original">
@@ -694,24 +694,24 @@
                             </div>
 
                             <div class="package-guests">
-                                <i class="fas fa-users"></i> <strong>Up to {{ $package->max_guests }} Guests</strong>
+                                <i class="fas fa-users"></i> <strong>Hingga {{ $package->max_guests }} Tamu</strong>
                             </div>
 
                             <ul class="package-features">
                                 @forelse(json_decode($package->features ?? '[]') as $feature)
                                     <li>{{ $feature }}</li>
                                 @empty
-                                    <li>Complete wedding planning</li>
+                                    <li>Perencanaan pernikahan lengkap</li>
                                 @endforelse
                             </ul>
 
                             @auth
                                 <a href="{{ route('customer.orders.create', ['package' => $package->id]) }}" class="package-btn">
-                                    <i class="fas fa-check-circle"></i> Book Now
+                                    <i class="fas fa-check-circle"></i> Pesan Sekarang
                                 </a>
                             @else
                                 <a href="{{ route('login') }}" class="package-btn">
-                                    <i class="fas fa-lock"></i> Login to Book
+                                    <i class="fas fa-lock"></i> Masuk untuk Memesan
                                 </a>
                             @endauth
                         </div>
@@ -719,7 +719,7 @@
                 @empty
                     <div class="col-12">
                         <div class="alert alert-info" role="alert">
-                            <i class="fas fa-info-circle"></i> No packages available at the moment.
+                            <i class="fas fa-info-circle"></i> Belum ada paket tersedia saat ini.
                         </div>
                     </div>
                 @endforelse
@@ -731,8 +731,8 @@
     <section class="features-section" id="features">
         <div class="container">
             <div class="section-title">
-                <h2>Why Choose Us</h2>
-                <p>Experience excellence in every detail</p>
+                <h2>Mengapa Memilih Kami</h2>
+                <p>Rasakan layanan terbaik di setiap detail</p>
             </div>
 
             <div class="row g-4">
@@ -741,8 +741,8 @@
                         <div class="feature-icon">
                             <i class="fas fa-award"></i>
                         </div>
-                        <h4>Professional Team</h4>
-                        <p>Experienced coordinators dedicated to your success</p>
+                        <h4>Tim Profesional</h4>
+                        <p>Koordinator berpengalaman yang siap mendukung acara Anda</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
@@ -750,8 +750,8 @@
                         <div class="feature-icon">
                             <i class="fas fa-handshake"></i>
                         </div>
-                        <h4>Personal Touch</h4>
-                        <p>Customized packages tailored to your preferences</p>
+                        <h4>Sentuhan Personal</h4>
+                        <p>Paket yang disesuaikan dengan preferensi Anda</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
@@ -759,8 +759,8 @@
                         <div class="feature-icon">
                             <i class="fas fa-check-double"></i>
                         </div>
-                        <h4>Reliable Service</h4>
-                        <p>100% commitment to making your day memorable</p>
+                        <h4>Layanan Andal</h4>
+                        <p>Komitmen penuh untuk membuat hari Anda berkesan</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
@@ -768,8 +768,8 @@
                         <div class="feature-icon">
                             <i class="fas fa-star"></i>
                         </div>
-                        <h4>Premium Quality</h4>
-                        <p>Top-tier vendors and equipment for your event</p>
+                        <h4>Kualitas Premium</h4>
+                        <p>Vendor dan perlengkapan terbaik untuk acara Anda</p>
                     </div>
                 </div>
             </div>
@@ -780,8 +780,8 @@
     <section class="testimonials-section" style="padding: 4rem 0; background: white; border-top: 1px solid var(--border-color);">
         <div class="container">
             <div class="section-title">
-                <h2>Our Couples' Stories</h2>
-                <p>See what our clients have to say about their experience</p>
+                <h2>Cerita Pasangan Kami</h2>
+                <p>Lihat pengalaman klien kami bersama layanan kami</p>
             </div>
 
             @php
@@ -867,7 +867,7 @@
                                                 @if($testimonial->order)
                                                     {{ $testimonial->order->package->name }}
                                                 @else
-                                                    Verified Couple
+                                                    Pasangan Terverifikasi
                                                 @endif
                                             </p>
                                         </div>
@@ -881,17 +881,17 @@
                 <div class="text-center mt-4">
                     @auth
                         <a href="{{ route('customer.testimonials.create') }}" class="btn" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 0.75rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600;">
-                            <i class="fas fa-star"></i> Share Your Story
+                            <i class="fas fa-star"></i> Bagikan Cerita Anda
                         </a>
                     @else
                         <a href="{{ route('login') }}" class="btn" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 0.75rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600;">
-                            <i class="fas fa-star"></i> Share Your Story
+                            <i class="fas fa-star"></i> Bagikan Cerita Anda
                         </a>
                     @endauth
                 </div>
             @else
                 <div class="alert alert-info" role="alert" style="text-align: center;">
-                    <i class="fas fa-info-circle"></i> Be the first to share your wedding story!
+                    <i class="fas fa-info-circle"></i> Jadilah yang pertama membagikan cerita pernikahan Anda!
                 </div>
             @endif
         </div>
@@ -900,7 +900,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2026 Gemilang WO - Professional Wedding Organizer. All rights reserved.</p>
+            <p>&copy; 2026 Gemilang WO - Penyelenggara Pernikahan Profesional. Hak cipta dilindungi undang-undang.</p>
         </div>
     </footer>
 

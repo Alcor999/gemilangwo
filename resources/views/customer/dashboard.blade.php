@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Customer Dashboard')
+@section('title', 'Dasbor Pelanggan')
 
 @section('content')
 <div class="container-fluid">
-    <h1 class="mb-4" style="font-size: 2rem;">My Dashboard</h1>
+    <h1 class="mb-4" style="font-size: 2rem;">Dasbor Saya</h1>
 
     <!-- Statistics Cards -->
     <div class="row mb-4">
@@ -12,7 +12,7 @@
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="mb-2">Total Orders</h6>
+                        <h6 class="mb-2">Total Pesanan</h6>
                         <h3 class="mb-0">{{ $total_orders }}</h3>
                     </div>
                     <i class="fas fa-receipt fa-2x" style="opacity: 0.5;"></i>
@@ -23,7 +23,7 @@
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="mb-2">Completed</h6>
+                        <h6 class="mb-2">Selesai</h6>
                         <h3 class="mb-0">{{ $completed_orders }}</h3>
                     </div>
                     <i class="fas fa-check-circle fa-2x" style="opacity: 0.5;"></i>
@@ -34,7 +34,7 @@
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="mb-2">Pending</h6>
+                        <h6 class="mb-2">Menunggu</h6>
                         <h3 class="mb-0">{{ $pending_orders }}</h3>
                     </div>
                     <i class="fas fa-clock fa-2x" style="opacity: 0.5;"></i>
@@ -45,8 +45,8 @@
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="mb-2">Booking Status</h6>
-                        <h3 class="mb-0" style="font-size: 1.5rem;">@if($pending_orders > 0) <span class="badge bg-warning">Active</span> @else <span class="badge bg-success">Free</span> @endif</h3>
+                        <h6 class="mb-2">Status Pemesanan</h6>
+                        <h3 class="mb-0" style="font-size: 1.5rem;">@if($pending_orders > 0) <span class="badge bg-warning">Aktif</span> @else <span class="badge bg-success">Tersedia</span> @endif</h3>
                     </div>
                     <i class="fas fa-calendar fa-2x" style="opacity: 0.5;"></i>
                 </div>
@@ -59,16 +59,16 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Quick Actions</h5>
+                    <h5 class="card-title">Aksi Cepat</h5>
                     <div class="d-grid gap-2 d-sm-flex flex-wrap">
                         <a href="{{ route('customer.packages.index') }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-search"></i> Browse Packages
+                            <i class="fas fa-search"></i> Lihat Paket
                         </a>
                         <a href="{{ route('customer.orders.create') }}" class="btn btn-success btn-sm">
-                            <i class="fas fa-plus"></i> New Booking
+                            <i class="fas fa-plus"></i> Pemesanan Baru
                         </a>
                         <a href="{{ route('customer.orders.index') }}" class="btn btn-info btn-sm">
-                            <i class="fas fa-list"></i> View All Orders
+                            <i class="fas fa-list"></i> Lihat Semua Pesanan
                         </a>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h5 class="mb-0" style="font-size: 1.1rem;">Recent Bookings</h5>
+                    <h5 class="mb-0" style="font-size: 1.1rem;">Pemesanan Terbaru</h5>
                 </div>
                 <div class="card-body p-2 p-md-3">
                     @if($recent_orders->count() > 0)
@@ -89,13 +89,13 @@
                             <table class="table table-hover table-sm mb-0">
                                 <thead>
                                     <tr>
-                                        <th style="font-size: 0.9rem;">Order ID</th>
-                                        <th style="font-size: 0.9rem;">Package</th>
-                                        <th style="font-size: 0.9rem;">Event Date</th>
-                                        <th style="font-size: 0.9rem;">Location</th>
+                                        <th style="font-size: 0.9rem;">ID Pesanan</th>
+                                        <th style="font-size: 0.9rem;">Paket</th>
+                                        <th style="font-size: 0.9rem;">Tanggal Acara</th>
+                                        <th style="font-size: 0.9rem;">Lokasi</th>
                                         <th style="font-size: 0.9rem;">Total</th>
                                         <th style="font-size: 0.9rem;">Status</th>
-                                        <th style="font-size: 0.9rem;">Actions</th>
+                                        <th style="font-size: 0.9rem;">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -122,7 +122,7 @@
                             </table>
                         </div>
                     @else
-                        <div class="alert alert-info mb-0">You haven't made any bookings yet. <a href="{{ route('customer.packages.index') }}">Browse packages</a></div>
+                        <div class="alert alert-info mb-0">Anda belum melakukan pemesanan. <a href="{{ route('customer.packages.index') }}">Lihat paket</a></div>
                     @endif
                 </div>
             </div>

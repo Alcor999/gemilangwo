@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Gemilang WO - Wedding Organizer')</title>
+    <title>@yield('title', 'Gemilang WO - Penyelenggara Pernikahan')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -403,13 +403,13 @@
                                     <i class="fas fa-user"></i> {{ auth()->user()->name }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="{{ route('home') }}">Home</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('home') }}">Beranda</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                                             @csrf
                                             <button type="submit" class="dropdown-item">
-                                                <i class="fas fa-sign-out-alt"></i> Logout
+                                                <i class="fas fa-sign-out-alt"></i> Keluar
                                             </button>
                                         </form>
                                     </li>
@@ -417,7 +417,7 @@
                             </li>
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}"><i class="fas fa-sign-in-alt"></i> Login</a>
+                                <a class="nav-link" href="{{ route('login') }}"><i class="fas fa-sign-in-alt"></i> Masuk</a>
                             </li>
                         @endauth
                     </ul>
@@ -432,28 +432,28 @@
                     <div class="nav flex-column nav-pills">
                         @if(auth()->user()->isAdmin())
                         <a class="nav-link {{ Route::currentRouteName() == 'admin.dashboard' ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
-                            <i class="fas fa-chart-line"></i> Dashboard
+                            <i class="fas fa-chart-line"></i> Dasbor
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'admin.packages.index' ? 'active' : '' }}" href="{{ route('admin.packages.index') }}">
-                            <i class="fas fa-box"></i> Manage Packages
+                            <i class="fas fa-box"></i> Kelola Paket
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'admin.discounts.index' ? 'active' : '' }}" href="{{ route('admin.discounts.index') }}">
-                            <i class="fas fa-tag"></i> Discounts & Promos
+                            <i class="fas fa-tag"></i> Diskon & Promo
                         </a>
                         <a class="nav-link {{ str_contains(Route::currentRouteName() ?? '', 'admin.vendor') ? 'active' : '' }}" href="{{ route('admin.vendor-categories.index') }}">
-                            <i class="fas fa-store"></i> Vendors
+                            <i class="fas fa-store"></i> Vendor
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'admin.reviews.index' ? 'active' : '' }}" href="{{ route('admin.reviews.index') }}">
-                            <i class="fas fa-star"></i> Reviews
+                            <i class="fas fa-star"></i> Ulasan
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'admin.orders.index' ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
-                            <i class="fas fa-clipboard-list"></i> Orders
+                            <i class="fas fa-clipboard-list"></i> Pesanan
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'admin.users.index' ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
-                            <i class="fas fa-users"></i> Users
+                            <i class="fas fa-users"></i> Pengguna
                         </a>
                         <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'admin.support') !== false ? 'active' : '' }}" href="{{ route('admin.support.tickets.index') }}">
-                            <i class="fas fa-headset"></i> Support Tickets
+                            <i class="fas fa-headset"></i> Tiket Dukungan
                         </a>
                         
                         <!-- Divider -->
@@ -461,15 +461,15 @@
                         
                         <!-- Media & Content -->
                         <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'admin.videos') !== false ? 'active' : '' }}" href="{{ route('admin.videos.index') }}">
-                            <i class="fas fa-video"></i> Video Gallery
+                            <i class="fas fa-video"></i> Galeri Video
                         </a>
                         <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'admin.testimonials') !== false ? 'active' : '' }}" href="{{ route('admin.testimonials.index') }}">
-                            <i class="fas fa-star"></i> Testimonial Approvals
+                            <i class="fas fa-star"></i> Persetujuan Testimoni
                         </a>
                         
                         <!-- Analytics -->
                         <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'admin.analytics') !== false ? 'active' : '' }}" href="{{ route('admin.analytics.dashboard') }}">
-                            <i class="fas fa-chart-pie"></i> Analytics
+                            <i class="fas fa-chart-pie"></i> Analitik
                         </a>
                         
                         <!-- Divider -->
@@ -477,23 +477,23 @@
                         
                         <!-- Testing Routes -->
                         <a class="nav-link" href="{{ route('email-test.order-confirmation', 1) }}" target="_blank">
-                            <i class="fas fa-envelope"></i> Email Test
+                            <i class="fas fa-envelope"></i> Uji Email
                         </a>
                         <a class="nav-link" href="{{ route('sms-test.order-confirmation', 1) }}" target="_blank">
-                            <i class="fas fa-sms"></i> SMS Test
+                            <i class="fas fa-sms"></i> Uji SMS
                         </a>
                     @elseif(auth()->user()->isOwner())
                         <a class="nav-link {{ Route::currentRouteName() == 'owner.dashboard' ? 'active' : '' }}" href="{{ route('owner.dashboard') }}">
-                            <i class="fas fa-chart-line"></i> Dashboard
+                            <i class="fas fa-chart-line"></i> Dasbor
                         </a>
                         <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'owner.analytics') !== false ? 'active' : '' }}" href="{{ route('owner.analytics.dashboard') }}">
-                            <i class="fas fa-chart-pie"></i> Analytics
+                            <i class="fas fa-chart-pie"></i> Analitik
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'owner.statistics' ? 'active' : '' }}" href="{{ route('owner.statistics') }}">
-                            <i class="fas fa-bar-chart"></i> Statistics
+                            <i class="fas fa-bar-chart"></i> Statistik
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'owner.payments' ? 'active' : '' }}" href="{{ route('owner.payments') }}">
-                            <i class="fas fa-credit-card"></i> Payments
+                            <i class="fas fa-credit-card"></i> Pembayaran
                         </a>
                         
                         <!-- Divider -->
@@ -501,18 +501,18 @@
                         
                         <!-- Calendar Management -->
                         <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'owner.calendar') !== false ? 'active' : '' }}" href="{{ route('owner.calendar.index') }}">
-                            <i class="fas fa-calendar-alt"></i> Calendar & Booking
+                            <i class="fas fa-calendar-alt"></i> Kalender & Pemesanan
                         </a>
                     @else
                         <!-- Main Menu -->
                         <a class="nav-link {{ Route::currentRouteName() == 'customer.dashboard' ? 'active' : '' }}" href="{{ route('customer.dashboard') }}">
-                            <i class="fas fa-home"></i> Dashboard
+                            <i class="fas fa-home"></i> Dasbor
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'customer.packages.index' ? 'active' : '' }}" href="{{ route('customer.packages.index') }}">
-                            <i class="fas fa-gift"></i> Browse Packages
+                            <i class="fas fa-gift"></i> Lihat Paket
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'customer.orders.index' ? 'active' : '' }}" href="{{ route('customer.orders.index') }}">
-                            <i class="fas fa-shopping-cart"></i> My Orders
+                            <i class="fas fa-shopping-cart"></i> Pesanan Saya
                         </a>
 
                         <!-- Divider -->
@@ -520,16 +520,16 @@
 
                         <!-- Customer Features -->
                         <a class="nav-link {{ Route::currentRouteName() == 'customer.profile.show' ? 'active' : '' }}" href="{{ route('customer.profile.show') }}">
-                            <i class="fas fa-user-circle"></i> My Profile
+                            <i class="fas fa-user-circle"></i> Profil Saya
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'customer.wishlist.index' ? 'active' : '' }}" href="{{ route('customer.wishlist.index') }}">
                             <i class="fas fa-heart"></i> Wishlist
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'customer.reviews.index' ? 'active' : '' }}" href="{{ route('customer.reviews.index') }}">
-                            <i class="fas fa-star"></i> My Reviews
+                            <i class="fas fa-star"></i> Ulasan Saya
                         </a>
                         <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'customer.testimonials') !== false ? 'active' : '' }}" href="{{ route('customer.testimonials.index') }}">
-                            <i class="fas fa-video"></i> My Testimonials
+                            <i class="fas fa-video"></i> Testimoni Saya
                         </a>
                         
                         <!-- Divider -->
@@ -537,12 +537,12 @@
                         
                         <!-- Calendar & Events -->
                         <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'customer.calendar') !== false ? 'active' : '' }}" href="{{ route('customer.calendar.confirmation') }}">
-                            <i class="fas fa-calendar-check"></i> My Events
+                            <i class="fas fa-calendar-check"></i> Acara Saya
                         </a>
                         
                         <!-- Support & Communication -->
                         <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'customer.support.tickets') !== false ? 'active' : '' }}" href="{{ route('customer.support.tickets.index') }}">
-                            <i class="fas fa-headset"></i> Support Tickets
+                            <i class="fas fa-headset"></i> Tiket Dukungan
                         </a>
                     @endif
                     </div>
@@ -553,7 +553,7 @@
         <main class="main-content flex-grow-1 w-100">
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-circle"></i> <strong>Error!</strong>
+                    <i class="fas fa-exclamation-circle"></i> <strong>Kesalahan!</strong>
                     @foreach ($errors->all() as $error)
                         <div>{{ $error }}</div>
                     @endforeach

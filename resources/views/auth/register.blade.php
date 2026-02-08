@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Register - Gemilang WO')
+@section('title', 'Daftar - Gemilang WO')
 
 @section('styles')
 <style>
@@ -318,7 +318,7 @@
                 <i class="fas fa-ring"></i>
             </div>
             <h2>Gemilang WO</h2>
-            <p>Create Your Account</p>
+            <p>Buat Akun Anda</p>
         </div>
 
         <!-- Body -->
@@ -326,7 +326,7 @@
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <i class="fas fa-exclamation-circle me-2"></i>
-                    <strong>Error!</strong> Please check the form and try again.
+                    <strong>Kesalahan!</strong> Silakan periksa formulir dan coba lagi.
                 </div>
             @endif
 
@@ -335,7 +335,7 @@
 
                 <!-- Full Name Field -->
                 <div class="form-group">
-                    <label for="name" class="form-label">Full Name</label>
+                    <label for="name" class="form-label">Nama Lengkap</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="fas fa-user"></i>
@@ -343,7 +343,7 @@
                         <input id="name" type="text" 
                                class="form-control @error('name') is-invalid @enderror" 
                                name="name" value="{{ old('name') }}" required autocomplete="name" autofocus
-                               placeholder="Enter your full name">
+                               placeholder="Masukkan nama lengkap Anda">
                     </div>
                     @error('name')
                         <span class="invalid-feedback">{{ $message }}</span>
@@ -352,7 +352,7 @@
 
                 <!-- Email Field -->
                 <div class="form-group">
-                    <label for="email" class="form-label">Email Address</label>
+                    <label for="email" class="form-label">Alamat Email</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="fas fa-envelope"></i>
@@ -369,7 +369,7 @@
 
                 <!-- Password Field -->
                 <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
+                    <label for="password" class="form-label">Kata Sandi</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="fas fa-lock"></i>
@@ -377,7 +377,7 @@
                         <input id="password" type="password" 
                                class="form-control @error('password') is-invalid @enderror" 
                                name="password" required autocomplete="new-password"
-                               placeholder="Create a password">
+                               placeholder="Buat kata sandi">
                     </div>
                     @error('password')
                         <span class="invalid-feedback">{{ $message }}</span>
@@ -386,7 +386,7 @@
 
                 <!-- Confirm Password Field -->
                 <div class="form-group">
-                    <label for="password_confirmation" class="form-label">Confirm Password</label>
+                    <label for="password_confirmation" class="form-label">Konfirmasi Kata Sandi</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="fas fa-lock"></i>
@@ -394,7 +394,7 @@
                         <input id="password_confirmation" type="password" 
                                class="form-control @error('password_confirmation') is-invalid @enderror" 
                                name="password_confirmation" required autocomplete="new-password"
-                               placeholder="Confirm your password">
+                               placeholder="Konfirmasi kata sandi Anda">
                     </div>
                     @error('password_confirmation')
                         <span class="invalid-feedback">{{ $message }}</span>
@@ -403,7 +403,7 @@
 
                 <!-- Register Button -->
                 <button type="submit" class="btn-login">
-                    <i class="fas fa-user-plus me-2"></i> Create Account
+                    <i class="fas fa-user-plus me-2"></i> Buat Akun
                 </button>
             </form>
 
@@ -412,13 +412,13 @@
 
             <!-- Login Link -->
             <p class="login-register">
-                Already have an account?<br>
-                <a href="{{ route('login') }}">Login here</a>
+                Sudah punya akun?<br>
+                <a href="{{ route('login') }}">Masuk di sini</a>
             </p>
 
             <!-- Back to Home -->
             <a href="{{ route('home') }}" class="login-back-link">
-                <i class="fas fa-arrow-left me-2"></i>Back to Home
+                <i class="fas fa-arrow-left me-2"></i>Kembali ke Beranda
             </a>
         </div>
     </div>
