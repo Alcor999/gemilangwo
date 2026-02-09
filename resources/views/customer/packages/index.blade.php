@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Browse Packages')
+@section('title', 'Lihat Paket')
 
 @section('content')
 <div class="container-fluid">
-    <h1 class="mb-4" style="font-size: 2rem;">Our Wedding Organizer Packages</h1>
+    <h1 class="mb-4" style="font-size: 2rem;">Paket Wedding Organizer Kami</h1>
 
     @if($packages->count() > 0)
         <div class="row">
@@ -24,12 +24,12 @@
                             <div class="mb-3">
                                 <h3 class="text-primary mb-0" style="font-size: 1.5rem;">Rp {{ number_format($package->price, 0, ',', '.') }}</h3>
                                 @if($package->max_guests)
-                                    <small class="text-muted">Up to {{ $package->max_guests }} guests</small>
+                                    <small class="text-muted">Hingga {{ $package->max_guests }} tamu</small>
                                 @endif
                             </div>
                             <div class="mt-auto">
                                 <a href="{{ route('customer.packages.show', $package->id) }}" class="btn btn-primary btn-sm w-100">
-                                    View Details & Book
+                                    Lihat Detail & Pesan
                                 </a>
                             </div>
                         </div>
@@ -39,7 +39,7 @@
         </div>
     @else
         <div class="alert alert-info">
-            No packages available at the moment. Please check back later.
+            Belum ada paket tersedia saat ini. Silakan cek kembali nanti.
         </div>
     @endif
 </div>

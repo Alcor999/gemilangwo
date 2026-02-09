@@ -46,7 +46,7 @@ class AnalyticsController extends Controller
         $year = $request->get('year', now()->year);
         $month = $request->get('month', now()->month);
 
-        $revenueData = match($period) {
+        $revenueData = match ($period) {
             'daily' => $this->analyticsService->getOwnerRevenueByDay($ownerId, $year, $month),
             'monthly' => $this->analyticsService->getOwnerRevenueByMonth($ownerId, $year),
             'yearly' => $this->analyticsService->getOwnerRevenueByYear($ownerId),

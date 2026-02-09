@@ -23,7 +23,9 @@ class PackageVendorCategorySeeder extends Seeder
 
         foreach ($assignments as $packageName => $slugs) {
             $package = Package::where('name', $packageName)->first();
-            if (!$package) continue;
+            if (! $package) {
+                continue;
+            }
 
             $ids = [];
             foreach ($slugs as $slug) {

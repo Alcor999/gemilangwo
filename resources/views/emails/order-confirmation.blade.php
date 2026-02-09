@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Order Confirmation</title>
+    <title>Konfirmasi Pesanan</title>
     <style>
         body { font-family: Arial, sans-serif; color: #333; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -22,74 +22,85 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Order Confirmation</h1>
-            <p>Your wedding package order has been received!</p>
+            <h1>Konfirmasi Pesanan</h1>
+            <p>Pesanan paket pernikahan Anda sudah kami terima!</p>
         </div>
 
         <div class="content">
-            <p>Hello {{ $customer->name }},</p>
+            <p>Halo {{ $customer->name }},</p>
 
-            <p>Thank you for choosing us! Your order has been successfully created and is now being processed.</p>
+            <p>Terima kasih telah memilih kami! Pesanan Anda berhasil dibuat dan sedang diproses.</p>
 
             <div class="info-box">
-                <strong>Order Details:</strong>
+                <strong>Detail Pesanan:</strong>
                 <table>
                     <tr>
-                        <td>Order ID:</td>
+                        <td>ID Pesanan:</td>
                         <td><strong>#{{ $order->id }}</strong></td>
                     </tr>
                     <tr>
-                        <td>Package:</td>
+                        <td>Paket:</td>
                         <td>{{ $package->name }}</td>
                     </tr>
                     <tr>
-                        <td>Package Price:</td>
+                        <td>Harga Paket:</td>
                         <td>Rp {{ number_format($package->price, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td>Total Price:</td>
+                        <td>Total:</td>
                         <td><strong>Rp {{ number_format($order->total_price, 0, ',', '.') }}</strong></td>
                     </tr>
                     <tr>
-                        <td>Event Date:</td>
+                        <td>Tanggal Acara:</td>
                         <td>{{ \Carbon\Carbon::parse($order->event_date)->format('d F Y') }}</td>
                     </tr>
                     <tr>
                         <td>Status:</td>
-                        <td><span class="warning-badge">{{ ucfirst($order->status) }}</span></td>
+                        <td>
+                            @php
+                                $statusLabels = [
+                                    'pending' => 'Menunggu',
+                                    'confirmed' => 'Dikonfirmasi',
+                                    'in_progress' => 'Sedang Berlangsung',
+                                    'completed' => 'Selesai',
+                                    'cancelled' => 'Dibatalkan',
+                                ];
+                            @endphp
+                            <span class="warning-badge">{{ $statusLabels[$order->status] ?? ucfirst(str_replace('_', ' ', $order->status)) }}</span>
+                        </td>
                     </tr>
                 </table>
             </div>
 
-            <p>Our team is reviewing your order and will contact you shortly to confirm the details and discuss any customizations.</p>
+            <p>Tim kami sedang meninjau pesanan Anda dan akan segera menghubungi Anda untuk mengonfirmasi detail serta mendiskusikan kebutuhan khusus.</p>
 
             <p style="text-align: center;">
                 <a href="{{ route('customer.orders.show', $order) }}" class="button">
-                    View Order Details
+                    Lihat Detail Pesanan
                 </a>
             </p>
 
             <hr class="divider">
 
-            <h3 style="margin-bottom: 10px;">What's Next?</h3>
+            <h3 style="margin-bottom: 10px;">Apa Selanjutnya?</h3>
             <ul>
-                <li>We will review your order within 24 hours</li>
-                <li>You will receive confirmation email from our team</li>
-                <li>We will contact you to discuss final details</li>
-                <li>Once confirmed, you can proceed with payment</li>
+                <li>Kami akan meninjau pesanan Anda dalam 24 jam</li>
+                <li>Anda akan menerima email konfirmasi dari tim kami</li>
+                <li>Kami akan menghubungi Anda untuk membahas detail akhir</li>
+                <li>Setelah dikonfirmasi, Anda dapat melanjutkan pembayaran</li>
             </ul>
 
-            <p>If you have any questions, please don't hesitate to contact us.</p>
+            <p>Jika ada pertanyaan, jangan ragu untuk menghubungi kami.</p>
 
             <p style="margin-top: 30px;">
-                Best regards,<br>
-                <strong>Gemilang WO Team</strong>
+                Salam hangat,<br>
+                <strong>Tim Gemilang WO</strong>
             </p>
         </div>
 
         <div class="footer">
-            <p>© 2026 Gemilang WO. All rights reserved.</p>
-            <p>This is an automated email. Please do not reply directly to this message.</p>
+            <p>© 2026 Gemilang WO. Hak cipta dilindungi undang-undang.</p>
+            <p>Ini adalah email otomatis. Mohon jangan membalas langsung pesan ini.</p>
         </div>
     </div>
 </body>

@@ -15,7 +15,7 @@
     <div class="container">
         <div class="header">
             <h2><i class="fas fa-check-circle"></i> Pembayaran Dikonfirmasi</h2>
-            <p>Order: {{ $order->order_number }}</p>
+            <p>Pesanan: {{ $order->order_number }}</p>
         </div>
         
         <div class="content">
@@ -23,14 +23,14 @@
             
             <div class="success-box">
                 <strong>✓ Pembayaran Anda telah dikonfirmasi!</strong><br>
-                Terima kasih telah menyelesaikan pembayaran. Pesanan Anda sekarang dalam status <strong>Confirmed</strong>.
+                Terima kasih telah menyelesaikan pembayaran. Pesanan Anda sekarang dalam status <strong>Dikonfirmasi</strong>.
             </div>
             
             <h4>Detail Pesanan Anda</h4>
             <ul>
-                <li><strong>Order Number:</strong> {{ $order->order_number }}</li>
+                <li><strong>Nomor Pesanan:</strong> {{ $order->order_number }}</li>
                 <li><strong>Paket:</strong> {{ $order->package->name }}</li>
-                <li><strong>Tanggal Event:</strong> {{ $order->event_date->format('d M Y') }}</li>
+                <li><strong>Tanggal Acara:</strong> {{ $order->event_date->format('d M Y') }}</li>
                 <li><strong>Lokasi:</strong> {{ $order->event_location }}</li>
                 <li><strong>Total Pembayaran:</strong> Rp {{ number_format($order->total_price, 0, ',', '.') }}</li>
             </ul>
@@ -49,7 +49,7 @@
         </div>
         
         <div class="footer">
-            <p>&copy; {{ date('Y') }} Gemilang WO. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} Gemilang WO. Hak cipta dilindungi undang-undang.</p>
         </div>
     </div>
 </body>

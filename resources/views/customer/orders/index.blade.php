@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'My Orders')
+@section('title', 'Pesanan Saya')
 
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>My Bookings</h1>
+        <h1>Pemesanan Saya</h1>
         <a href="{{ route('customer.orders.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Create New Booking
+            <i class="fas fa-plus"></i> Buat Pemesanan Baru
         </a>
     </div>
 
@@ -16,14 +16,14 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Order ID</th>
-                        <th>Package</th>
-                        <th>Event Date</th>
-                        <th>Location</th>
-                        <th>Total Amount</th>
+                        <th>ID Pesanan</th>
+                        <th>Paket</th>
+                        <th>Tanggal Acara</th>
+                        <th>Lokasi</th>
+                        <th>Total</th>
                         <th>Status</th>
-                        <th>Payment</th>
-                        <th>Actions</th>
+                        <th>Pembayaran</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,20 +41,20 @@
                             </td>
                             <td>
                                 @if($order->payment && $order->payment->isSuccess())
-                                    <span class="badge bg-success">Paid</span>
+                                    <span class="badge bg-success">Sudah Dibayar</span>
                                 @elseif($order->payment && $order->payment->status === 'pending')
-                                    <span class="badge bg-warning">Pending</span>
+                                    <span class="badge bg-warning">Menunggu</span>
                                 @else
-                                    <span class="badge bg-secondary">Unpaid</span>
+                                    <span class="badge bg-secondary">Belum Dibayar</span>
                                 @endif
                             </td>
                             <td>
                                 <a href="{{ route('customer.orders.show', $order->id) }}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-eye"></i> View
+                                    <i class="fas fa-eye"></i> Lihat
                                 </a>
                                 @if($order->isPending() && (!$order->payment || !$order->payment->isSuccess()))
                                     <a href="{{ route('customer.orders.payment', $order->id) }}" class="btn btn-sm btn-success">
-                                        <i class="fas fa-credit-card"></i> Pay
+                                        <i class="fas fa-credit-card"></i> Bayar
                                     </a>
                                 @endif
                             </td>
@@ -64,7 +64,7 @@
             </table>
         </div>
 
-        <!-- Pagination -->
+        <!-- Paginasi -->
         <div class="d-flex justify-content-center mt-4">
             {{ $orders->links() }}
         </div>

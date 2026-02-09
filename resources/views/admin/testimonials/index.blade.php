@@ -5,7 +5,7 @@
     <div class="row mb-4">
         <div class="col">
             <h2 class="mb-0">
-                <i class="fas fa-star me-2"></i> Testimonial Approvals
+                <i class="fas fa-star me-2"></i> Persetujuan Testimoni
             </h2>
         </div>
     </div>
@@ -22,7 +22,7 @@
         <div class="card-header bg-warning text-dark">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">
-                    <i class="fas fa-clock me-2"></i> Pending Review
+                    <i class="fas fa-clock me-2"></i> Menunggu Tinjauan
                     <span class="badge bg-danger">{{ $pendingTestimonials->total() }}</span>
                 </h5>
             </div>
@@ -33,26 +33,26 @@
                     @foreach ($pendingTestimonials as $testimonial)
                         <div class="col-md-6 col-lg-4 mb-4">
                             <div class="card h-100 shadow-sm border-0">
-                                <!-- Thumbnail -->
+                                <!-- Gambar Miniatur -->
                                 <div class="position-relative" style="height: 160px; background: #f0f0f0; overflow: hidden;">
                                     @if ($testimonial->type === 'upload' && $testimonial->video_path)
                                         <img src="{{ asset('storage/' . $testimonial->video_path) }}" 
-                                             alt="Thumbnail" class="w-100 h-100 object-fit-cover">
+                                             alt="Gambar miniatur" class="w-100 h-100 object-fit-cover">
                                     @elseif ($testimonial->type === 'youtube' && $testimonial->youtube_url)
                                         <img src="https://img.youtube.com/vi/{{ $testimonial->getYoutubeId() }}/hqdefault.jpg" 
-                                             alt="YouTube Thumbnail" class="w-100 h-100 object-fit-cover">
+                                             alt="Gambar miniatur YouTube" class="w-100 h-100 object-fit-cover">
                                     @else
                                         <div class="d-flex align-items-center justify-content-center h-100">
                                             <div class="text-center">
                                                 <i class="fas fa-video fa-3x text-muted"></i>
-                                                <p class="text-muted mt-2">No Thumbnail</p>
+                                                <p class="text-muted mt-2">Tidak Ada Gambar Miniatur</p>
                                             </div>
                                         </div>
                                     @endif
                                     
                                     <!-- Badge -->
                                     <span class="badge bg-warning position-absolute top-2 end-2">
-                                        <i class="fas fa-clock me-1"></i> Pending
+                                        <i class="fas fa-clock me-1"></i> Menunggu
                                     </span>
                                 </div>
 
@@ -78,16 +78,16 @@
                                     <div class="d-flex gap-2 w-100">
                                         <a href="{{ route('admin.testimonials.show', $testimonial) }}" 
                                            class="btn btn-sm btn-primary flex-grow-1">
-                                            <i class="fas fa-eye me-1"></i> View
+                                            <i class="fas fa-eye me-1"></i> Lihat
                                         </a>
                                         <button type="button" class="btn btn-sm btn-success flex-grow-1" 
                                                 data-bs-toggle="modal" data-bs-target="#approveModal{{ $testimonial->id }}">
-                                            <i class="fas fa-check me-1"></i> Approve
+                                            <i class="fas fa-check me-1"></i> Setujui
                                         </button>
                                         <button type="button" class="btn btn-sm btn-danger flex-grow-1" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#rejectModal{{ $testimonial->id }}">
-                                            <i class="fas fa-times me-1"></i> Reject
+                                            <i class="fas fa-times me-1"></i> Tolak
                                         </button>
                                     </div>
                                 </div>
@@ -119,23 +119,23 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header border-danger">
-                                            <h5 class="modal-title">Reject Testimonial</h5>
+                                            <h5 class="modal-title">Tolak Testimoni</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <form action="{{ route('admin.testimonials.reject', $testimonial) }}" method="POST">
                                             @csrf
                                             <div class="modal-body">
-                                                <p>Are you sure you want to reject this testimonial from <strong>{{ $testimonial->user->name }}</strong>?</p>
+                                                <p>Apakah Anda yakin ingin menolak testimoni dari <strong>{{ $testimonial->user->name }}</strong>?</p>
                                                 <div class="mb-3">
-                                                    <label class="form-label">Reason (optional)</label>
+                                                    <label class="form-label">Alasan (opsional)</label>
                                                     <textarea name="reason" class="form-control" rows="3" 
-                                                              placeholder="Why are you rejecting this testimonial?"></textarea>
+                                                              placeholder="Mengapa Anda menolak testimoni ini?"></textarea>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                                                 <button type="submit" class="btn btn-danger">
-                                                    <i class="fas fa-trash me-1"></i> Reject & Delete
+                                                    <i class="fas fa-trash me-1"></i> Tolak & Hapus
                                                 </button>
                                             </div>
                                         </form>
@@ -146,14 +146,14 @@
                     @endforeach
                 </div>
 
-                <!-- Pagination -->
+                <!-- Paginasi -->
                 <nav>
                     {{ $pendingTestimonials->links() }}
                 </nav>
             @else
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="fas fa-check-circle me-2"></i>
-                    <strong>Great!</strong> No pending testimonials. All submissions have been reviewed.
+                    <strong>Bagus!</strong> Tidak ada testimoni yang menunggu. Semua kiriman sudah ditinjau.
                 </div>
             @endif
         </div>
@@ -164,7 +164,7 @@
         <div class="card-header bg-success text-white">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">
-                    <i class="fas fa-check-circle me-2"></i> Published Testimonials
+                    <i class="fas fa-check-circle me-2"></i> Testimoni Dipublikasikan
                     <span class="badge bg-light text-dark">{{ $publishedTestimonials->total() }}</span>
                 </h5>
             </div>
@@ -175,19 +175,19 @@
                     @foreach ($publishedTestimonials as $testimonial)
                         <div class="col-md-6 col-lg-4 mb-4">
                             <div class="card h-100 shadow-sm border-0">
-                                <!-- Thumbnail -->
+                                <!-- Gambar Miniatur -->
                                 <div class="position-relative" style="height: 160px; background: #f0f0f0; overflow: hidden;">
                                     @if ($testimonial->type === 'upload' && $testimonial->video_path)
                                         <img src="{{ asset('storage/' . $testimonial->video_path) }}" 
-                                             alt="Thumbnail" class="w-100 h-100 object-fit-cover">
+                                             alt="Gambar miniatur" class="w-100 h-100 object-fit-cover">
                                     @elseif ($testimonial->type === 'youtube' && $testimonial->youtube_url)
                                         <img src="https://img.youtube.com/vi/{{ $testimonial->getYoutubeId() }}/hqdefault.jpg" 
-                                             alt="YouTube Thumbnail" class="w-100 h-100 object-fit-cover">
+                                             alt="Gambar miniatur YouTube" class="w-100 h-100 object-fit-cover">
                                     @else
                                         <div class="d-flex align-items-center justify-content-center h-100">
                                             <div class="text-center">
                                                 <i class="fas fa-video fa-3x text-muted"></i>
-                                                <p class="text-muted mt-2">No Thumbnail</p>
+                                            <p class="text-muted mt-2">Tidak Ada Gambar Miniatur</p>
                                             </div>
                                         </div>
                                     @endif
@@ -195,7 +195,7 @@
                                     <!-- Featured Badge -->
                                     @if ($testimonial->is_featured)
                                         <span class="badge bg-warning position-absolute top-2 end-2">
-                                            <i class="fas fa-star me-1"></i> Featured
+                                            <i class="fas fa-star me-1"></i> Unggulan
                                         </span>
                                     @endif
                                 </div>
@@ -225,51 +225,51 @@
                                     <div class="d-flex gap-2 w-100 flex-wrap">
                                         <a href="{{ route('admin.testimonials.show', $testimonial) }}" 
                                            class="btn btn-sm btn-primary flex-grow-1">
-                                            <i class="fas fa-eye me-1"></i> View
+                                            <i class="fas fa-eye me-1"></i> Lihat
                                         </a>
                                         @if (!$testimonial->is_featured)
                                             <form action="{{ route('admin.testimonials.feature', $testimonial) }}" method="POST" class="d-flex flex-grow-1">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm btn-warning w-100" title="Mark as Featured">
-                                                    <i class="fas fa-star me-1"></i> Feature
+                                                <button type="submit" class="btn btn-sm btn-warning w-100" title="Tandai sebagai Unggulan">
+                                                    <i class="fas fa-star me-1"></i> Jadikan Unggulan
                                                 </button>
                                             </form>
                                         @else
                                             <form action="{{ route('admin.testimonials.unfeature', $testimonial) }}" method="POST" class="d-flex flex-grow-1">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm btn-secondary w-100" title="Remove from Featured">
-                                                    <i class="fas fa-star me-1"></i> Unfeature
+                                                <button type="submit" class="btn btn-sm btn-secondary w-100" title="Hapus dari Unggulan">
+                                                    <i class="fas fa-star me-1"></i> Batalkan Unggulan
                                                 </button>
                                             </form>
                                         @endif
                                         <button type="button" class="btn btn-sm btn-danger flex-grow-1" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#deleteModal{{ $testimonial->id }}">
-                                            <i class="fas fa-trash me-1"></i> Delete
+                                            <i class="fas fa-trash me-1"></i> Hapus
                                         </button>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Delete Modal -->
+                            <!-- Modal Hapus -->
                             <div class="modal fade" id="deleteModal{{ $testimonial->id }}" tabindex="-1">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header border-danger">
-                                            <h5 class="modal-title">Delete Testimonial</h5>
+                                            <h5 class="modal-title">Hapus Testimoni</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>Are you sure you want to permanently delete this testimonial?</p>
-                                            <p class="text-muted"><strong>Title:</strong> {{ $testimonial->title }}</p>
-                                            <p class="text-muted"><strong>By:</strong> {{ $testimonial->user->name }}</p>
+                                            <p>Apakah Anda yakin ingin menghapus testimoni ini secara permanen?</p>
+                                            <p class="text-muted"><strong>Judul:</strong> {{ $testimonial->title }}</p>
+                                            <p class="text-muted"><strong>Oleh:</strong> {{ $testimonial->user->name }}</p>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                                             <form action="{{ route('admin.testimonials.reject', $testimonial) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger">
-                                                    <i class="fas fa-trash me-1"></i> Delete Permanently
+                                                    <i class="fas fa-trash me-1"></i> Hapus Permanen
                                                 </button>
                                             </form>
                                         </div>
@@ -280,14 +280,14 @@
                     @endforeach
                 </div>
 
-                <!-- Pagination -->
+                <!-- Paginasi -->
                 <nav>
                     {{ $publishedTestimonials->links() }}
                 </nav>
             @else
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle me-2"></i>
-                    No published testimonials yet. Approve pending submissions to display them.
+                    Belum ada testimoni yang dipublikasikan. Setujui kiriman yang menunggu untuk menampilkannya.
                 </div>
             @endif
         </div>
@@ -309,11 +309,11 @@ function doApproveTestimonial(id) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            if (typeof showToast === 'function') showToast('Testimonial berhasil disetujui!', 'success');
+            if (typeof showToast === 'function') showToast('Testimoni berhasil disetujui!', 'success');
             location.reload();
         }
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => console.error('Kesalahan:', error));
 }
 </script>
 @endsection

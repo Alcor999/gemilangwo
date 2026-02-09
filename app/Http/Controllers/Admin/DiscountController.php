@@ -15,6 +15,7 @@ class DiscountController extends Controller
     public function index()
     {
         $discounts = Discount::with('creator', 'packages')->latest()->paginate(15);
+
         return view('admin.discounts.index', compact('discounts'));
     }
 
@@ -24,6 +25,7 @@ class DiscountController extends Controller
     public function create()
     {
         $packages = Package::all();
+
         return view('admin.discounts.create', compact('packages'));
     }
 
@@ -48,8 +50,8 @@ class DiscountController extends Controller
         $validated['created_by'] = auth()->id();
 
         $discount = Discount::create($validated);
-        
-        if ($request->has('packages') && !empty($request->packages)) {
+
+        if ($request->has('packages') && ! empty($request->packages)) {
             $discount->packages()->sync($request->packages);
         }
 
@@ -64,6 +66,7 @@ class DiscountController extends Controller
     public function show(Discount $discount)
     {
         $discount->load('creator', 'packages');
+
         return view('admin.discounts.show', compact('discount'));
     }
 
@@ -74,6 +77,7 @@ class DiscountController extends Controller
     {
         $packages = Package::all();
         $discount->load('packages');
+
         return view('admin.discounts.edit', compact('discount', 'packages'));
     }
 
@@ -96,7 +100,7 @@ class DiscountController extends Controller
         ]);
 
         $discount->update($validated);
-        
+
         if ($request->has('packages')) {
             $discount->packages()->sync($request->packages ?? []);
         }
@@ -119,4 +123,3 @@ class DiscountController extends Controller
             ->with('success', 'Discount berhasil dihapus!');
     }
 }
-

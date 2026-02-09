@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             // Add SMS preference columns if they don't exist
-            if (!Schema::hasColumn('users', 'prefer_whatsapp')) {
+            if (! Schema::hasColumn('users', 'prefer_whatsapp')) {
                 $table->boolean('prefer_whatsapp')->default(true)->comment('Prefer WhatsApp notifications');
             }
-            if (!Schema::hasColumn('users', 'prefer_sms')) {
+            if (! Schema::hasColumn('users', 'prefer_sms')) {
                 $table->boolean('prefer_sms')->default(true)->comment('Prefer SMS notifications');
             }
-            if (!Schema::hasColumn('users', 'prefer_email')) {
+            if (! Schema::hasColumn('users', 'prefer_email')) {
                 $table->boolean('prefer_email')->default(true)->comment('Prefer Email notifications');
             }
         });

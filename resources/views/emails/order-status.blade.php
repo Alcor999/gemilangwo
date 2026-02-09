@@ -1,35 +1,46 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><style>body { font-family: Arial, sans-serif; color: #333; }.container { max-width: 600px; margin: 0 auto; padding: 20px; }.header { background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%); color: white; padding: 30px; text-align: center; border-radius: 8px; margin-bottom: 20px; }.content { padding: 20px; background: #f9f9f9; border-radius: 8px; }.info-box { background: white; padding: 15px; border-left: 4px solid #b8860b; margin: 20px 0; }table { width: 100%; border-collapse: collapse; }table td { padding: 8px; border-bottom: 1px solid #eee; }table td:first-child { font-weight: bold; width: 30%; }.button { display: inline-block; background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }.divider { border: none; border-top: 1px solid #ddd; margin: 20px 0; }.footer { text-align: center; color: #666; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; }ul { margin-left: 20px; margin-bottom: 20px; }</style></head><body><div class="container"><div class="header">
     <div class="header">
-        <h1>Order Status Update</h1>
-        <p>Your order status has changed</p>
+        <h1>Pembaruan Status Pesanan</h1>
+        <p>Status pesanan Anda berubah</p>
     </div>
 
     <div class="content">
-        <p>Hello {{ $customer->name }},</p>
+        <p>Halo {{ $customer->name }},</p>
 
-        <p>We're writing to inform you that the status of your order has been updated.</p>
+        <p>Kami ingin menginformasikan bahwa status pesanan Anda telah diperbarui.</p>
 
         <div class="info-box">
-            <strong>Status Update:</strong>
+            <strong>Pembaruan Status:</strong>
             <table>
                 <tr>
-                    <td>Order ID:</td>
+                    <td>ID Pesanan:</td>
                     <td><strong>#{{ $order->id }}</strong></td>
                 </tr>
                 <tr>
-                    <td>Package:</td>
+                    <td>Paket:</td>
                     <td>{{ $package->name }}</td>
                 </tr>
                 <tr>
-                    <td>Previous Status:</td>
-                    <td><span class="warning-badge">{{ ucfirst($previousStatus) }}</span></td>
+                    <td>Status Sebelumnya:</td>
+                    <td>
+                        @php
+                            $statusLabels = [
+                                'pending' => 'Menunggu',
+                                'confirmed' => 'Dikonfirmasi',
+                                'in_progress' => 'Sedang Berlangsung',
+                                'completed' => 'Selesai',
+                                'cancelled' => 'Dibatalkan',
+                            ];
+                        @endphp
+                        <span class="warning-badge">{{ $statusLabels[$previousStatus] ?? ucfirst(str_replace('_', ' ', $previousStatus)) }}</span>
+                    </td>
                 </tr>
                 <tr>
-                    <td>New Status:</td>
-                    <td><span class="success-badge">{{ ucfirst($order->status) }}</span></td>
+                    <td>Status Baru:</td>
+                    <td><span class="success-badge">{{ $statusLabels[$order->status] ?? ucfirst(str_replace('_', ' ', $order->status)) }}</span></td>
                 </tr>
                 <tr>
-                    <td>Updated At:</td>
+                    <td>Diperbarui Pada:</td>
                     <td>{{ now()->format('d F Y H:i') }}</td>
                 </tr>
             </table>
@@ -37,37 +48,37 @@
 
         @switch($order->status)
             @case('confirmed')
-                <p>Great news! Your order has been confirmed by our team. We're now preparing everything for your special event.</p>
+                <p>Kabar baik! Pesanan Anda sudah dikonfirmasi oleh tim kami. Kami sedang menyiapkan semuanya untuk acara spesial Anda.</p>
                 @break
             @case('in_progress')
-                <p>Your event is currently being prepared. Our team is working hard to make your event perfect!</p>
+                <p>Acara Anda sedang dipersiapkan. Tim kami bekerja keras untuk membuat acara Anda sempurna!</p>
                 @break
             @case('completed')
-                <p>Your event has been completed successfully! We hope everything went perfectly. Please share your feedback and rating on your order page.</p>
+                <p>Acara Anda telah selesai dengan sukses! Semoga semuanya berjalan lancar. Silakan berikan ulasan dan rating pada halaman pesanan Anda.</p>
                 @break
             @case('cancelled')
-                <p>Your order has been cancelled. If this was done by mistake, please contact our support team immediately.</p>
+                <p>Pesanan Anda telah dibatalkan. Jika ini terjadi karena kesalahan, silakan segera hubungi tim dukungan kami.</p>
                 @break
         @endswitch
 
         <p style="text-align: center;">
             <a href="{{ route('customer.orders.show', $order) }}" class="button">
-                View Order Details
+                Lihat Detail Pesanan
             </a>
         </p>
 
         <hr class="divider">
 
-        <p>If you have any questions about this update, please don't hesitate to contact us.</p>
+        <p>Jika Anda memiliki pertanyaan terkait pembaruan ini, jangan ragu untuk menghubungi kami.</p>
 
         <p style="margin-top: 30px;">
-            Best regards,<br>
-            <strong>Gemilang WO Team</strong>
+            Salam hangat,<br>
+            <strong>Tim Gemilang WO</strong>
         </p>
     </div>
 
     <div class="footer">
-        <p>© 2026 Gemilang WO. All rights reserved.</p>
-        <p>This is an automated email. Please do not reply directly to this message.</p>
+        <p>© 2026 Gemilang WO. Hak cipta dilindungi undang-undang.</p>
+        <p>Ini adalah email otomatis. Mohon jangan membalas langsung pesan ini.</p>
     </div>
 </div></div></body></html>

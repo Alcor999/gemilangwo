@@ -15,15 +15,14 @@ class AdminNotificationMail extends Mailable
     public function __construct(
         public string $type,
         public array $data = []
-    ) {
-    }
+    ) {}
 
     public function envelope(): Envelope
     {
-        $subject = match($this->type) {
-            'new_order' => '🎉 New Order Received - #' . ($this->data['order_id'] ?? 'N/A'),
+        $subject = match ($this->type) {
+            'new_order' => '🎉 New Order Received - #'.($this->data['order_id'] ?? 'N/A'),
             'new_review' => '⭐ New Review Received',
-            'payment_received' => '💰 Payment Received - #' . ($this->data['order_id'] ?? 'N/A'),
+            'payment_received' => '💰 Payment Received - #'.($this->data['order_id'] ?? 'N/A'),
             default => 'New Notification from Gemilang WO',
         };
 

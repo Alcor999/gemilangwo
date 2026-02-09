@@ -31,7 +31,7 @@
                     <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
                 @endforeach
             </select>
-            <button type="submit" class="btn btn-outline-primary">Filter</button>
+            <button type="submit" class="btn btn-outline-primary">Saring</button>
         </form>
     </div>
 
@@ -44,7 +44,7 @@
                         <th>Kategori</th>
                         <th>Harga</th>
                         <th>Status</th>
-                        <th class="text-end">Actions</th>
+                        <th class="text-end">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,7 +69,7 @@
                                 </span>
                             </td>
                             <td class="text-end">
-                                <a href="{{ route('admin.vendors.edit', $v) }}" class="btn btn-sm btn-warning" title="Edit">
+                                <a href="{{ route('admin.vendors.edit', $v) }}" class="btn btn-sm btn-warning" title="Ubah">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <form action="{{ route('admin.vendors.destroy', $v) }}" method="POST" class="d-inline">

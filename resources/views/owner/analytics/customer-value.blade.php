@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Customer Lifetime Value - Owner Analytics')
+@section('title', 'Nilai Seumur Hidup Pelanggan - Analitik Owner')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -8,9 +8,9 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <h1 class="h3 mb-0">
-                <i class="fas fa-chart-pie"></i> Customer Lifetime Value
+                <i class="fas fa-chart-pie"></i> Nilai Seumur Hidup Pelanggan
             </h1>
-            <p class="text-muted">Analyze customer value and repeat bookings</p>
+            <p class="text-muted">Analisis nilai pelanggan dan pemesanan berulang</p>
         </div>
     </div>
 
@@ -19,7 +19,7 @@
         <div class="col-md-3">
             <div class="card border-left-primary">
                 <div class="card-body">
-                    <p class="text-muted small mb-1">Total Repeat Customers</p>
+                    <p class="text-muted small mb-1">Total Pelanggan Berulang</p>
                     <h4>{{ $repeatCustomers->count() }}</h4>
                 </div>
             </div>
@@ -27,7 +27,7 @@
         <div class="col-md-3">
             <div class="card border-left-success">
                 <div class="card-body">
-                    <p class="text-muted small mb-1">Avg Orders Per Customer</p>
+                    <p class="text-muted small mb-1">Rata-rata Pesanan per Pelanggan</p>
                     <h4>{{ round($repeatCustomers->avg('order_count'), 2) }}</h4>
                 </div>
             </div>
@@ -35,7 +35,7 @@
         <div class="col-md-3">
             <div class="card border-left-info">
                 <div class="card-body">
-                    <p class="text-muted small mb-1">Highest LTV</p>
+                    <p class="text-muted small mb-1">LTV Tertinggi</p>
                     <h4>{{ $clvData->max('ltv') ? 'Rp ' . number_format($clvData->max('ltv'), 0, ',', '.') : '-' }}</h4>
                 </div>
             </div>
@@ -43,28 +43,28 @@
         <div class="col-md-3">
             <div class="card border-left-warning">
                 <div class="card-body">
-                    <p class="text-muted small mb-1">Avg LTV</p>
+                    <p class="text-muted small mb-1">Rata-rata LTV</p>
                     <h4>{{ $clvData->count() > 0 ? 'Rp ' . number_format($clvData->avg('ltv'), 0, ',', '.') : '-' }}</h4>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Top Customers by LTV -->
+    <!-- Pelanggan Teratas berdasarkan LTV -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-crown"></i> Top Customers by Lifetime Value</h6>
+                    <h6 class="mb-0"><i class="fas fa-crown"></i> Pelanggan Teratas berdasarkan Nilai Seumur Hidup</h6>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Customer Name</th>
-                                <th class="text-end">Total Orders</th>
-                                <th class="text-end">Lifetime Value</th>
-                                <th class="text-end">Avg Order Value</th>
+                                <th>Nama Pelanggan</th>
+                                <th class="text-end">Total Pesanan</th>
+                                <th class="text-end">Nilai Seumur Hidup</th>
+                                <th class="text-end">Rata-rata Nilai Pesanan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,7 +74,7 @@
                                         @if($customer->user)
                                             {{ $customer->user->name }}
                                         @else
-                                            Unknown Customer
+                                            Pelanggan Tidak Dikenal
                                         @endif
                                     </td>
                                     <td class="text-end">{{ $customer->orders }}</td>
@@ -88,7 +88,7 @@
                             @empty
                                 <tr>
                                     <td colspan="4" class="text-center text-muted py-4">
-                                        <i class="fas fa-inbox"></i> No customer data
+                                        <i class="fas fa-inbox"></i> Tidak ada data pelanggan
                                     </td>
                                 </tr>
                             @endforelse
@@ -99,21 +99,21 @@
         </div>
     </div>
 
-    <!-- Repeat Customer Analysis -->
+    <!-- Analisis Pelanggan Berulang -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-redo"></i> Repeat Customers Analysis</h6>
+                    <h6 class="mb-0"><i class="fas fa-redo"></i> Analisis Pelanggan Berulang</h6>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Customer Name</th>
-                                <th class="text-end">Repeat Orders</th>
-                                <th class="text-end">First Order</th>
-                                <th class="text-end">Last Order</th>
+                                <th>Nama Pelanggan</th>
+                                <th class="text-end">Pesanan Berulang</th>
+                                <th class="text-end">Pesanan Pertama</th>
+                                <th class="text-end">Pesanan Terakhir</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -123,7 +123,7 @@
                                         @if($customer->user)
                                             {{ $customer->user->name }}
                                         @else
-                                            Unknown Customer
+                                            Pelanggan Tidak Dikenal
                                         @endif
                                     </td>
                                     <td class="text-end">
@@ -139,7 +139,7 @@
                             @empty
                                 <tr>
                                     <td colspan="4" class="text-center text-muted py-4">
-                                        <i class="fas fa-inbox"></i> No repeat customers yet
+                                        <i class="fas fa-inbox"></i> Belum ada pelanggan berulang
                                     </td>
                                 </tr>
                             @endforelse

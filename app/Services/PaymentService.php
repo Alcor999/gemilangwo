@@ -2,15 +2,15 @@
 
 namespace App\Services;
 
+use App\Mail\PaymentInstructionMail;
+use App\Mail\PaymentRejectedMail;
+use App\Mail\PaymentVerifiedMail;
+use App\Models\Bank;
 use App\Models\Order;
 use App\Models\Payment;
-use App\Models\Bank;
 use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\PaymentInstructionMail;
-use App\Mail\PaymentVerifiedMail;
-use App\Mail\PaymentRejectedMail;
+use Illuminate\Support\Str;
 
 class PaymentService
 {
@@ -21,7 +21,7 @@ class PaymentService
     {
         $payment = Payment::create([
             'order_id' => $order->id,
-            'payment_id' => 'MANUAL-' . $order->order_number . '-' . Str::random(8),
+            'payment_id' => 'MANUAL-'.$order->order_number.'-'.Str::random(8),
             'bank_id' => $bank->id,
             'payment_method' => 'bank_transfer',
             'amount' => $order->total_price,
@@ -43,29 +43,30 @@ class PaymentService
     public function generateWhatsAppLink($order, $bank = null, $adminPhone = null)
     {
         try {
-            if (!$bank) {
+            if (! $bank) {
                 return null;
             }
 
             // Default admin phone - ganti sesuai nomor WhatsApp Anda
             $adminPhone = $adminPhone ?? env('ADMIN_WHATSAPP_NUMBER', '6281234567890');
-            
+
             // Ensure order has package loaded
-            if (!$order->package) {
+            if (! $order->package) {
                 $order->load('package');
             }
-            
+
             $message = "Halo, saya ingin konfirmasi pembayaran untuk order {$order->order_number}.\n";
             $message .= "Paket: {$order->package->name}\n";
-            $message .= "Jumlah: Rp " . number_format($order->total_price, 0, ',', '.') . "\n";
+            $message .= 'Jumlah: Rp '.number_format($order->total_price, 0, ',', '.')."\n";
             $message .= "Bank: {$bank->name} ({$bank->account_number})";
 
             // Encode message untuk WhatsApp URL
             $encodedMessage = urlencode($message);
-            
+
             return "https://wa.me/{$adminPhone}?text={$encodedMessage}";
         } catch (\Exception $e) {
-            \Log::error('WhatsApp link generation error: ' . $e->getMessage());
+            \Log::error('WhatsApp link generation error: '.$e->getMessage());
+
             return null;
         }
     }

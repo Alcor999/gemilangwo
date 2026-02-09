@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Carbon\Carbon;
 
 class CalendarEvent extends Model
 {
@@ -80,7 +79,7 @@ class CalendarEvent extends Model
     {
         $startDate = $this->event_start ?? $this->event_date;
         $endDate = $this->event_end ?? $this->event_date;
-        
+
         return $endDate->diffInDays($startDate) + 1;
     }
 
@@ -91,15 +90,15 @@ class CalendarEvent extends Model
     {
         $startDate = $this->event_start ?? $this->event_date;
         $endDate = $this->event_end ?? $this->event_date;
-        
+
         $dates = [];
         $current = $startDate->copy();
-        
+
         while ($current <= $endDate) {
             $dates[] = $current->toDateString();
             $current->addDay();
         }
-        
+
         return $dates;
     }
 
@@ -119,7 +118,7 @@ class CalendarEvent extends Model
      */
     public function getStatusLabel()
     {
-        return match($this->status) {
+        return match ($this->status) {
             'pending' => 'Tertunda',
             'confirmed' => 'Dikonfirmasi',
             'in_progress' => 'Sedang Berlangsung',
@@ -149,7 +148,7 @@ class CalendarEvent extends Model
      */
     public function getColorClass()
     {
-        return match($this->status) {
+        return match ($this->status) {
             'pending' => 'bg-blue-200 border-blue-500',
             'confirmed' => 'bg-green-200 border-green-500',
             'in_progress' => 'bg-purple-200 border-purple-500',

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Churn Analysis - Owner Analytics')
+@section('title', 'Analisis Churn - Analitik Owner')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -8,9 +8,9 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <h1 class="h3 mb-0">
-                <i class="fas fa-chart-line"></i> Churn Analysis
+                <i class="fas fa-chart-line"></i> Analisis Churn
             </h1>
-            <p class="text-muted">Track customer activity and churn trends</p>
+            <p class="text-muted">Pantau aktivitas pelanggan dan tren churn</p>
         </div>
     </div>
 
@@ -21,11 +21,11 @@
                 <div class="card-body">
                     <form method="GET" action="{{ route('owner.analytics.churn') }}" class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label">Months to Display</label>
+                            <label class="form-label">Jumlah Bulan</label>
                             <select name="months" class="form-select" onchange="this.form.submit()">
-                                <option value="6" {{ $months == 6 ? 'selected' : '' }}>Last 6 Months</option>
-                                <option value="12" {{ $months == 12 ? 'selected' : '' }}>Last 12 Months</option>
-                                <option value="24" {{ $months == 24 ? 'selected' : '' }}>Last 24 Months</option>
+                                <option value="6" {{ $months == 6 ? 'selected' : '' }}>6 Bulan Terakhir</option>
+                                <option value="12" {{ $months == 12 ? 'selected' : '' }}>12 Bulan Terakhir</option>
+                                <option value="24" {{ $months == 24 ? 'selected' : '' }}>24 Bulan Terakhir</option>
                             </select>
                         </div>
                     </form>
@@ -39,7 +39,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-chart-area"></i> Active Customers Trend</h6>
+                    <h6 class="mb-0"><i class="fas fa-chart-area"></i> Tren Pelanggan Aktif</h6>
                 </div>
                 <div class="card-body">
                     <canvas id="churnChart"></canvas>
@@ -48,21 +48,21 @@
         </div>
     </div>
 
-    <!-- Churn Details -->
+    <!-- Detail Churn -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-table"></i> Monthly Active Customers</h6>
+                    <h6 class="mb-0"><i class="fas fa-table"></i> Pelanggan Aktif per Bulan</h6>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Month</th>
-                                <th class="text-end">Active Customers</th>
-                                <th class="text-end">Change from Previous</th>
-                                <th class="text-end">Change %</th>
+                                <th>Bulan</th>
+                                <th class="text-end">Pelanggan Aktif</th>
+                                <th class="text-end">Perubahan dari Sebelumnya</th>
+                                <th class="text-end">Perubahan %</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -98,7 +98,7 @@
                             @empty
                                 <tr>
                                     <td colspan="4" class="text-center text-muted py-4">
-                                        <i class="fas fa-inbox"></i> No churn data available
+                                        <i class="fas fa-inbox"></i> Tidak ada data churn
                                     </td>
                                 </tr>
                             @endforelse
@@ -109,17 +109,17 @@
         </div>
     </div>
 
-    <!-- Insights -->
+    <!-- Insight -->
     <div class="row mt-4">
         <div class="col-md-12">
             <div class="alert alert-info" role="alert">
                 <h6 class="alert-heading">
-                    <i class="fas fa-lightbulb"></i> Insights
+                    <i class="fas fa-lightbulb"></i> Insight
                 </h6>
                 <p class="mb-0">
-                    Churn analysis helps you understand customer retention patterns. 
-                    An increase in active customers indicates growth, while a decrease might indicate churn. 
-                    Monitor trends to identify periods where you need to focus on customer engagement and retention strategies.
+                    Analisis churn membantu Anda memahami pola retensi pelanggan.
+                    Peningkatan pelanggan aktif menandakan pertumbuhan, sedangkan penurunan bisa mengindikasikan churn.
+                    Pantau tren untuk mengidentifikasi periode yang memerlukan fokus pada engagement dan strategi retensi pelanggan.
                 </p>
             </div>
         </div>
@@ -137,7 +137,7 @@
             data: {
                 labels: churnData.map(item => item.month),
                 datasets: [{
-                    label: 'Active Customers',
+                    label: 'Pelanggan Aktif',
                     data: churnData.map(item => item.active_customers),
                     borderColor: 'rgb(54, 162, 235)',
                     backgroundColor: 'rgba(54, 162, 235, 0.1)',

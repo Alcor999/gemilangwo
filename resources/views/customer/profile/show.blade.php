@@ -19,7 +19,7 @@
                     <h4 class="fw-bold mb-1">{{ $user->name }}</h4>
                     <p class="text-muted small mb-3">{{ $user->email }}</p>
                     <a href="{{ route('customer.profile.edit') }}" class="btn btn-primary btn-sm">
-                        <i class="fas fa-edit"></i> Edit Profil
+                        <i class="fas fa-edit"></i> Ubah Profil
                     </a>
                 </div>
             </div>
@@ -36,13 +36,13 @@
                     </div>
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mb-1">
-                            <strong>Review</strong>
+                            <strong>Ulasan</strong>
                             <span class="badge bg-success">{{ $stats['reviews'] }}</span>
                         </div>
                     </div>
                     <div>
                         <div class="d-flex justify-content-between mb-1">
-                            <strong>Wishlist</strong>
+                            <strong>Daftar Keinginan</strong>
                             <span class="badge bg-warning text-dark">{{ $stats['wishlists'] }}</span>
                         </div>
                     </div>
@@ -121,12 +121,12 @@
                 </div>
                 <div class="col-md-4">
                     <a href="{{ route('customer.reviews.index') }}" class="btn btn-outline-success w-100">
-                        <i class="fas fa-star"></i> Review Saya
+                        <i class="fas fa-star"></i> Ulasan Saya
                     </a>
                 </div>
                 <div class="col-md-4">
                     <a href="{{ route('customer.wishlist.index') }}" class="btn btn-outline-warning w-100">
-                        <i class="fas fa-heart"></i> Wishlist Saya
+                        <i class="fas fa-heart"></i> Daftar Keinginan Saya
                     </a>
                 </div>
             </div>

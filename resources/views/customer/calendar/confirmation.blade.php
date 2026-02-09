@@ -3,21 +3,21 @@
 @section('title', 'Kalender Konfirmasi Acara')
 
 @section('content')
-<!-- Header Section -->
+<!-- Bagian Header -->
 <div style="background: #f8fafc; padding: 1.5rem 0; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0;">
     <h1 style="font-size: 2rem; font-weight: 700; color: #1e293b; margin: 0 0 0.5rem;">✅ Kalender Konfirmasi Acara</h1>
     <p style="color: #64748b; margin: 0; font-size: 0.95rem;">Kelola dan konfirmasi acara pernikahan Anda</p>
 </div>
 
-<!-- Export Button -->
+<!-- Tombol Ekspor -->
 <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
     <a href="{{ route('customer.calendar.export-confirmation') }}" 
        style="display: inline-flex; align-items: center; padding: 0.75rem 1.5rem; background: #10b981; color: white; border-radius: 0.375rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; border: none; cursor: pointer; transition: background 0.2s;">
-        📥 Export ke iCal
+        📥 Ekspor ke iCal
     </a>
 </div>
 
-<!-- Main Grid -->
+<!-- Grid Utama -->
 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
     <!-- Calendar Panel -->
     <div style="background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0; overflow: hidden;">

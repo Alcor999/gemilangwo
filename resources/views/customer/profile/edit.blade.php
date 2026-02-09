@@ -7,7 +7,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-gradient py-4">
                     <h3 class="mb-0 fw-bold text-white">
-                        <i class="fas fa-user-edit"></i> Edit Profil
+                        <i class="fas fa-user-edit"></i> Ubah Profil
                     </h3>
                 </div>
                 <div class="card-body p-5">
@@ -26,7 +26,7 @@
                                 @endif
                             </div>
                             <input type="file" name="profile_image" class="form-control @error('profile_image') is-invalid @enderror" accept="image/*">
-                            <small class="text-muted d-block mt-2">JPG, PNG, GIF max 2MB</small>
+                            <small class="text-muted d-block mt-2">JPG, PNG, GIF maks 2MB</small>
                             @error('profile_image')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror

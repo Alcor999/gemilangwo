@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\User;
 use App\Traits\DatabaseHelper;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     use DatabaseHelper;
+
     public function index()
     {
         // Total Statistics
@@ -27,7 +27,7 @@ class DashboardController extends Controller
 
         // Monthly Revenue Chart Data
         $monthly_revenue = Order::where('status', 'completed')
-            ->selectRaw($this->getYearRaw('created_at') . ' as year, ' . $this->getMonthRaw('created_at') . ' as month, SUM(total_price) as total')
+            ->selectRaw($this->getYearRaw('created_at').' as year, '.$this->getMonthRaw('created_at').' as month, SUM(total_price) as total')
             ->groupBy(DB::raw($this->getYearRaw('created_at')), DB::raw($this->getMonthRaw('created_at')))
             ->orderBy('year', 'asc')
             ->orderBy('month', 'asc')

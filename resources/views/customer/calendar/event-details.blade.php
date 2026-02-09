@@ -3,13 +3,13 @@
 @section('title', 'Detail Acara - ' . $event->package->name)
 
 @section('content')
-<!-- Header Section -->
+<!-- Bagian Header -->
 <div style="background: #f8fafc; padding: 1.5rem 0; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0;">
     <h1 style="font-size: 2rem; font-weight: 700; color: #1e293b; margin: 0 0 0.5rem;">📋 Detail Acara Pernikahan</h1>
     <p style="color: #64748b; margin: 0; font-size: 0.95rem;">Informasi lengkap acara dan status konfirmasi Anda</p>
 </div>
 
-<!-- Main Grid -->
+<!-- Grid Utama -->
 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
     <!-- Main Content -->
     <div style="background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0; overflow: hidden;">
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <!-- Event Details -->
+        <!-- Detail Acara -->
         <div style="padding: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
             <!-- Left Column -->
             <div>
@@ -137,17 +137,17 @@
             </div>
         @endif
 
-        <!-- Export Card -->
+        <!-- Kartu Ekspor -->
         <div style="background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0; overflow: hidden;">
             <div style="padding: 1.5rem;">
-                <h3 style="font-size: 0.875rem; font-weight: 700; color: #1e293b; margin: 0 0 1rem;">📥 Export</h3>
+                <h3 style="font-size: 0.875rem; font-weight: 700; color: #1e293b; margin: 0 0 1rem;">📥 Ekspor</h3>
                 <a href="{{ route('customer.calendar.export-event', $event) }}" style="display: block; padding: 0.75rem 1rem; background: #3b82f6; color: white; border-radius: 0.375rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; text-align: center; transition: background 0.2s;">
                     📥 Simpan ke iCal
                 </a>
             </div>
         </div>
 
-        <!-- Back Link -->
+        <!-- Tautan Kembali -->
         <div style="text-align: center;">
             <a href="{{ route('customer.calendar.confirmation') }}" style="color: #6366f1; text-decoration: none; font-weight: 600; font-size: 0.95rem;">
                 ← Kembali ke Kalender

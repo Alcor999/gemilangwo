@@ -17,7 +17,7 @@ class OrderSeeder extends Seeder
         $order1 = Order::create([
             'user_id' => 3, // Budi
             'package_id' => 2, // Silver
-            'order_number' => 'WO-' . time() . '001',
+            'order_number' => 'WO-'.time().'001',
             'event_date' => now()->addDays(30)->format('Y-m-d'),
             'event_location' => 'Bandung Convention Center',
             'guest_count' => 250,
@@ -28,7 +28,7 @@ class OrderSeeder extends Seeder
 
         Payment::create([
             'order_id' => $order1->id,
-            'payment_id' => 'MIDTRANS-' . time() . '001',
+            'payment_id' => 'MIDTRANS-'.time().'001',
             'payment_method' => 'credit_card',
             'amount' => 100000000,
             'status' => 'success',
@@ -39,7 +39,7 @@ class OrderSeeder extends Seeder
         $order2 = Order::create([
             'user_id' => 4, // Siti
             'package_id' => 1, // Gold
-            'order_number' => 'WO-' . time() . '002',
+            'order_number' => 'WO-'.time().'002',
             'event_date' => now()->addDays(45)->format('Y-m-d'),
             'event_location' => 'Yogyakarta Palace Hall',
             'guest_count' => 350,
@@ -50,7 +50,7 @@ class OrderSeeder extends Seeder
 
         Payment::create([
             'order_id' => $order2->id,
-            'payment_id' => 'MIDTRANS-' . time() . '002',
+            'payment_id' => 'MIDTRANS-'.time().'002',
             'payment_method' => null,
             'amount' => 150000000,
             'status' => 'pending',
@@ -60,7 +60,7 @@ class OrderSeeder extends Seeder
         $order3 = Order::create([
             'user_id' => 5, // Ahmad
             'package_id' => 3, // Bronze
-            'order_number' => 'WO-' . time() . '003',
+            'order_number' => 'WO-'.time().'003',
             'event_date' => now()->addDays(60)->format('Y-m-d'),
             'event_location' => 'Medan Grand Hotel',
             'guest_count' => 200,
@@ -71,7 +71,7 @@ class OrderSeeder extends Seeder
 
         Payment::create([
             'order_id' => $order3->id,
-            'payment_id' => 'MIDTRANS-' . time() . '003',
+            'payment_id' => 'MIDTRANS-'.time().'003',
             'payment_method' => 'bank_transfer',
             'amount' => 60000000,
             'status' => 'success',
@@ -82,7 +82,7 @@ class OrderSeeder extends Seeder
         $order4 = Order::create([
             'user_id' => 6, // Dewi
             'package_id' => 4, // Platinum
-            'order_number' => 'WO-' . time() . '004',
+            'order_number' => 'WO-'.time().'004',
             'event_date' => now()->addDays(20)->format('Y-m-d'),
             'event_location' => 'Makassar Seaside Resort',
             'guest_count' => 500,
@@ -93,7 +93,7 @@ class OrderSeeder extends Seeder
 
         Payment::create([
             'order_id' => $order4->id,
-            'payment_id' => 'MIDTRANS-' . time() . '004',
+            'payment_id' => 'MIDTRANS-'.time().'004',
             'payment_method' => 'e_wallet',
             'amount' => 250000000,
             'status' => 'success',
@@ -104,7 +104,7 @@ class OrderSeeder extends Seeder
         $order5 = Order::create([
             'user_id' => 7, // Rinto
             'package_id' => 5, // Rose
-            'order_number' => 'WO-' . time() . '005',
+            'order_number' => 'WO-'.time().'005',
             'event_date' => now()->addDays(15)->format('Y-m-d'),
             'event_location' => 'Malang City Hotel',
             'guest_count' => 100,
@@ -115,7 +115,7 @@ class OrderSeeder extends Seeder
 
         Payment::create([
             'order_id' => $order5->id,
-            'payment_id' => 'MIDTRANS-' . time() . '005',
+            'payment_id' => 'MIDTRANS-'.time().'005',
             'payment_method' => 'bank_transfer',
             'amount' => 35000000,
             'status' => 'success',
@@ -126,7 +126,7 @@ class OrderSeeder extends Seeder
         $order6 = Order::create([
             'user_id' => 8, // Nina
             'package_id' => 6, // Diamond
-            'order_number' => 'WO-' . time() . '006',
+            'order_number' => 'WO-'.time().'006',
             'event_date' => now()->addDays(50)->format('Y-m-d'),
             'event_location' => 'Semarang International Convention Center',
             'guest_count' => 400,
@@ -137,7 +137,7 @@ class OrderSeeder extends Seeder
 
         Payment::create([
             'order_id' => $order6->id,
-            'payment_id' => 'MIDTRANS-' . time() . '006',
+            'payment_id' => 'MIDTRANS-'.time().'006',
             'payment_method' => 'credit_card',
             'amount' => 180000000,
             'status' => 'success',
@@ -148,7 +148,7 @@ class OrderSeeder extends Seeder
         Order::create([
             'user_id' => 3, // Budi
             'package_id' => 3, // Bronze
-            'order_number' => 'WO-' . time() . '007',
+            'order_number' => 'WO-'.time().'007',
             'event_date' => now()->addDays(90)->format('Y-m-d'),
             'event_location' => 'Bandung City Resort',
             'guest_count' => 150,

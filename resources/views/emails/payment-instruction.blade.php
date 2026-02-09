@@ -16,7 +16,7 @@
     <div class="container">
         <div class="header">
             <h2>Instruksi Pembayaran</h2>
-            <p>Order: {{ $order->order_number }}</p>
+            <p>Pesanan: {{ $order->order_number }}</p>
         </div>
         
         <div class="content">
@@ -39,7 +39,7 @@
             <h4>Detail Pesanan</h4>
             <ul>
                 <li><strong>Paket:</strong> {{ $order->package->name }}</li>
-                <li><strong>Tanggal Event:</strong> {{ $order->event_date->format('d M Y') }}</li>
+                <li><strong>Tanggal Acara:</strong> {{ $order->event_date->format('d M Y') }}</li>
                 <li><strong>Lokasi:</strong> {{ $order->event_location }}</li>
                 <li><strong>Jumlah Tamu:</strong> {{ $order->guest_count }} orang</li>
             </ul>
@@ -59,12 +59,12 @@
             </p>
             
             <p style="color: #666; font-size: 14px; margin-top: 20px;">
-                Jika ada pertanyaan, hubungi kami via WhatsApp atau email support.
+                Jika ada pertanyaan, hubungi kami via WhatsApp atau email dukungan.
             </p>
         </div>
         
         <div class="footer">
-            <p>&copy; {{ date('Y') }} Gemilang WO. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} Gemilang WO. Hak cipta dilindungi undang-undang.</p>
         </div>
     </div>
 </body>

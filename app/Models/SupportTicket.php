@@ -112,7 +112,7 @@ class SupportTicket extends Model
         $this->increment('response_count');
 
         // Update first response time if this is first message from admin
-        if (!$this->first_response_at && auth()->user()->role === 'admin') {
+        if (! $this->first_response_at && auth()->user()->role === 'admin') {
             $this->update(['first_response_at' => now()]);
         }
 

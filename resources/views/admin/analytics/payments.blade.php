@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Payment Methods - Admin Analytics')
+@section('title', 'Metode Pembayaran - Analitik Admin')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -8,27 +8,27 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <h1 class="h3 mb-0">
-                <i class="fas fa-credit-card"></i> Payment Method Analysis
+                <i class="fas fa-credit-card"></i> Analisis Metode Pembayaran
             </h1>
-            <p class="text-muted">Track payment methods used by customers</p>
+            <p class="text-muted">Pantau metode pembayaran yang digunakan pelanggan</p>
         </div>
     </div>
 
-    <!-- Filters -->
+    <!-- Penyaringan -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <form method="GET" action="{{ route('admin.analytics.payments') }}" class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label">Period</label>
+                            <label class="form-label">Periode</label>
                             <select name="period" class="form-select" onchange="this.form.submit()">
-                                <option value="month" {{ $period === 'month' ? 'selected' : '' }}>Monthly</option>
-                                <option value="yearly" {{ $period === 'yearly' ? 'selected' : '' }}>Yearly</option>
+                                <option value="month" {{ $period === 'month' ? 'selected' : '' }}>Bulanan</option>
+                                <option value="yearly" {{ $period === 'yearly' ? 'selected' : '' }}>Tahunan</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label">Year</label>
+                            <label class="form-label">Tahun</label>
                             <select name="year" class="form-select" onchange="this.form.submit()">
                                 @for($y = now()->year - 5; $y <= now()->year; $y++)
                                     <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
@@ -41,12 +41,12 @@
         </div>
     </div>
 
-    <!-- Pie Chart -->
+    <!-- Diagram Pie -->
     <div class="row mb-4">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-chart-pie"></i> Payment Methods Distribution</h6>
+                    <h6 class="mb-0"><i class="fas fa-chart-pie"></i> Distribusi Metode Pembayaran</h6>
                 </div>
                 <div class="card-body">
                     <canvas id="paymentChart"></canvas>
@@ -54,23 +54,23 @@
             </div>
         </div>
 
-        <!-- Summary Stats -->
+        <!-- Ringkasan -->
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-chart-bar"></i> Summary</h6>
+                    <h6 class="mb-0"><i class="fas fa-chart-bar"></i> Ringkasan</h6>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <p class="text-muted small mb-1">Total Transactions</p>
+                        <p class="text-muted small mb-1">Total Transaksi</p>
                         <h4>{{ $paymentMethods->sum('count') }}</h4>
                     </div>
                     <div class="mb-3">
-                        <p class="text-muted small mb-1">Total Revenue</p>
+                        <p class="text-muted small mb-1">Total Pendapatan</p>
                         <h4>Rp {{ number_format($paymentMethods->sum('amount'), 0, ',', '.') }}</h4>
                     </div>
                     <div>
-                        <p class="text-muted small mb-1">Average Transaction</p>
+                        <p class="text-muted small mb-1">Rata-rata Transaksi</p>
                         <h4>Rp {{ number_format($paymentMethods->sum('amount') / max($paymentMethods->sum('count'), 1), 0, ',', '.') }}</h4>
                     </div>
                 </div>
@@ -78,22 +78,22 @@
         </div>
     </div>
 
-    <!-- Detailed Table -->
+    <!-- Tabel Detail -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-table"></i> Payment Methods Details</h6>
+                    <h6 class="mb-0"><i class="fas fa-table"></i> Detail Metode Pembayaran</h6>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Payment Method</th>
-                                <th class="text-end">Transactions</th>
-                                <th class="text-end">Total Amount</th>
-                                <th class="text-end">Average Amount</th>
-                                <th class="text-end">Percentage</th>
+                                <th>Metode Pembayaran</th>
+                                <th class="text-end">Transaksi</th>
+                                <th class="text-end">Total</th>
+                                <th class="text-end">Rata-rata</th>
+                                <th class="text-end">Persentase</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -119,7 +119,7 @@
                             @empty
                                 <tr>
                                     <td colspan="5" class="text-center text-muted py-4">
-                                        <i class="fas fa-inbox"></i> No payment data available
+                                        <i class="fas fa-inbox"></i> Tidak ada data pembayaran
                                     </td>
                                 </tr>
                             @endforelse

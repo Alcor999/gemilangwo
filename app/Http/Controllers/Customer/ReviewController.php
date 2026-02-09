@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Models\Review;
 use App\Models\Order;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -12,6 +12,7 @@ class ReviewController extends Controller
     public function index()
     {
         $reviews = auth()->user()->reviews()->with('package')->paginate(10);
+
         return view('customer.reviews.index', compact('reviews'));
     }
 
@@ -73,12 +74,14 @@ class ReviewController extends Controller
     public function markHelpful(Review $review)
     {
         $review->increment('helpful_count');
+
         return response()->json(['helpful_count' => $review->helpful_count]);
     }
 
     public function markUnhelpful(Review $review)
     {
         $review->increment('unhelpful_count');
+
         return response()->json(['unhelpful_count' => $review->unhelpful_count]);
     }
 }

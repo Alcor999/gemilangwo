@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bank;
 use App\Models\Order;
 use App\Models\Package;
-use App\Models\Bank;
 use App\Services\MidtransService;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     protected $midtransService;
+
     protected $paymentService;
 
     public function __construct(MidtransService $midtransService, PaymentService $paymentService)
@@ -44,6 +45,7 @@ class OrderController extends Controller
         }
 
         $order->load(['package', 'payment', 'reviews', 'orderVendors']);
+
         return view('customer.orders.show', ['order' => $order]);
     }
 
@@ -55,6 +57,7 @@ class OrderController extends Controller
         $packages = Package::where('status', 'active')
             ->with(['requiredVendorCategories.vendors'])
             ->get();
+
         return view('customer.orders.create', ['packages' => $packages]);
     }
 
@@ -79,7 +82,7 @@ class OrderController extends Controller
         if ($package->max_guests && $validated['guest_count'] > $package->max_guests) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Guest count exceeds package maximum of ' . $package->max_guests);
+                ->with('error', 'Guest count exceeds package maximum of '.$package->max_guests);
         }
 
         // Calculate total: package base + vendor prices
@@ -88,16 +91,16 @@ class OrderController extends Controller
 
         foreach ($package->requiredVendorCategories as $category) {
             $vendorId = $validated['vendors'][$category->id] ?? null;
-            if (!$vendorId) {
+            if (! $vendorId) {
                 return redirect()->back()
                     ->withInput()
-                    ->with('error', 'Silakan pilih vendor untuk kategori: ' . $category->name);
+                    ->with('error', 'Silakan pilih vendor untuk kategori: '.$category->name);
             }
             $vendor = $category->vendors->firstWhere('id', $vendorId);
-            if (!$vendor) {
+            if (! $vendor) {
                 return redirect()->back()
                     ->withInput()
-                    ->with('error', 'Vendor tidak valid untuk kategori: ' . $category->name);
+                    ->with('error', 'Vendor tidak valid untuk kategori: '.$category->name);
             }
             $totalPrice += (float) $vendor->price;
             $selectedVendors[] = [
@@ -106,7 +109,7 @@ class OrderController extends Controller
             ];
         }
 
-        $orderNumber = 'WO-' . substr(time(), -8) . rand(10, 99);
+        $orderNumber = 'WO-'.substr(time(), -8).rand(10, 99);
 
         $order = Order::create([
             'user_id' => auth()->id(),
@@ -143,7 +146,7 @@ class OrderController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        if (!$order->isPending()) {
+        if (! $order->isPending()) {
             return redirect()->route('customer.orders.show', $order->id)
                 ->with('error', 'This order cannot be paid');
         }
@@ -191,8 +194,8 @@ class OrderController extends Controller
         // Reload order with payment, bank, and package relationship
         $order = $order->load('payment.bank', 'package');
         $payment = $order->payment;
-        
-        if (!$payment || $payment->payment_method !== 'bank_transfer') {
+
+        if (! $payment || $payment->payment_method !== 'bank_transfer') {
             return redirect()->route('customer.orders.payment', $order->id)
                 ->with('error', 'Invalid payment record');
         }
@@ -215,7 +218,8 @@ class OrderController extends Controller
     {
         try {
             $notification = $request->all();
-            $this->midtransService->handleNotification((object)$notification);
+            $this->midtransService->handleNotification((object) $notification);
+
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
@@ -230,7 +234,7 @@ class OrderController extends Controller
         $order_id = $request->query('order_id');
         $order = Order::where('order_number', $order_id)->first();
 
-        if (!$order) {
+        if (! $order) {
             return redirect()->route('customer.orders.index')
                 ->with('error', 'Order not found');
         }
@@ -259,6 +263,7 @@ class OrderController extends Controller
 
         if ($order->isPending()) {
             $order->update(['status' => 'cancelled']);
+
             return redirect()->route('customer.orders.index')
                 ->with('success', 'Order cancelled successfully');
         }

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Vendor')
+@section('title', 'Ubah Vendor')
 
 @section('content')
 <div class="container-fluid">
@@ -8,7 +8,7 @@
         <div class="col-md-8 offset-md-2">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h5 class="mb-0">Edit Vendor</h5>
+                    <h5 class="mb-0">Ubah Vendor</h5>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.vendors.update', $vendor) }}" method="POST" enctype="multipart/form-data">

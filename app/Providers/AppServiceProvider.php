@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(MidtransService::class, function ($app) {
-            return new MidtransService();
+            return new MidtransService;
         });
     }
 
@@ -25,4 +25,3 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 }
-

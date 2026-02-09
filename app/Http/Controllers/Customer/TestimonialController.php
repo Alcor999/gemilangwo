@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\VideoTestimonial;
-use App\Models\Order;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class TestimonialController extends Controller
 {
@@ -59,7 +58,7 @@ class TestimonialController extends Controller
 
         // Handle video upload
         if ($request->type === 'upload' && $request->hasFile('video_file')) {
-            $videoPath = $request->file('video_file')->store('testimonials/' . $user->id, 'public');
+            $videoPath = $request->file('video_file')->store('testimonials/'.$user->id, 'public');
         }
 
         // Handle thumbnail upload
@@ -81,7 +80,7 @@ class TestimonialController extends Controller
         ]);
 
         return redirect()->route('customer.testimonials.index')
-                       ->with('success', 'Testimonial submitted successfully! It will be reviewed by our team.');
+            ->with('success', 'Testimonial submitted successfully! It will be reviewed by our team.');
     }
 
     /**
@@ -90,7 +89,7 @@ class TestimonialController extends Controller
     public function edit($testimonialId)
     {
         $testimonial = VideoTestimonial::findOrFail($testimonialId);
-        
+
         // Check if user owns this testimonial
         if ($testimonial->user_id !== Auth::id()) {
             abort(403);
@@ -132,7 +131,7 @@ class TestimonialController extends Controller
             if ($testimonial->video_path) {
                 Storage::disk('public')->delete($testimonial->video_path);
             }
-            $testimonial->video_path = $request->file('video_file')->store('testimonials/' . Auth::id(), 'public');
+            $testimonial->video_path = $request->file('video_file')->store('testimonials/'.Auth::id(), 'public');
         }
 
         // Handle thumbnail upload
@@ -154,7 +153,7 @@ class TestimonialController extends Controller
         ]);
 
         return redirect()->route('customer.testimonials.index')
-                       ->with('success', 'Testimonial updated and resubmitted for review!');
+            ->with('success', 'Testimonial updated and resubmitted for review!');
     }
 
     /**
@@ -181,6 +180,6 @@ class TestimonialController extends Controller
         $testimonial->delete();
 
         return redirect()->route('customer.testimonials.index')
-                       ->with('success', 'Testimonial deleted successfully!');
+            ->with('success', 'Testimonial deleted successfully!');
     }
 }

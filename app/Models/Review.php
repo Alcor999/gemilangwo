@@ -83,12 +83,15 @@ class Review extends Model
     public function getAverageHelpfulness()
     {
         $total = $this->helpful_count + $this->unhelpful_count;
-        if ($total === 0) return 0;
+        if ($total === 0) {
+            return 0;
+        }
+
         return round(($this->helpful_count / $total) * 100);
     }
 
     public function getStarDisplay()
     {
-        return str_repeat('★', $this->rating) . str_repeat('☆', 5 - $this->rating);
+        return str_repeat('★', $this->rating).str_repeat('☆', 5 - $this->rating);
     }
 }

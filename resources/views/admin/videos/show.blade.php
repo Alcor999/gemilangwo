@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $package->name . ' - Video Gallery')
+@section('title', $package->name . ' - Galeri Video')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -10,12 +10,12 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h1 class="h3 mb-0">
-                        <i class="fas fa-film"></i> {{ $package->name }} - Videos
+                        <i class="fas fa-film"></i> {{ $package->name }} - Video
                     </h1>
-                    <p class="text-muted">Manage package videos and media</p>
+                    <p class="text-muted">Kelola video dan media paket</p>
                 </div>
                 <a href="{{ route('admin.videos.create', $package->id) }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Add Video
+                    <i class="fas fa-plus"></i> Tambah Video
                 </a>
             </div>
         </div>
@@ -28,12 +28,12 @@
         </div>
     @endif
 
-    <!-- Videos List -->
+    <!-- Daftar Video -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-list"></i> Video List ({{ $videos->count() }} videos)</h6>
+                    <h6 class="mb-0"><i class="fas fa-list"></i> Daftar Video ({{ $videos->count() }} video)</h6>
                 </div>
                 @if($videos->count() > 0)
                     <div class="table-responsive">
@@ -41,10 +41,10 @@
                             <thead class="table-light">
                                 <tr>
                                     <th style="width: 5%"></th>
-                                    <th>Title</th>
-                                    <th>Type</th>
+                                    <th>Judul</th>
+                                    <th>Jenis</th>
                                     <th class="text-center" style="width: 10%">Status</th>
-                                    <th class="text-end" style="width: 20%">Actions</th>
+                                    <th class="text-end" style="width: 20%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="videoSortable">
@@ -84,39 +84,39 @@
                                             <form action="{{ route('admin.videos.toggle', $video->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-{{ $video->is_active ? 'success' : 'secondary' }}" 
-                                                        title="{{ $video->is_active ? 'Click to disable' : 'Click to enable' }}">
+                                                        title="{{ $video->is_active ? 'Klik untuk menonaktifkan' : 'Klik untuk mengaktifkan' }}">
                                                     <i class="fas fa-{{ $video->is_active ? 'check-circle' : 'times-circle' }}"></i>
-                                                    {{ $video->is_active ? 'Active' : 'Inactive' }}
+                                                    {{ $video->is_active ? 'Aktif' : 'Tidak Aktif' }}
                                                 </button>
                                             </form>
                                         </td>
                                         <td class="text-end">
-                                            <a href="{{ route('admin.videos.edit', $video->id) }}" class="btn btn-sm btn-warning" title="Edit">
+                                            <a href="{{ route('admin.videos.edit', $video->id) }}" class="btn btn-sm btn-warning" title="Ubah">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" 
-                                                    data-bs-target="#deleteModal{{ $video->id }}" title="Delete">
+                                                    data-bs-target="#deleteModal{{ $video->id }}" title="Hapus">
                                                 <i class="fas fa-trash"></i>
                                             </button>
 
-                                            <!-- Delete Modal -->
+                                            <!-- Modal Hapus -->
                                             <div class="modal fade" id="deleteModal{{ $video->id }}" tabindex="-1">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title">Delete Video</h5>
+                                                            <h5 class="modal-title">Hapus Video</h5>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <p>Are you sure you want to delete this video?</p>
+                                                            <p>Apakah Anda yakin ingin menghapus video ini?</p>
                                                             <p><strong>{{ $video->title }}</strong></p>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                                                             <form action="{{ route('admin.videos.destroy', $video->id) }}" method="POST" class="d-inline">
                                                                 @csrf
                                                                 @method('DELETE')
-                                                                <button type="submit" class="btn btn-danger">Delete Video</button>
+                                                                <button type="submit" class="btn btn-danger">Hapus Video</button>
                                                             </form>
                                                         </div>
                                                     </div>
@@ -131,9 +131,9 @@
                 @else
                     <div class="card-body text-center text-muted py-4">
                         <i class="fas fa-inbox" style="font-size: 2rem; opacity: 0.5;"></i>
-                        <p class="mt-2">No videos uploaded yet</p>
+                        <p class="mt-2">Belum ada video yang diunggah</p>
                         <a href="{{ route('admin.videos.create', $package->id) }}" class="btn btn-sm btn-primary">
-                            <i class="fas fa-plus"></i> Add First Video
+                            <i class="fas fa-plus"></i> Tambah Video Pertama
                         </a>
                     </div>
                 @endif
@@ -144,7 +144,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
-    // Enable drag and drop reordering
+    // Aktifkan drag and drop untuk mengatur urutan
     const videoSortable = document.getElementById('videoSortable');
     if (videoSortable) {
         new Sortable(videoSortable, {
@@ -159,7 +159,7 @@
                     });
                 });
 
-                // Send reorder request
+                // Kirim permintaan urut ulang
                 fetch('{{ route("admin.videos.reorder", $package->id) }}', {
                     method: 'POST',
                     headers: {

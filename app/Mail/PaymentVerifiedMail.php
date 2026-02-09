@@ -19,7 +19,7 @@ class PaymentVerifiedMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Pembayaran Dikonfirmasi - ' . $this->order->order_number,
+            subject: 'Pembayaran Dikonfirmasi - '.$this->order->order_number,
         );
     }
 

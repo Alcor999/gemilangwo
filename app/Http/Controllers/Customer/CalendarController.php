@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\BlockedDate;
+use App\Models\CalendarEvent;
 use App\Models\Order;
 use App\Models\Package;
-use App\Models\CalendarEvent;
-use App\Models\BlockedDate;
 use App\Services\ICalExportService;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class CalendarController extends Controller
 {
@@ -81,7 +81,7 @@ class CalendarController extends Controller
 
         // Get or create calendar events for these orders
         foreach ($confirmedOrders as $order) {
-            if (!$order->calendarEvent) {
+            if (! $order->calendarEvent) {
                 CalendarEvent::createFromOrder($order);
             }
         }
@@ -95,7 +95,7 @@ class CalendarController extends Controller
         $eventsData = [];
         foreach ($calendarEvents as $event) {
             $dateKey = $event->event_date->toDateString();
-            if (!isset($eventsData[$dateKey])) {
+            if (! isset($eventsData[$dateKey])) {
                 $eventsData[$dateKey] = [];
             }
 
@@ -226,7 +226,7 @@ class CalendarController extends Controller
 
         return response($iCalContent, 200)
             ->header('Content-Type', 'text/calendar')
-            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"')
+            ->header('Content-Disposition', 'attachment; filename="'.$filename.'"')
             ->header('Pragma', 'no-cache');
     }
 
@@ -236,7 +236,7 @@ class CalendarController extends Controller
     public function exportConfirmationCalendar()
     {
         $user = auth()->user();
-        
+
         // Create a pseudo-package for user's events
         $content = "BEGIN:VCALENDAR\r\n";
         $content .= "VERSION:2.0\r\n";
@@ -258,13 +258,13 @@ class CalendarController extends Controller
                 $endDate = $event->event_end ?? $event->event_date;
 
                 $vEvent = "BEGIN:VEVENT\r\n";
-                $vEvent .= "UID:event-" . $event->id . "@gemilangwo.com\r\n";
-                $vEvent .= "DTSTAMP:" . now()->format('Ymd\THis\Z') . "\r\n";
-                $vEvent .= "DTSTART;VALUE=DATE:" . $startDate->format('Ymd') . "\r\n";
-                $vEvent .= "DTEND;VALUE=DATE:" . $endDate->addDay()->format('Ymd') . "\r\n";
-                $vEvent .= "SUMMARY:" . $this->escapeString("Acara: " . $event->package->name) . "\r\n";
-                $vEvent .= "DESCRIPTION:" . $this->escapeString($this->buildEventDescription($event)) . "\r\n";
-                $vEvent .= "LOCATION:" . $this->escapeString($order->event_location) . "\r\n";
+                $vEvent .= 'UID:event-'.$event->id."@gemilangwo.com\r\n";
+                $vEvent .= 'DTSTAMP:'.now()->format('Ymd\THis\Z')."\r\n";
+                $vEvent .= 'DTSTART;VALUE=DATE:'.$startDate->format('Ymd')."\r\n";
+                $vEvent .= 'DTEND;VALUE=DATE:'.$endDate->addDay()->format('Ymd')."\r\n";
+                $vEvent .= 'SUMMARY:'.$this->escapeString('Acara: '.$event->package->name)."\r\n";
+                $vEvent .= 'DESCRIPTION:'.$this->escapeString($this->buildEventDescription($event))."\r\n";
+                $vEvent .= 'LOCATION:'.$this->escapeString($order->event_location)."\r\n";
                 $vEvent .= "STATUS:CONFIRMED\r\n";
                 $vEvent .= "TRANSP:OPAQUE\r\n";
                 $vEvent .= "COLOR:#22c55e\r\n";
@@ -276,11 +276,11 @@ class CalendarController extends Controller
 
         $content .= "END:VCALENDAR\r\n";
 
-        $filename = "my-weddings-" . now()->format('Y-m-d') . ".ics";
+        $filename = 'my-weddings-'.now()->format('Y-m-d').'.ics';
 
         return response($content, 200)
             ->header('Content-Type', 'text/calendar')
-            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"')
+            ->header('Content-Disposition', 'attachment; filename="'.$filename.'"')
             ->header('Pragma', 'no-cache');
     }
 
@@ -302,27 +302,27 @@ class CalendarController extends Controller
         $content .= "PRODID:-//Wedding App//My Wedding Event//EN\r\n";
         $content .= "CALSCALE:GREGORIAN\r\n";
         $content .= "METHOD:PUBLISH\r\n";
-        $content .= "X-WR-CALNAME:" . $this->escapeString($event->package->name) . "\r\n";
+        $content .= 'X-WR-CALNAME:'.$this->escapeString($event->package->name)."\r\n";
         $content .= "X-WR-TIMEZONE:Asia/Jakarta\r\n";
         $content .= "BEGIN:VEVENT\r\n";
-        $content .= "UID:event-" . $event->id . "@gemilangwo.com\r\n";
-        $content .= "DTSTAMP:" . now()->format('Ymd\THis\Z') . "\r\n";
-        $content .= "DTSTART;VALUE=DATE:" . $startDate->format('Ymd') . "\r\n";
-        $content .= "DTEND;VALUE=DATE:" . $endDate->addDay()->format('Ymd') . "\r\n";
-        $content .= "SUMMARY:" . $this->escapeString("Acara: " . $event->package->name) . "\r\n";
-        $content .= "DESCRIPTION:" . $this->escapeString($this->buildEventDescription($event)) . "\r\n";
-        $content .= "LOCATION:" . $this->escapeString($event->order->event_location ?? '') . "\r\n";
+        $content .= 'UID:event-'.$event->id."@gemilangwo.com\r\n";
+        $content .= 'DTSTAMP:'.now()->format('Ymd\THis\Z')."\r\n";
+        $content .= 'DTSTART;VALUE=DATE:'.$startDate->format('Ymd')."\r\n";
+        $content .= 'DTEND;VALUE=DATE:'.$endDate->addDay()->format('Ymd')."\r\n";
+        $content .= 'SUMMARY:'.$this->escapeString('Acara: '.$event->package->name)."\r\n";
+        $content .= 'DESCRIPTION:'.$this->escapeString($this->buildEventDescription($event))."\r\n";
+        $content .= 'LOCATION:'.$this->escapeString($event->order->event_location ?? '')."\r\n";
         $content .= "STATUS:CONFIRMED\r\n";
         $content .= "TRANSP:OPAQUE\r\n";
         $content .= "COLOR:#22c55e\r\n";
         $content .= "END:VEVENT\r\n";
         $content .= "END:VCALENDAR\r\n";
 
-        $filename = "event-" . $event->id . "-" . $event->event_date->format('Y-m-d') . ".ics";
+        $filename = 'event-'.$event->id.'-'.$event->event_date->format('Y-m-d').'.ics';
 
         return response($content, 200)
             ->header('Content-Type', 'text/calendar')
-            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"')
+            ->header('Content-Disposition', 'attachment; filename="'.$filename.'"')
             ->header('Pragma', 'no-cache');
     }
 
@@ -385,7 +385,7 @@ class CalendarController extends Controller
         $daysChecked = 0;
 
         while (count($availableDates) < $count && $daysChecked < $maxDays) {
-            if (!BlockedDate::isDateBlocked($packageId, $current) && !$current->isPast()) {
+            if (! BlockedDate::isDateBlocked($packageId, $current) && ! $current->isPast()) {
                 $availableDates[] = $current->copy();
             }
 
@@ -401,11 +401,11 @@ class CalendarController extends Controller
      */
     private function buildEventDescription($event)
     {
-        $description = "Paket: " . $event->package->name . "\n";
-        $description .= "Tanggal Acara: " . $event->event_date->format('d F Y') . "\n";
-        $description .= "Lokasi: " . $event->order->event_location . "\n";
-        $description .= "Jumlah Tamu: " . $event->order->guest_count . "\n";
-        
+        $description = 'Paket: '.$event->package->name."\n";
+        $description .= 'Tanggal Acara: '.$event->event_date->format('d F Y')."\n";
+        $description .= 'Lokasi: '.$event->order->event_location."\n";
+        $description .= 'Jumlah Tamu: '.$event->order->guest_count."\n";
+
         return $description;
     }
 
@@ -419,7 +419,7 @@ class CalendarController extends Controller
         $string = str_replace(';', '\\;', $string);
         $string = str_replace("\n", '\\n', $string);
         $string = str_replace("\r", '', $string);
-        
+
         return $string;
     }
 }

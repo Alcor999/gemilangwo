@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
-@section('title', 'Discount Details')
+@section('title', 'Detail Diskon')
 
 @section('content')
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h1><i class="fas fa-eye"></i> Discount Details</h1>
+            <h1><i class="fas fa-eye"></i> Detail Diskon</h1>
         </div>
         <div class="col-md-4 text-end">
             <a href="{{ route('admin.discounts.edit', $discount) }}" class="btn btn-warning">
-                <i class="fas fa-edit"></i> Edit
+                <i class="fas fa-edit"></i> Ubah
             </a>
             <a href="{{ route('admin.discounts.index') }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Back
+                <i class="fas fa-arrow-left"></i> Kembali
             </a>
         </div>
     </div>
@@ -31,12 +31,12 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <h6 class="text-muted">Discount Type</h6>
+                            <h6 class="text-muted">Tipe Diskon</h6>
                             <p>
                                 @if ($discount->type === 'percentage')
-                                    <span class="badge bg-info">Percentage</span> {{ $discount->value }}%
+                                    <span class="badge bg-info">Persentase</span> {{ $discount->value }}%
                                 @else
-                                    <span class="badge bg-info">Fixed Amount</span> Rp {{ number_format($discount->value, 0, ',', '.') }}
+                                    <span class="badge bg-info">Nominal Tetap</span> Rp {{ number_format($discount->value, 0, ',', '.') }}
                                 @endif
                             </p>
                         </div>
@@ -45,15 +45,15 @@
                             <h6 class="text-muted">Status</h6>
                             <p>
                                 @if ($discount->is_active)
-                                    <span class="badge bg-success">Enabled</span>
+                                    <span class="badge bg-success">Aktif</span>
                                 @else
-                                    <span class="badge bg-danger">Disabled</span>
+                                    <span class="badge bg-danger">Nonaktif</span>
                                 @endif
                                 
                                 @if ($discount->isActive())
-                                    <span class="badge bg-success">Currently Active</span>
+                                    <span class="badge bg-success">Sedang Aktif</span>
                                 @else
-                                    <span class="badge bg-warning">Not Active Yet</span>
+                                    <span class="badge bg-warning">Belum Aktif</span>
                                 @endif
                             </p>
                         </div>
@@ -61,17 +61,17 @@
 
                     <div class="row mt-3">
                         <div class="col-md-6">
-                            <h6 class="text-muted">Start Date</h6>
+                            <h6 class="text-muted">Tanggal Mulai</h6>
                             <p>{{ $discount->start_date->format('d F Y H:i') }}</p>
                         </div>
 
                         <div class="col-md-6">
-                            <h6 class="text-muted">End Date</h6>
+                            <h6 class="text-muted">Tanggal Berakhir</h6>
                             <p>
                                 @if ($discount->end_date)
                                     {{ $discount->end_date->format('d F Y H:i') }}
                                 @else
-                                    <span class="text-muted">No expiry (unlimited)</span>
+                                    <span class="text-muted">Tanpa batas (tidak kedaluwarsa)</span>
                                 @endif
                             </p>
                         </div>
@@ -80,12 +80,12 @@
                     @if ($discount->usage_limit)
                         <div class="row mt-3">
                             <div class="col-md-6">
-                                <h6 class="text-muted">Usage Limit</h6>
-                                <p>{{ $discount->usage_limit }} times</p>
+                                <h6 class="text-muted">Batas Pemakaian</h6>
+                                <p>{{ $discount->usage_limit }} kali</p>
                             </div>
 
                             <div class="col-md-6">
-                                <h6 class="text-muted">Usage Count</h6>
+                                <h6 class="text-muted">Jumlah Pemakaian</h6>
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar" 
                                          style="width: {{ ($discount->usage_count / $discount->usage_limit) * 100 }}%"
@@ -103,16 +103,16 @@
             @if ($discount->packages->count() > 0)
                 <div class="card">
                     <div class="card-header bg-light">
-                        <h5 class="mb-0"><i class="fas fa-box"></i> Applied Packages</h5>
+                        <h5 class="mb-0"><i class="fas fa-box"></i> Paket yang Berlaku</h5>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-sm mb-0">
                             <thead>
                                 <tr>
-                                    <th>Package Name</th>
-                                    <th>Original Price</th>
+                                    <th>Nama Paket</th>
+                                    <th>Harga Awal</th>
                                     <th>Discount</th>
-                                    <th>Final Price</th>
+                                    <th>Harga Akhir</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -137,7 +137,7 @@
             @else
                 <div class="card">
                     <div class="card-body text-center text-muted">
-                        <p class="mb-0">This discount applies to <strong>all packages</strong></p>
+                        <p class="mb-0">Diskon ini berlaku untuk <strong>semua paket</strong></p>
                     </div>
                 </div>
             @endif
@@ -150,13 +150,13 @@
                 </div>
                 <div class="card-body">
                     <p class="small">
-                        <strong>Created by:</strong><br>
+                        <strong>Dibuat oleh:</strong><br>
                         {{ $discount->creator->name }}<br>
                         <span class="text-muted">{{ $discount->created_at->format('d M Y H:i') }}</span>
                     </p>
 
                     <p class="small">
-                        <strong>Last Updated:</strong><br>
+                        <strong>Terakhir Diperbarui:</strong><br>
                         <span class="text-muted">{{ $discount->updated_at->format('d M Y H:i') }}</span>
                     </p>
 
@@ -164,7 +164,7 @@
 
                     <div class="d-grid gap-2">
                         <a href="{{ route('admin.discounts.edit', $discount) }}" class="btn btn-warning btn-sm">
-                            <i class="fas fa-edit"></i> Edit
+                            <i class="fas fa-edit"></i> Ubah
                         </a>
                         <form action="{{ route('admin.discounts.destroy', $discount) }}" method="POST" class="mb-0">
                             @csrf

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Video;
 use App\Models\Package;
+use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,7 +16,7 @@ class VideoController extends Controller
     public function index()
     {
         $packages = Package::with('videos')->get();
-        
+
         return view('admin.videos.index', [
             'packages' => $packages,
         ]);
@@ -77,7 +77,7 @@ class VideoController extends Controller
 
         // Handle video upload
         if ($request->type === 'upload' && $request->hasFile('video_file')) {
-            $videoPath = $request->file('video_file')->store('videos/' . $packageId, 'public');
+            $videoPath = $request->file('video_file')->store('videos/'.$packageId, 'public');
         }
 
         // Handle thumbnail upload
@@ -101,7 +101,7 @@ class VideoController extends Controller
         ]);
 
         return redirect()->route('admin.videos.show', $packageId)
-                       ->with('success', 'Video added successfully!');
+            ->with('success', 'Video added successfully!');
     }
 
     /**
@@ -140,7 +140,7 @@ class VideoController extends Controller
             if ($video->video_path) {
                 Storage::disk('public')->delete($video->video_path);
             }
-            $video->video_path = $request->file('video_file')->store('videos/' . $video->package_id, 'public');
+            $video->video_path = $request->file('video_file')->store('videos/'.$video->package_id, 'public');
         }
 
         // Handle thumbnail upload
@@ -160,7 +160,7 @@ class VideoController extends Controller
         ]);
 
         return redirect()->route('admin.videos.show', $video->package_id)
-                       ->with('success', 'Video updated successfully!');
+            ->with('success', 'Video updated successfully!');
     }
 
     /**
@@ -184,7 +184,7 @@ class VideoController extends Controller
         $video->delete();
 
         return redirect()->route('admin.videos.show', $packageId)
-                       ->with('success', 'Video deleted successfully!');
+            ->with('success', 'Video deleted successfully!');
     }
 
     /**
@@ -193,7 +193,7 @@ class VideoController extends Controller
     public function toggle($videoId)
     {
         $video = Video::findOrFail($videoId);
-        $video->update(['is_active' => !$video->is_active]);
+        $video->update(['is_active' => ! $video->is_active]);
 
         return redirect()->back()->with('success', 'Video status updated!');
     }

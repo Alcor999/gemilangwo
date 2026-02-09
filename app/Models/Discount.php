@@ -38,7 +38,8 @@ class Discount extends Model
     public function isActive()
     {
         $now = now();
-        return $this->is_active && 
+
+        return $this->is_active &&
                $now->greaterThanOrEqualTo($this->start_date) &&
                ($this->end_date === null || $now->lessThanOrEqualTo($this->end_date));
     }
@@ -48,6 +49,7 @@ class Discount extends Model
         if ($this->type === 'percentage') {
             return ($originalPrice * $this->value) / 100;
         }
+
         return min($this->value, $originalPrice);
     }
 

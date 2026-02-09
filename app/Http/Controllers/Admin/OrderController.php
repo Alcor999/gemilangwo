@@ -16,6 +16,7 @@ class OrderController extends Controller
     {
         $this->paymentService = $paymentService;
     }
+
     /**
      * Display a listing of all orders
      */
@@ -24,7 +25,7 @@ class OrderController extends Controller
         $orders = Order::with(['user', 'package', 'payment'])
             ->latest()
             ->paginate(15);
-        
+
         return view('admin.orders.index', ['orders' => $orders]);
     }
 
@@ -34,6 +35,7 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $order->load(['user', 'package', 'payment', 'reviews', 'orderVendors']);
+
         return view('admin.orders.show', ['order' => $order]);
     }
 
@@ -59,6 +61,7 @@ class OrderController extends Controller
     {
         if ($order->status === 'pending') {
             $order->update(['status' => 'cancelled']);
+
             return redirect()->back()
                 ->with('success', 'Order cancelled successfully');
         }

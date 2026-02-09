@@ -13,7 +13,7 @@ class Bank extends Model
         'account_holder',
         'logo_path',
         'instruction',
-        'active'
+        'active',
     ];
 
     protected $casts = [

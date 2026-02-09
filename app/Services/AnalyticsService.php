@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\Models\Order;
-use App\Models\User;
 use App\Models\Package;
 use App\Models\Payment;
+use App\Models\User;
 use App\Traits\DatabaseHelper;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 class AnalyticsService
 {
     use DatabaseHelper;
+
     /**
      * Admin Analytics - Revenue
      */
@@ -20,7 +21,7 @@ class AnalyticsService
     {
         $query = Payment::where('status', 'success');
 
-        return match($period) {
+        return match ($period) {
             'today' => $query->whereDate('created_at', now()->toDateString())->sum('amount'),
             'month' => $query->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->sum('amount'),
             'year' => $query->whereYear('created_at', now()->year)->sum('amount'),
@@ -37,7 +38,7 @@ class AnalyticsService
             ->selectRaw('DATE(created_at) as date, SUM(amount) as revenue, COUNT(*) as transactions')
             ->orderBy('date')
             ->get()
-            ->map(fn($item) => [
+            ->map(fn ($item) => [
                 'date' => Carbon::parse($item->date)->format('d M'),
                 'revenue' => $item->revenue,
                 'transactions' => $item->transactions,
@@ -49,10 +50,10 @@ class AnalyticsService
         return Payment::where('status', 'success')
             ->whereYear('created_at', $year)
             ->groupBy(DB::raw($this->getMonthRaw('created_at')))
-            ->selectRaw($this->getMonthRaw('created_at') . ' as month, SUM(amount) as revenue, COUNT(*) as transactions')
+            ->selectRaw($this->getMonthRaw('created_at').' as month, SUM(amount) as revenue, COUNT(*) as transactions')
             ->orderBy('month')
             ->get()
-            ->map(fn($item) => [
+            ->map(fn ($item) => [
                 'month' => Carbon::createFromDate($year, $item->month)->format('M'),
                 'revenue' => $item->revenue,
                 'transactions' => $item->transactions,
@@ -63,10 +64,10 @@ class AnalyticsService
     {
         return Payment::where('status', 'success')
             ->groupBy(DB::raw($this->getYearRaw('created_at')))
-            ->selectRaw($this->getYearRaw('created_at') . ' as year, SUM(amount) as revenue, COUNT(*) as transactions')
+            ->selectRaw($this->getYearRaw('created_at').' as year, SUM(amount) as revenue, COUNT(*) as transactions')
             ->orderBy('year')
             ->get()
-            ->map(fn($item) => [
+            ->map(fn ($item) => [
                 'year' => $item->year,
                 'revenue' => $item->revenue,
                 'transactions' => $item->transactions,
@@ -85,7 +86,7 @@ class AnalyticsService
     {
         $query = User::where('role', 'customer');
 
-        return match($period) {
+        return match ($period) {
             'month' => $query->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count(),
             'year' => $query->whereYear('created_at', now()->year)->count(),
             default => 0,
@@ -97,10 +98,10 @@ class AnalyticsService
         return User::where('role', 'customer')
             ->whereYear('created_at', $year)
             ->groupBy(DB::raw($this->getMonthRaw('created_at')))
-            ->selectRaw($this->getMonthRaw('created_at') . ' as month, COUNT(*) as customers')
+            ->selectRaw($this->getMonthRaw('created_at').' as month, COUNT(*) as customers')
             ->orderBy('month')
             ->get()
-            ->map(fn($item) => [
+            ->map(fn ($item) => [
                 'month' => Carbon::createFromDate($year, $item->month)->format('M'),
                 'customers' => $item->customers,
             ]);
@@ -110,10 +111,10 @@ class AnalyticsService
     {
         return User::where('role', 'customer')
             ->groupBy(DB::raw($this->getYearRaw('created_at')))
-            ->selectRaw($this->getYearRaw('created_at') . ' as year, COUNT(*) as customers')
+            ->selectRaw($this->getYearRaw('created_at').' as year, COUNT(*) as customers')
             ->orderBy('year')
             ->get()
-            ->map(fn($item) => [
+            ->map(fn ($item) => [
                 'year' => $item->year,
                 'customers' => $item->customers,
             ]);
@@ -136,7 +137,7 @@ class AnalyticsService
     public function getPackagePerformance($period = 'month', $year = null)
     {
         $year = $year ?? now()->year;
-        
+
         $query = Order::select(
             'packages.id',
             'packages.name',
@@ -144,8 +145,8 @@ class AnalyticsService
             DB::raw('COUNT(orders.id) as total_bookings'),
             DB::raw('SUM(orders.total_price) as total_revenue')
         )
-        ->join('packages', 'orders.package_id', '=', 'packages.id')
-        ->where('orders.status', '!=', 'cancelled');
+            ->join('packages', 'orders.package_id', '=', 'packages.id')
+            ->where('orders.status', '!=', 'cancelled');
 
         if ($period === 'month') {
             $query->whereYear('orders.created_at', $year);
@@ -163,7 +164,7 @@ class AnalyticsService
     {
         $year = $year ?? now()->year;
 
-        $baseQuery = fn($model) => $model->whereYear('created_at', $year);
+        $baseQuery = fn ($model) => $model->whereYear('created_at', $year);
 
         $totalVisitors = $baseQuery(Order::query())->distinct('user_id')->count('user_id') ?? 1;
         $totalOrders = $baseQuery(Order::query())->count();
@@ -211,11 +212,11 @@ class AnalyticsService
 
         return Payment::where('status', 'success')
             ->whereYear('created_at', $year)
-            ->when($period === 'month', fn($q) => $q->whereMonth('created_at', now()->month))
+            ->when($period === 'month', fn ($q) => $q->whereMonth('created_at', now()->month))
             ->groupBy('payment_method')
             ->selectRaw('payment_method, COUNT(*) as count, SUM(amount) as total_amount')
             ->get()
-            ->map(fn($item) => [
+            ->map(fn ($item) => [
                 'method' => ucfirst($item->payment_method ?? 'unknown'),
                 'count' => $item->count,
                 'amount' => $item->total_amount,
@@ -228,7 +229,7 @@ class AnalyticsService
      */
     public function formatChartData($data, $period = 'month')
     {
-        $labels = $data->pluck(match($period) {
+        $labels = $data->pluck(match ($period) {
             'daily' => 'date',
             'monthly' => 'month',
             'yearly' => 'year',
@@ -246,8 +247,8 @@ class AnalyticsService
                     'borderColor' => 'rgb(75, 192, 192)',
                     'backgroundColor' => 'rgba(75, 192, 192, 0.1)',
                     'tension' => 0.1,
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -265,9 +266,9 @@ class AnalyticsService
                         'rgba(255, 206, 86, 0.5)',
                         'rgba(75, 192, 192, 0.5)',
                         'rgba(153, 102, 255, 0.5)',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -278,14 +279,14 @@ class AnalyticsService
     {
         $year = $year ?? now()->year;
 
-        $data = match($type) {
+        $data = match ($type) {
             'revenue' => $this->getRevenueByMonth($year),
             'customers' => $this->getCustomersByMonth($year),
             'packages' => $this->getPackagePerformance($period, $year),
             default => [],
         };
 
-        return match($format) {
+        return match ($format) {
             'pdf' => $this->exportPdf($type, $data),
             'excel' => $this->exportExcel($type, $data),
             default => response()->json(['error' => 'Invalid format'], 400),
@@ -296,36 +297,36 @@ class AnalyticsService
     {
         // Implement using dompdf
         $html = $this->generatePdfHtml($type, $data);
-        
-        $pdf = new \Dompdf\Dompdf();
+
+        $pdf = new \Dompdf\Dompdf;
         $pdf->loadHtml($html);
         $pdf->setPaper('A4', 'portrait');
         $pdf->render();
-        
-        $filename = $type . '-report-' . now()->format('Y-m-d') . '.pdf';
-        
+
+        $filename = $type.'-report-'.now()->format('Y-m-d').'.pdf';
+
         // Return response with PDF content
         return response($pdf->output(), 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 
     protected function exportExcel($type, $data)
     {
-        $export = match($type) {
+        $export = match ($type) {
             'revenue' => new \App\Exports\RevenueExport($data, 'Revenue Report'),
             'packages' => new \App\Exports\PackagePerformanceExport($data),
             default => null,
         };
 
-        if (!$export) {
+        if (! $export) {
             return response()->json(['error' => 'Invalid export type'], 400);
         }
 
         return \Maatwebsite\Excel\Facades\Excel::download(
             $export,
-            $type . '-report-' . now()->format('Y-m-d') . '.xlsx'
+            $type.'-report-'.now()->format('Y-m-d').'.xlsx'
         );
     }
 
@@ -339,30 +340,31 @@ class AnalyticsService
         $html .= 'td { padding: 10px; border-bottom: 1px solid #ddd; }';
         $html .= 'tr:nth-child(even) { background-color: #f2f2f2; }';
         $html .= '</style></head><body>';
-        $html .= '<h1>' . ucfirst($type) . ' Report</h1>';
-        $html .= '<p>Generated on: ' . now()->format('d M Y H:i:s') . '</p>';
+        $html .= '<h1>'.ucfirst($type).' Report</h1>';
+        $html .= '<p>Generated on: '.now()->format('d M Y H:i:s').'</p>';
         $html .= '<table><thead><tr>';
 
         if ($type === 'revenue') {
             $html .= '<th>Period</th><th>Revenue</th><th>Transactions</th>';
             $html .= '</tr></thead><tbody>';
             foreach ($data as $item) {
-                $html .= '<tr><td>' . ($item['date'] ?? $item['month'] ?? $item['year']) . '</td>';
-                $html .= '<td>Rp ' . number_format($item['revenue'], 0, ',', '.') . '</td>';
-                $html .= '<td>' . ($item['transactions'] ?? 0) . '</td></tr>';
+                $html .= '<tr><td>'.($item['date'] ?? $item['month'] ?? $item['year']).'</td>';
+                $html .= '<td>Rp '.number_format($item['revenue'], 0, ',', '.').'</td>';
+                $html .= '<td>'.($item['transactions'] ?? 0).'</td></tr>';
             }
         } elseif ($type === 'packages') {
             $html .= '<th>Package</th><th>Price</th><th>Bookings</th><th>Revenue</th>';
             $html .= '</tr></thead><tbody>';
             foreach ($data as $item) {
-                $html .= '<tr><td>' . $item->name . '</td>';
-                $html .= '<td>Rp ' . number_format($item->price, 0, ',', '.') . '</td>';
-                $html .= '<td>' . $item->total_bookings . '</td>';
-                $html .= '<td>Rp ' . number_format($item->total_revenue, 0, ',', '.') . '</td></tr>';
+                $html .= '<tr><td>'.$item->name.'</td>';
+                $html .= '<td>Rp '.number_format($item->price, 0, ',', '.').'</td>';
+                $html .= '<td>'.$item->total_bookings.'</td>';
+                $html .= '<td>Rp '.number_format($item->total_revenue, 0, ',', '.').'</td></tr>';
             }
         }
 
         $html .= '</tbody></table></body></html>';
+
         return $html;
     }
 
@@ -372,13 +374,11 @@ class AnalyticsService
     public function getOwnerRevenue($ownerId, $period = 'month')
     {
         $query = Payment::where('status', 'success')
-            ->whereHas('order', fn($q) => 
-                $q->whereHas('package', fn($p) => 
-                    $p->where('owner_id', $ownerId)
-                )
+            ->whereHas('order', fn ($q) => $q->whereHas('package', fn ($p) => $p->where('owner_id', $ownerId)
+            )
             );
 
-        return match($period) {
+        return match ($period) {
             'today' => $query->whereDate('created_at', now()->toDateString())->sum('amount'),
             'month' => $query->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->sum('amount'),
             'year' => $query->whereYear('created_at', now()->year)->sum('amount'),
@@ -388,19 +388,19 @@ class AnalyticsService
 
     public function getOwnerTotalOrders($ownerId)
     {
-        return Order::whereHas('package', fn($q) => $q->where('owner_id', $ownerId))->count();
+        return Order::whereHas('package', fn ($q) => $q->where('owner_id', $ownerId))->count();
     }
 
     public function getOwnerCompletedOrders($ownerId)
     {
-        return Order::whereHas('package', fn($q) => $q->where('owner_id', $ownerId))
+        return Order::whereHas('package', fn ($q) => $q->where('owner_id', $ownerId))
             ->where('status', 'completed')
             ->count();
     }
 
     public function getOwnerUpcomingEvents($ownerId, $days = 30)
     {
-        return Order::whereHas('package', fn($q) => $q->where('owner_id', $ownerId))
+        return Order::whereHas('package', fn ($q) => $q->where('owner_id', $ownerId))
             ->where('status', '!=', 'cancelled')
             ->whereBetween('event_date', [now(), now()->addDays($days)])
             ->orderBy('event_date')
@@ -421,10 +421,8 @@ class AnalyticsService
     public function getOwnerRevenueByDay($ownerId, $year, $month)
     {
         return Payment::where('status', 'success')
-            ->whereHas('order', fn($q) => 
-                $q->whereHas('package', fn($p) => 
-                    $p->where('owner_id', $ownerId)
-                )
+            ->whereHas('order', fn ($q) => $q->whereHas('package', fn ($p) => $p->where('owner_id', $ownerId)
+            )
             )
             ->whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
@@ -437,14 +435,12 @@ class AnalyticsService
     public function getOwnerRevenueByMonth($ownerId, $year)
     {
         return Payment::where('status', 'success')
-            ->whereHas('order', fn($q) => 
-                $q->whereHas('package', fn($p) => 
-                    $p->where('owner_id', $ownerId)
-                )
+            ->whereHas('order', fn ($q) => $q->whereHas('package', fn ($p) => $p->where('owner_id', $ownerId)
+            )
             )
             ->whereYear('created_at', $year)
             ->groupBy(DB::raw($this->getMonthRaw('created_at')))
-            ->selectRaw($this->getMonthRaw('created_at') . ' as month, SUM(amount) as revenue, COUNT(*) as orders')
+            ->selectRaw($this->getMonthRaw('created_at').' as month, SUM(amount) as revenue, COUNT(*) as orders')
             ->orderBy('month')
             ->get();
     }
@@ -452,13 +448,11 @@ class AnalyticsService
     public function getOwnerRevenueByYear($ownerId)
     {
         return Payment::where('status', 'success')
-            ->whereHas('order', fn($q) => 
-                $q->whereHas('package', fn($p) => 
-                    $p->where('owner_id', $ownerId)
-                )
+            ->whereHas('order', fn ($q) => $q->whereHas('package', fn ($p) => $p->where('owner_id', $ownerId)
+            )
             )
             ->groupBy(DB::raw($this->getYearRaw('created_at')))
-            ->selectRaw($this->getYearRaw('created_at') . ' as year, SUM(amount) as revenue, COUNT(*) as orders')
+            ->selectRaw($this->getYearRaw('created_at').' as year, SUM(amount) as revenue, COUNT(*) as orders')
             ->orderBy('year')
             ->get();
     }
@@ -467,17 +461,17 @@ class AnalyticsService
     {
         $year = $year ?? now()->year;
 
-        return Order::whereHas('package', fn($q) => $q->where('owner_id', $ownerId))
+        return Order::whereHas('package', fn ($q) => $q->where('owner_id', $ownerId))
             ->whereYear('created_at', $year)
             ->groupBy(DB::raw($this->getMonthRaw('created_at')))
-            ->selectRaw($this->getMonthRaw('created_at') . ' as month, COUNT(*) as bookings, SUM(CASE WHEN status = "completed" THEN 1 ELSE 0 END) as completed')
+            ->selectRaw($this->getMonthRaw('created_at').' as month, COUNT(*) as bookings, SUM(CASE WHEN status = "completed" THEN 1 ELSE 0 END) as completed')
             ->orderBy('month')
             ->get();
     }
 
     public function getOwnerCustomerLifetimeValue($ownerId, $period = 'month')
     {
-        return Order::whereHas('package', fn($q) => $q->where('owner_id', $ownerId))
+        return Order::whereHas('package', fn ($q) => $q->where('owner_id', $ownerId))
             ->with('user:id,name,email')
             ->select('user_id', DB::raw('COUNT(*) as orders'), DB::raw('SUM(total_price) as ltv'))
             ->groupBy('user_id')
@@ -488,7 +482,7 @@ class AnalyticsService
 
     public function getOwnerRepeatCustomers($ownerId)
     {
-        return Order::whereHas('package', fn($q) => $q->where('owner_id', $ownerId))
+        return Order::whereHas('package', fn ($q) => $q->where('owner_id', $ownerId))
             ->select('user_id', DB::raw('COUNT(*) as order_count'))
             ->groupBy('user_id')
             ->having('order_count', '>', 1)
@@ -500,12 +494,12 @@ class AnalyticsService
     public function getOwnerChurnAnalysis($ownerId, $months = 12)
     {
         $data = [];
-        
+
         for ($i = $months; $i > 0; $i--) {
             $startDate = now()->subMonths($i)->startOfMonth();
             $endDate = now()->subMonths($i)->endOfMonth();
 
-            $activeCustomers = Order::whereHas('package', fn($q) => $q->where('owner_id', $ownerId))
+            $activeCustomers = Order::whereHas('package', fn ($q) => $q->where('owner_id', $ownerId))
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->distinct('user_id')
                 ->count('user_id');
@@ -523,14 +517,14 @@ class AnalyticsService
     {
         $year = $year ?? now()->year;
 
-        $data = match($type) {
+        $data = match ($type) {
             'revenue' => $this->getOwnerRevenueByMonth($ownerId, $year),
             'bookings' => $this->getOwnerBookingStats($ownerId, $period, $year),
             'packages' => $this->getOwnerTopPackages($ownerId, 50),
             default => [],
         };
 
-        return match($format) {
+        return match ($format) {
             'pdf' => $this->exportPdf($type, $data),
             'excel' => $this->exportExcel($type, $data),
             default => response()->json(['error' => 'Invalid format'], 400),

@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Verified Payments')
+@section('title', 'Pembayaran Terverifikasi')
 
 @section('content')
 <div class="container-fluid mt-4">
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4><i class="fas fa-check-circle me-2"></i>Verified Payments</h4>
+                <h4><i class="fas fa-check-circle me-2"></i>Pembayaran Terverifikasi</h4>
                 <div>
                     <a href="{{ route('admin.payments.pending') }}" class="btn btn-sm btn-outline-warning">
-                        <i class="fas fa-hourglass-half me-1"></i>Pending ({{ \App\Models\Payment::where('verification_status', 'pending')->count() }})
+                        <i class="fas fa-hourglass-half me-1"></i>Menunggu ({{ \App\Models\Payment::where('verification_status', 'pending')->count() }})
                     </a>
                 </div>
             </div>
@@ -18,7 +18,7 @@
             @if ($payments->isEmpty())
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle me-2"></i>
-                    No verified payments yet.
+                    Belum ada pembayaran yang terverifikasi.
                 </div>
             @else
                 <div class="card" style="box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
@@ -26,12 +26,12 @@
                         <table class="table table-hover mb-0">
                             <thead style="background-color: #f8f9fa;">
                                 <tr>
-                                    <th>Order Number</th>
-                                    <th>Customer</th>
-                                    <th>Amount</th>
-                                    <th>Verified By</th>
-                                    <th>Verified Date</th>
-                                    <th>Notes</th>
+                                    <th>Nomor Pesanan</th>
+                                    <th>Pelanggan</th>
+                                    <th>Jumlah</th>
+                                    <th>Diverifikasi Oleh</th>
+                                    <th>Tanggal Verifikasi</th>
+                                    <th>Catatan</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Conversion Funnel - Admin Analytics')
+@section('title', 'Funnel Konversi - Analitik Admin')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -8,27 +8,27 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <h1 class="h3 mb-0">
-                <i class="fas fa-funnel"></i> Conversion Funnel Analysis
+                <i class="fas fa-funnel"></i> Analisis Funnel Konversi
             </h1>
-            <p class="text-muted">Track customer journey from visitor to payment</p>
+            <p class="text-muted">Pantau perjalanan pelanggan dari pengunjung hingga pembayaran</p>
         </div>
     </div>
 
-    <!-- Filters -->
+    <!-- Penyaringan -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <form method="GET" action="{{ route('admin.analytics.conversion') }}" class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label">Period</label>
+                            <label class="form-label">Periode</label>
                             <select name="period" class="form-select" onchange="this.form.submit()">
-                                <option value="month" {{ $period === 'month' ? 'selected' : '' }}>Monthly</option>
-                                <option value="yearly" {{ $period === 'yearly' ? 'selected' : '' }}>Yearly</option>
+                                <option value="month" {{ $period === 'month' ? 'selected' : '' }}>Bulanan</option>
+                                <option value="yearly" {{ $period === 'yearly' ? 'selected' : '' }}>Tahunan</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label">Year</label>
+                            <label class="form-label">Tahun</label>
                             <select name="year" class="form-select" onchange="this.form.submit()">
                                 @for($y = now()->year - 5; $y <= now()->year; $y++)
                                     <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
@@ -41,12 +41,12 @@
         </div>
     </div>
 
-    <!-- Funnel Chart -->
+    <!-- Grafik Funnel -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-chart-line"></i> Funnel Visualization</h6>
+                    <h6 class="mb-0"><i class="fas fa-chart-line"></i> Visualisasi Funnel</h6>
                 </div>
                 <div class="card-body">
                     <canvas id="funnelChart"></canvas>
@@ -55,21 +55,21 @@
         </div>
     </div>
 
-    <!-- Funnel Details -->
+    <!-- Detail Funnel -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-table"></i> Funnel Stages</h6>
+                    <h6 class="mb-0"><i class="fas fa-table"></i> Tahap Funnel</h6>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Stage</th>
-                                <th class="text-end">Count</th>
-                                <th class="text-end">Percentage</th>
-                                <th class="text-end">Drop-off Rate</th>
+                                <th>Tahap</th>
+                                <th class="text-end">Jumlah</th>
+                                <th class="text-end">Persentase</th>
+                                <th class="text-end">Tingkat Drop-off</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -116,7 +116,7 @@
             data: {
                 labels: funnelData.map(item => item.stage),
                 datasets: [{
-                    label: 'Users',
+                    label: 'Pengguna',
                     data: funnelData.map(item => item.count),
                     backgroundColor: [
                         'rgba(54, 162, 235, 0.6)',

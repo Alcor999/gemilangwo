@@ -67,7 +67,7 @@
                             @enderror
                         </div>
 
-                        <!-- Related Order (Optional) -->
+                        <!-- Pesanan Terkait (Opsional) -->
                         @php
                             $userOrders = auth()->user()->orders()->get();
                         @endphp
@@ -81,7 +81,7 @@
                                     <option value="">Tidak ada pesanan terkait</option>
                                     @foreach ($userOrders as $order)
                                         <option value="{{ $order->id }}" {{ old('order_id') == $order->id ? 'selected' : '' }}>
-                                            Order #{{ $order->id }} - {{ $order->package->name }} ({{ $order->created_at->format('d M Y') }})
+                                            Pesanan #{{ $order->id }} - {{ $order->package->name }} ({{ $order->created_at->format('d M Y') }})
                                         </option>
                                     @endforeach
                                 </select>

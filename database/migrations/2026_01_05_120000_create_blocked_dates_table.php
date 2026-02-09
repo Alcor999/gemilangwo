@@ -21,7 +21,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
-            
+
             // Indexes for faster queries
             $table->index(['package_id', 'start_date', 'end_date']);
             $table->index(['package_id', 'is_active']);

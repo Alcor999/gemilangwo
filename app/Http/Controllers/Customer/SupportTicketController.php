@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\SupportTicket;
-use App\Models\ChatMessage;
 use Illuminate\Http\Request;
 
 class SupportTicketController extends Controller
@@ -27,6 +26,7 @@ class SupportTicketController extends Controller
     public function create()
     {
         $orders = auth()->user()->orders()->latest()->get();
+
         return view('customer.support.tickets.create', compact('orders'));
     }
 
@@ -69,7 +69,7 @@ class SupportTicketController extends Controller
     public function show($id)
     {
         $ticket = SupportTicket::findOrFail($id);
-        
+
         // Check authorization
         if ($ticket->user_id !== auth()->id()) {
             abort(403);
@@ -89,7 +89,7 @@ class SupportTicketController extends Controller
     public function addMessage(Request $request, $id)
     {
         $ticket = SupportTicket::findOrFail($id);
-        
+
         // Check authorization
         if ($ticket->user_id !== auth()->id()) {
             abort(403);
@@ -118,7 +118,7 @@ class SupportTicketController extends Controller
     public function close($id)
     {
         $ticket = SupportTicket::findOrFail($id);
-        
+
         if ($ticket->user_id !== auth()->id()) {
             abort(403);
         }
@@ -134,20 +134,20 @@ class SupportTicketController extends Controller
     public function getNewMessages($id)
     {
         $ticket = SupportTicket::findOrFail($id);
-        
+
         if ($ticket->user_id !== auth()->id()) {
             abort(403);
         }
 
         $lastMessageId = request()->query('last_message_id', 0);
-        
+
         $messages = $ticket->messages()
             ->where('id', '>', $lastMessageId)
             ->with('sender')
             ->get();
 
         return response()->json([
-            'messages' => $messages->map(fn($msg) => [
+            'messages' => $messages->map(fn ($msg) => [
                 'id' => $msg->id,
                 'sender_name' => $msg->sender->name,
                 'sender_type' => $msg->sender_type,

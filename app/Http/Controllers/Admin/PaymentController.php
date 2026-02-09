@@ -22,7 +22,7 @@ class PaymentController extends Controller
     public function pendingPayments()
     {
         $payments = $this->paymentService->getPendingPayments();
-        
+
         return view('admin.payments.pending', [
             'payments' => $payments,
         ]);
@@ -84,7 +84,7 @@ class PaymentController extends Controller
     public function verifiedPayments()
     {
         $payments = $this->paymentService->getVerifiedPayments();
-        
+
         return view('admin.payments.verified', [
             'payments' => $payments,
         ]);
@@ -96,11 +96,11 @@ class PaymentController extends Controller
     public function export()
     {
         $payments = $this->paymentService->getPendingPayments();
-        
+
         return response()->json([
             'count' => $payments->count(),
             'total_amount' => $payments->sum('amount'),
-            'payments' => $payments->map(function($p) {
+            'payments' => $payments->map(function ($p) {
                 return [
                     'order_number' => $p->order->order_number,
                     'amount' => $p->amount,

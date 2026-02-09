@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Owner Dashboard')
+@section('title', 'Dasbor Pemilik')
 
 @section('content')
 <div class="container-fluid">
-    <h1 class="mb-4">Business Dashboard</h1>
+    <h1 class="mb-4">Dasbor Bisnis</h1>
 
     <!-- Statistics Cards -->
     <div class="row mb-4">
@@ -12,7 +12,7 @@
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="mb-2">Total Orders</h6>
+                        <h6 class="mb-2">Total Pesanan</h6>
                         <h3 class="mb-0">{{ $total_orders }}</h3>
                     </div>
                     <i class="fas fa-receipt fa-2x" style="opacity: 0.5;"></i>
@@ -23,7 +23,7 @@
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="mb-2">Total Customers</h6>
+                        <h6 class="mb-2">Total Pelanggan</h6>
                         <h3 class="mb-0">{{ $total_customers }}</h3>
                     </div>
                     <i class="fas fa-users fa-2x" style="opacity: 0.5;"></i>
@@ -34,7 +34,7 @@
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="mb-2">Completed Revenue</h6>
+                        <h6 class="mb-2">Pendapatan Selesai</h6>
                         <h3 class="mb-0">Rp {{ number_format($total_revenue, 0, ',', '.') }}</h3>
                     </div>
                     <i class="fas fa-money-bill-wave fa-2x" style="opacity: 0.5;"></i>
@@ -45,7 +45,7 @@
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="mb-2">Pending Revenue</h6>
+                        <h6 class="mb-2">Pendapatan Tertunda</h6>
                         <h3 class="mb-0">Rp {{ number_format($pending_revenue, 0, ',', '.') }}</h3>
                     </div>
                     <i class="fas fa-hourglass-half fa-2x" style="opacity: 0.5;"></i>
@@ -54,35 +54,35 @@
         </div>
     </div>
 
-    <!-- Quick Links -->
+    <!-- Tautan Cepat -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Reports & Analytics</h5>
+                    <h5 class="card-title">Laporan & Analitik</h5>
                     <a href="{{ route('owner.statistics') }}" class="btn btn-primary btn-sm me-2">
-                        <i class="fas fa-chart-bar"></i> Detailed Statistics
+                        <i class="fas fa-chart-bar"></i> Statistik Detail
                     </a>
                     <a href="{{ route('owner.payments') }}" class="btn btn-info btn-sm">
-                        <i class="fas fa-credit-card"></i> Payment Details
+                        <i class="fas fa-credit-card"></i> Detail Pembayaran
                     </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Orders by Status -->
+    <!-- Pesanan Berdasarkan Status -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h5 class="mb-0">Orders by Status</h5>
+                    <h5 class="mb-0">Pesanan Berdasarkan Status</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         @php
                             $statuses = ['pending', 'confirmed', 'in_progress', 'completed', 'cancelled'];
-                            $status_labels = ['Pending', 'Confirmed', 'In Progress', 'Completed', 'Cancelled'];
+                            $status_labels = ['Menunggu', 'Dikonfirmasi', 'Sedang Berlangsung', 'Selesai', 'Dibatalkan'];
                             $status_colors = ['warning', 'info', 'primary', 'success', 'danger'];
                         @endphp
                         @foreach($statuses as $idx => $status)
@@ -97,12 +97,12 @@
         </div>
     </div>
 
-    <!-- Recent Orders -->
+    <!-- Pesanan Terbaru -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h5 class="mb-0">Recent Orders</h5>
+                    <h5 class="mb-0">Pesanan Terbaru</h5>
                 </div>
                 <div class="card-body">
                     @if($recent_orders->count() > 0)
@@ -110,13 +110,13 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Order ID</th>
-                                        <th>Customer</th>
-                                        <th>Package</th>
-                                        <th>Amount</th>
-                                        <th>Payment Status</th>
-                                        <th>Order Status</th>
-                                        <th>Date</th>
+                                        <th>ID Pesanan</th>
+                                        <th>Pelanggan</th>
+                                        <th>Paket</th>
+                                        <th>Jumlah</th>
+                                        <th>Status Pembayaran</th>
+                                        <th>Status Pesanan</th>
+                                        <th>Tanggal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -132,7 +132,7 @@
                                                         {{ ucfirst($order->payment->status) }}
                                                     </span>
                                                 @else
-                                                    <span class="badge bg-secondary">Unpaid</span>
+                                                    <span class="badge bg-secondary">Belum Dibayar</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -147,7 +147,7 @@
                             </table>
                         </div>
                     @else
-                        <div class="alert alert-info">No orders yet.</div>
+                        <div class="alert alert-info">Belum ada pesanan.</div>
                     @endif
                 </div>
             </div>

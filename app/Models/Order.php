@@ -54,7 +54,7 @@ class Order extends Model
                 try {
                     app(NotificationService::class)->notifyOrderConfirmation($order);
                 } catch (\Exception $e) {
-                    \Log::warning('SMS notification failed: ' . $e->getMessage());
+                    \Log::warning('SMS notification failed: '.$e->getMessage());
                 }
             }
         });
@@ -75,7 +75,7 @@ class Order extends Model
                                 app(NotificationService::class)->notifyPaymentReminder($order);
                             }
                         } catch (\Exception $e) {
-                            \Log::warning('SMS notification failed: ' . $e->getMessage());
+                            \Log::warning('SMS notification failed: '.$e->getMessage());
                         }
                     }
                 }

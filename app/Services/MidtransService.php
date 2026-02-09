@@ -5,8 +5,8 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\Payment;
 use Midtrans\Config;
-use Midtrans\Transaction;
 use Midtrans\Snap;
+use Midtrans\Transaction;
 
 class MidtransService
 {
@@ -26,7 +26,7 @@ class MidtransService
     {
         $transaction_details = [
             'order_id' => $order->order_number,
-            'gross_amount' => (int)$order->total_price,
+            'gross_amount' => (int) $order->total_price,
         ];
 
         $customer_details = [
@@ -37,8 +37,8 @@ class MidtransService
 
         $item_details = [
             [
-                'id' => 'pkg-' . $order->package->id,
-                'price' => (int)$order->package->price,
+                'id' => 'pkg-'.$order->package->id,
+                'price' => (int) $order->package->price,
                 'quantity' => 1,
                 'name' => $order->package->name,
             ],
@@ -48,7 +48,7 @@ class MidtransService
             $additional_cost = $order->total_price - $order->package->price;
             $item_details[] = [
                 'id' => 'additional_fee',
-                'price' => (int)$additional_cost,
+                'price' => (int) $additional_cost,
                 'quantity' => 1,
                 'name' => 'Additional Charges',
             ];
@@ -87,9 +87,10 @@ class MidtransService
 
         try {
             $snapToken = Snap::getSnapToken($payload);
+
             return $snapToken;
         } catch (\Exception $e) {
-            throw new \Exception('Error creating Snap token: ' . $e->getMessage());
+            throw new \Exception('Error creating Snap token: '.$e->getMessage());
         }
     }
 
@@ -106,19 +107,19 @@ class MidtransService
         // Find payment by order number (order_id in Midtrans = order_number)
         $order = Order::where('order_number', $order_id)->first();
 
-        if (!$order) {
-            throw new \Exception('Order not found for order_id: ' . $order_id);
+        if (! $order) {
+            throw new \Exception('Order not found for order_id: '.$order_id);
         }
 
         $payment = $order->payment;
-        if (!$payment) {
-            $payment = new Payment();
+        if (! $payment) {
+            $payment = new Payment;
             $payment->order_id = $order->id;
             $payment->payment_id = $transaction_id;
         }
 
         $payment->payment_method = $payment_type;
-        $payment->midtrans_response = (array)$notification;
+        $payment->midtrans_response = (array) $notification;
 
         // Handle bank transfer with VA
         if ($payment_type === 'bank_transfer' || $payment_type === 'echannel') {
@@ -156,9 +157,10 @@ class MidtransService
     {
         try {
             $status = Transaction::status($transaction_id);
+
             return $status;
         } catch (\Exception $e) {
-            throw new \Exception('Error getting transaction status: ' . $e->getMessage());
+            throw new \Exception('Error getting transaction status: '.$e->getMessage());
         }
     }
 }

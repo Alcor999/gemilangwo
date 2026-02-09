@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Payment Received</title>
+    <title>Pembayaran Diterima</title>
     <style>
         body { font-family: Arial, sans-serif; color: #333; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -22,78 +22,78 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Payment Received</h1>
-            <p>Thank you for your payment!</p>
+            <h1>Pembayaran Diterima</h1>
+            <p>Terima kasih atas pembayaran Anda!</p>
         </div>
 
         <div class="content">
-        <p>Hello {{ $customer->name }},</p>
+        <p>Halo {{ $customer->name }},</p>
 
-        <p>We have successfully received your payment for order <strong>#{{ $order->id }}</strong>.</p>
+        <p>Kami telah menerima pembayaran Anda untuk pesanan <strong>#{{ $order->id }}</strong>.</p>
 
         <div class="info-box">
-            <strong>Payment Details:</strong>
+            <strong>Detail Pembayaran:</strong>
             <table>
                 <tr>
-                    <td>Payment ID:</td>
+                    <td>ID Pembayaran:</td>
                     <td><strong>#{{ $payment->id }}</strong></td>
                 </tr>
                 <tr>
-                    <td>Order ID:</td>
+                    <td>ID Pesanan:</td>
                     <td>#{{ $order->id }}</td>
                 </tr>
                 <tr>
-                    <td>Package:</td>
+                    <td>Paket:</td>
                     <td>{{ $package->name }}</td>
                 </tr>
                 <tr>
-                    <td>Amount Paid:</td>
+                    <td>Jumlah Dibayar:</td>
                     <td><strong>Rp {{ number_format($payment->amount, 0, ',', '.') }}</strong></td>
                 </tr>
                 <tr>
-                    <td>Payment Method:</td>
+                    <td>Metode Pembayaran:</td>
                     <td>{{ ucfirst($payment->payment_method) }}</td>
                 </tr>
                 <tr>
-                    <td>Payment Date:</td>
+                    <td>Tanggal Pembayaran:</td>
                     <td>{{ $payment->paid_at->format('d F Y H:i') }}</td>
                 </tr>
                 <tr>
                     <td>Status:</td>
-                    <td><span class="success-badge">Paid</span></td>
+                    <td><span class="success-badge">Sudah Dibayar</span></td>
                 </tr>
             </table>
         </div>
 
-        <p>Your order is now confirmed and our team is preparing everything for your special event. We will keep you updated on the progress.</p>
+        <p>Pesanan Anda sudah dikonfirmasi dan tim kami sedang menyiapkan semuanya untuk acara spesial Anda. Kami akan terus memberikan pembaruan progresnya.</p>
 
         <p style="text-align: center;">
             <a href="{{ route('customer.orders.show', $order) }}" class="button">
-                View Order & Tracking
+                Lihat Pesanan & Pelacakan
             </a>
         </p>
 
         <hr class="divider">
 
-        <h3 style="margin-bottom: 10px;">What Happens Next?</h3>
+        <h3 style="margin-bottom: 10px;">Apa Selanjutnya?</h3>
         <ul style="margin-left: 20px; margin-bottom: 20px;">
-            <li>Your order is now confirmed and processing</li>
-            <li>Our team will contact you 3 days before the event</li>
-            <li>Final confirmation will be sent 1 day before</li>
-            <li>We're excited to make your event special!</li>
+            <li>Pesanan Anda sudah dikonfirmasi dan sedang diproses</li>
+            <li>Tim kami akan menghubungi Anda 3 hari sebelum acara</li>
+            <li>Konfirmasi akhir akan dikirim 1 hari sebelum acara</li>
+            <li>Kami antusias membantu membuat acara Anda spesial!</li>
         </ul>
 
-        <p>If you have any questions about your order, please contact our support team.</p>
+        <p>Jika Anda memiliki pertanyaan terkait pesanan, silakan hubungi tim dukungan kami.</p>
 
         <p style="margin-top: 30px;">
-            Thank you for choosing us!<br>
-            <strong>Gemilang WO Team</strong>
+            Terima kasih telah memilih kami!<br>
+            <strong>Tim Gemilang WO</strong>
         </p>
     </div>
 
     <div class="footer">
-        <p>© 2026 Gemilang WO. All rights reserved.</p>
-        <p>This is an automated email. Please do not reply directly to this message.</p>
+        <p>© 2026 Gemilang WO. Hak cipta dilindungi undang-undang.</p>
+        <p>Ini adalah email otomatis. Mohon jangan membalas langsung pesan ini.</p>
     </div>
     </div>
 </body>

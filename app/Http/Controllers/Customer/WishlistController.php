@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Models\Wishlist;
 use App\Models\Package;
-use Illuminate\Http\Request;
+use App\Models\Wishlist;
 
 class WishlistController extends Controller
 {
@@ -13,14 +12,14 @@ class WishlistController extends Controller
     {
         $user = auth()->user();
         $wishlists = $user->wishlists()->with('package')->paginate(12);
-        
+
         return view('customer.wishlist.index', compact('wishlists'));
     }
 
     public function add(Package $package)
     {
         $user = auth()->user();
-        
+
         $exists = Wishlist::where('user_id', $user->id)
             ->where('package_id', $package->id)
             ->exists();
@@ -57,6 +56,7 @@ class WishlistController extends Controller
 
         if ($wishlist) {
             $wishlist->delete();
+
             return response()->json([
                 'success' => true,
                 'added' => false,

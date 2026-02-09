@@ -13,13 +13,11 @@ class OrderStatusMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public Order $order, public string $previousStatus)
-    {
-    }
+    public function __construct(public Order $order, public string $previousStatus) {}
 
     public function envelope(): Envelope
     {
-        $statusLabel = match($this->order->status) {
+        $statusLabel = match ($this->order->status) {
             'pending' => 'Pending',
             'confirmed' => 'Confirmed',
             'in_progress' => 'In Progress',
@@ -29,7 +27,7 @@ class OrderStatusMail extends Mailable
         };
 
         return new Envelope(
-            subject: 'Order Status Updated - Order #' . $this->order->id . ' is ' . $statusLabel,
+            subject: 'Order Status Updated - Order #'.$this->order->id.' is '.$statusLabel,
         );
     }
 

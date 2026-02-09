@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
-use App\Models\Package;
 use App\Models\BlockedDate;
 use App\Models\CalendarEvent;
+use App\Models\Package;
 use App\Services\ICalExportService;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class CalendarController extends Controller
 {
@@ -26,17 +26,17 @@ class CalendarController extends Controller
     {
         $user = auth()->user();
         $packages = $user->packages ?? Package::where('owner_id', $user->id)->get();
-        
+
         $selectedPackageId = $request->get('package_id', $packages->first()->id ?? null);
         $month = $request->get('month', now()->month);
         $year = $request->get('year', now()->year);
 
-        if (!$selectedPackageId) {
+        if (! $selectedPackageId) {
             return redirect()->back()->with('warning', 'Tidak ada paket yang tersedia.');
         }
 
         $package = Package::findOrFail($selectedPackageId);
-        
+
         // Check authorization
         if ($package->owner_id !== $user->id) {
             abort(403);
@@ -77,9 +77,9 @@ class CalendarController extends Controller
     {
         $user = auth()->user();
         $packageId = $request->get('package_id');
-        
+
         $package = Package::findOrFail($packageId);
-        
+
         if ($package->owner_id !== $user->id) {
             abort(403);
         }
@@ -95,7 +95,7 @@ class CalendarController extends Controller
     public function storeBlocked(Request $request, Package $package)
     {
         $user = auth()->user();
-        
+
         if ($package->owner_id !== $user->id) {
             abort(403);
         }
@@ -126,7 +126,7 @@ class CalendarController extends Controller
     public function editBlocked(BlockedDate $blockedDate)
     {
         $user = auth()->user();
-        
+
         if ($blockedDate->package->owner_id !== $user->id) {
             abort(403);
         }
@@ -143,7 +143,7 @@ class CalendarController extends Controller
     public function updateBlocked(Request $request, BlockedDate $blockedDate)
     {
         $user = auth()->user();
-        
+
         if ($blockedDate->package->owner_id !== $user->id) {
             abort(403);
         }
@@ -168,7 +168,7 @@ class CalendarController extends Controller
     public function destroyBlocked(BlockedDate $blockedDate)
     {
         $user = auth()->user();
-        
+
         if ($blockedDate->package->owner_id !== $user->id) {
             abort(403);
         }
@@ -186,7 +186,7 @@ class CalendarController extends Controller
     public function getCalendarData(Request $request, Package $package)
     {
         $user = auth()->user();
-        
+
         if ($package->owner_id !== $user->id) {
             abort(403);
         }
@@ -203,7 +203,7 @@ class CalendarController extends Controller
             ->orWhereBetween('end_date', [$startOfMonth->toDateString(), $endOfMonth->toDateString()])
             ->orWhere(function ($query) use ($startOfMonth, $endOfMonth) {
                 $query->where('start_date', '<=', $endOfMonth->toDateString())
-                      ->where('end_date', '>=', $startOfMonth->toDateString());
+                    ->where('end_date', '>=', $startOfMonth->toDateString());
             })
             ->get();
 
@@ -214,23 +214,23 @@ class CalendarController extends Controller
             ->get();
 
         $events = [];
-        
+
         // Add blocked dates
         foreach ($blockedDates as $blocked) {
             $current = $blocked->start_date->copy();
             while ($current <= $blocked->end_date) {
                 $dateStr = $current->toDateString();
-                if (!isset($events[$dateStr])) {
+                if (! isset($events[$dateStr])) {
                     $events[$dateStr] = [];
                 }
-                
+
                 $events[$dateStr][] = [
                     'type' => 'blocked',
                     'reason' => $blocked->reason,
                     'blockType' => $blocked->block_type,
                     'label' => $blocked->getTypeLabel(),
                 ];
-                
+
                 $current->addDay();
             }
         }
@@ -238,7 +238,7 @@ class CalendarController extends Controller
         // Add calendar events
         foreach ($calendarEvents as $event) {
             $dateStr = $event->event_date->toDateString();
-            if (!isset($events[$dateStr])) {
+            if (! isset($events[$dateStr])) {
                 $events[$dateStr] = [];
             }
 
@@ -263,19 +263,19 @@ class CalendarController extends Controller
     public function exportCalendar(Request $request, Package $package)
     {
         $user = auth()->user();
-        
+
         if ($package->owner_id !== $user->id) {
             abort(403);
         }
 
         $type = $request->get('type', 'all'); // 'all', 'events', 'blocked'
-        
+
         $iCalContent = $this->iCalService->generateCalendarFile($package->id, $type);
         $filename = $this->iCalService->getFilename($package, $type);
 
         return response($iCalContent, 200)
             ->header('Content-Type', 'text/calendar')
-            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"')
+            ->header('Content-Disposition', 'attachment; filename="'.$filename.'"')
             ->header('Pragma', 'no-cache');
     }
 

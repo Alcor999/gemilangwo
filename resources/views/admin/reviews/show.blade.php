@@ -5,17 +5,17 @@
     <div class="row mb-4">
         <div class="col">
             <a href="{{ route('admin.reviews.index') }}" class="btn btn-outline-secondary btn-sm">
-                <i class="fas fa-arrow-left"></i> Back to Reviews
+                <i class="fas fa-arrow-left"></i> Kembali ke Ulasan
             </a>
         </div>
     </div>
 
     <div class="row g-4">
-        <!-- Review Content -->
+        <!-- Konten Ulasan -->
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
-                    <!-- Review Header -->
+                    <!-- Header Ulasan -->
                     <div class="mb-4">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
@@ -29,15 +29,15 @@
                             </div>
                             <div>
                                 @if($review->is_approved)
-                                    <span class="badge bg-success">Approved</span>
+                                    <span class="badge bg-success">Disetujui</span>
                                 @else
-                                    <span class="badge bg-warning text-dark">Pending</span>
+                                    <span class="badge bg-warning text-dark">Menunggu</span>
                                 @endif
                                 @if($review->is_verified)
-                                    <span class="badge bg-info ms-1">Verified</span>
+                                    <span class="badge bg-info ms-1">Terverifikasi</span>
                                 @endif
                                 @if($review->is_featured)
-                                    <span class="badge bg-info ms-1"><i class="fas fa-star"></i> Featured</span>
+                                    <span class="badge bg-info ms-1"><i class="fas fa-star"></i> Unggulan</span>
                                 @endif
                             </div>
                         </div>
@@ -45,9 +45,9 @@
 
                     <hr>
 
-                    <!-- Review Content -->
+                    <!-- Konten Ulasan -->
                     <div class="mb-4">
-                        <h5 class="fw-bold mb-3">Review Content</h5>
+                        <h5 class="fw-bold mb-3">Isi Ulasan</h5>
                         <p class="text-muted lh-lg">{{ $review->content }}</p>
                     </div>
 
@@ -55,7 +55,7 @@
 
                     <!-- Helpfulness Stats -->
                     <div class="mb-4">
-                        <h5 class="fw-bold mb-3">Helpfulness</h5>
+                        <h5 class="fw-bold mb-3">Kegunaan</h5>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="d-flex align-items-center gap-3">
@@ -63,7 +63,7 @@
                                         <i class="fas fa-thumbs-up fa-2x text-success opacity-50"></i>
                                     </div>
                                     <div>
-                                        <h6 class="text-muted small mb-1">Helpful</h6>
+                                        <h6 class="text-muted small mb-1">Membantu</h6>
                                         <h3 class="mb-0">{{ $review->helpful_count }}</h3>
                                     </div>
                                 </div>
@@ -74,7 +74,7 @@
                                         <i class="fas fa-thumbs-down fa-2x text-danger opacity-50"></i>
                                     </div>
                                     <div>
-                                        <h6 class="text-muted small mb-1">Unhelpful</h6>
+                                        <h6 class="text-muted small mb-1">Tidak Membantu</h6>
                                         <h3 class="mb-0">{{ $review->unhelpful_count }}</h3>
                                     </div>
                                 </div>
@@ -87,10 +87,10 @@
 
         <!-- Sidebar Info -->
         <div class="col-lg-4">
-            <!-- Customer Info -->
+            <!-- Info Pelanggan -->
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-light border-0">
-                    <h5 class="mb-0 fw-bold">Customer</h5>
+                    <h5 class="mb-0 fw-bold">Pelanggan</h5>
                 </div>
                 <div class="card-body">
                     <div class="text-center mb-3">
@@ -102,11 +102,11 @@
                     <hr>
                     <ul class="list-unstyled">
                         <li class="mb-2">
-                            <strong>Phone:</strong><br>
-                            <span class="text-muted">{{ $review->user->phone ?? 'N/A' }}</span>
+                            <strong>Telepon:</strong><br>
+                            <span class="text-muted">{{ $review->user->phone ?? '-' }}</span>
                         </li>
                         <li class="mb-2">
-                            <strong>Joined:</strong><br>
+                            <strong>Bergabung:</strong><br>
                             <span class="text-muted">{{ $review->user->created_at->format('M d, Y') }}</span>
                         </li>
                     </ul>
@@ -116,17 +116,17 @@
             <!-- Package Info -->
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-light border-0">
-                    <h5 class="mb-0 fw-bold">Package</h5>
+                    <h5 class="mb-0 fw-bold">Paket</h5>
                 </div>
                 <div class="card-body">
                     <h6 class="fw-bold mb-2">{{ $review->package->name }}</h6>
                     <p class="text-muted small mb-3">{{ Str::limit($review->package->description, 100) }}</p>
                     <div class="mb-3">
-                        <strong class="d-block mb-1">Price:</strong>
+                        <strong class="d-block mb-1">Harga:</strong>
                         <span class="text-primary h6">Rp {{ number_format($review->package->price, 0, ',', '.') }}</span>
                     </div>
                     <a href="{{ route('admin.packages.show', $review->package) }}" class="btn btn-outline-primary btn-sm w-100">
-                        <i class="fas fa-eye"></i> View Package
+                        <i class="fas fa-eye"></i> Lihat Paket
                     </a>
                 </div>
             </div>
@@ -134,10 +134,10 @@
             <!-- Order Info -->
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-light border-0">
-                    <h5 class="mb-0 fw-bold">Order</h5>
+                    <h5 class="mb-0 fw-bold">Pesanan</h5>
                 </div>
                 <div class="card-body">
-                    <h6 class="fw-bold mb-2">Order #{{ $review->order->id }}</h6>
+                    <h6 class="fw-bold mb-2">Pesanan #{{ $review->order->id }}</h6>
                     <ul class="list-unstyled">
                         <li class="mb-2">
                             <strong>Status:</strong><br>
@@ -146,16 +146,16 @@
                             </span>
                         </li>
                         <li class="mb-2">
-                            <strong>Total Price:</strong><br>
+                            <strong>Total:</strong><br>
                             <span class="text-muted">Rp {{ number_format($review->order->total_price, 0, ',', '.') }}</span>
                         </li>
                         <li class="mb-2">
-                            <strong>Ordered:</strong><br>
+                            <strong>Dipesan:</strong><br>
                             <span class="text-muted">{{ $review->order->created_at->format('M d, Y H:i') }}</span>
                         </li>
                     </ul>
                     <a href="{{ route('admin.orders.show', $review->order) }}" class="btn btn-outline-primary btn-sm w-100 mt-2">
-                        <i class="fas fa-eye"></i> View Order
+                        <i class="fas fa-eye"></i> Lihat Pesanan
                     </a>
                 </div>
             </div>
@@ -163,42 +163,42 @@
             <!-- Moderation Actions -->
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-light border-0">
-                    <h5 class="mb-0 fw-bold">Actions</h5>
+                    <h5 class="mb-0 fw-bold">Aksi</h5>
                 </div>
                 <div class="card-body">
                     @if(!$review->is_approved)
                         <form action="{{ route('admin.reviews.approve', $review) }}" method="POST" class="mb-2">
                             @csrf
                             <button type="submit" class="btn btn-success w-100 btn-sm">
-                                <i class="fas fa-check"></i> Approve Review
+                                <i class="fas fa-check"></i> Setujui Ulasan
                             </button>
                         </form>
                         <form action="{{ route('admin.reviews.reject', $review) }}" method="POST" class="mb-2">
                             @csrf
                             <button type="button" class="btn btn-danger w-100 btn-sm"
-                                data-confirm="Apakah Anda yakin ingin menolak review ini?"
-                                data-confirm-title="Tolak Review"
+                                data-confirm="Apakah Anda yakin ingin menolak ulasan ini?"
+                                data-confirm-title="Tolak Ulasan"
                                 data-confirm-btn="Ya, Tolak"
                                 data-confirm-danger="1">
-                                <i class="fas fa-times"></i> Tolak Review
+                                <i class="fas fa-times"></i> Tolak Ulasan
                             </button>
                         </form>
                     @else
                         <form action="{{ route('admin.reviews.feature', $review) }}" method="POST" class="mb-2">
                             @csrf
                             <button type="submit" class="btn {{ $review->is_featured ? 'btn-warning' : 'btn-outline-warning' }} w-100 btn-sm">
-                                <i class="fas fa-star"></i> {{ $review->is_featured ? 'Unfeature' : 'Feature as Testimonial' }}
+                                <i class="fas fa-star"></i> {{ $review->is_featured ? 'Batalkan Unggulan' : 'Jadikan Testimoni' }}
                             </button>
                         </form>
                         <form action="{{ route('admin.reviews.destroy', $review) }}" method="POST" class="mb-0">
                             @csrf
                             @method('DELETE')
                             <button type="button" class="btn btn-outline-danger w-100 btn-sm"
-                                data-confirm="Apakah Anda yakin ingin menghapus review ini secara permanen?"
-                                data-confirm-title="Hapus Review"
+                                data-confirm="Apakah Anda yakin ingin menghapus ulasan ini secara permanen?"
+                                data-confirm-title="Hapus Ulasan"
                                 data-confirm-btn="Ya, Hapus"
                                 data-confirm-danger="1">
-                                <i class="fas fa-trash"></i> Hapus Review
+                                <i class="fas fa-trash"></i> Hapus Ulasan
                             </button>
                         </form>
                     @endif

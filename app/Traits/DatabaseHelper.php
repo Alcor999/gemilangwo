@@ -21,7 +21,7 @@ trait DatabaseHelper
     {
         $driver = $this->getDatabaseDriver();
 
-        return match($driver) {
+        return match ($driver) {
             'sqlite' => "CAST(strftime('%m', $column) AS INTEGER)",
             'pgsql' => "EXTRACT(MONTH FROM $column)",
             default => "MONTH($column)", // MySQL, MariaDB
@@ -35,7 +35,7 @@ trait DatabaseHelper
     {
         $driver = $this->getDatabaseDriver();
 
-        return match($driver) {
+        return match ($driver) {
             'sqlite' => "CAST(strftime('%Y', $column) AS INTEGER)",
             'pgsql' => "EXTRACT(YEAR FROM $column)",
             default => "YEAR($column)", // MySQL, MariaDB
@@ -49,7 +49,7 @@ trait DatabaseHelper
     {
         $driver = $this->getDatabaseDriver();
 
-        return match($driver) {
+        return match ($driver) {
             'sqlite' => "DATE($column)",
             'pgsql' => "DATE($column)",
             default => "DATE($column)", // All support DATE()
@@ -63,7 +63,7 @@ trait DatabaseHelper
     {
         $driver = $this->getDatabaseDriver();
 
-        return match($driver) {
+        return match ($driver) {
             'sqlite' => "strftime('%Y-%m', $column)",
             'pgsql' => "TO_CHAR($column, 'YYYY-MM')",
             default => "DATE_FORMAT($column, '%Y-%m')", // MySQL, MariaDB

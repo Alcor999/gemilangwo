@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\VendorCategory;
 use App\Models\Vendor;
+use App\Models\VendorCategory;
 use Illuminate\Database\Seeder;
 
 class VendorCategorySeeder extends Seeder
@@ -59,12 +59,12 @@ class VendorCategorySeeder extends Seeder
                 ],
             ];
 
-            $vendorList = $samples[$category->name] ?? [['Vendor ' . $category->name, 5000000]];
+            $vendorList = $samples[$category->name] ?? [['Vendor '.$category->name, 5000000]];
             foreach ($vendorList as $i => [$name, $price]) {
                 Vendor::create([
                     'vendor_category_id' => $category->id,
                     'name' => $name,
-                    'description' => 'Layanan ' . $name . ' untuk ' . $category->name,
+                    'description' => 'Layanan '.$name.' untuk '.$category->name,
                     'price' => $price,
                     'sort_order' => $i + 1,
                     'is_active' => true,

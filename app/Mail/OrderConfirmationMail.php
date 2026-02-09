@@ -13,14 +13,12 @@ class OrderConfirmationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public Order $order)
-    {
-    }
+    public function __construct(public Order $order) {}
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Order Confirmation - #' . $this->order->id,
+            subject: 'Order Confirmation - #'.$this->order->id,
         );
     }
 

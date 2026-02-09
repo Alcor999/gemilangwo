@@ -7,22 +7,22 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-gradient py-4">
                     <h3 class="mb-1 fw-bold text-white">
-                        <i class="fas fa-star"></i> Share Your Review
+                        <i class="fas fa-star"></i> Bagikan Ulasan Anda
                     </h3>
-                    <p class="mb-0 small text-white opacity-75">Help others make informed decisions</p>
+                    <p class="mb-0 small text-white opacity-75">Bantu orang lain membuat keputusan yang tepat</p>
                 </div>
 
                 <div class="card-body p-5">
-                    <!-- Order & Package Info -->
+                    <!-- Info Pesanan & Paket -->
                     <div class="mb-4 p-3 bg-light rounded">
                         <div class="row">
                             <div class="col-md-8">
-                                <h6 class="fw-bold text-muted mb-2">PACKAGE ORDERED</h6>
+                                <h6 class="fw-bold text-muted mb-2">PAKET YANG DIPESAN</h6>
                                 <h5 class="mb-1 fw-bold">{{ $order->package->name }}</h5>
-                                <p class="text-muted small mb-0">Order #{{ $order->id }} • Completed on {{ $order->updated_at->format('M d, Y') }}</p>
+                                <p class="text-muted small mb-0">Pesanan #{{ $order->id }} • Selesai pada {{ $order->updated_at->format('d M Y') }}</p>
                             </div>
                             <div class="col-md-4 text-md-end">
-                                <h6 class="fw-bold text-muted mb-2">TOTAL SPENT</h6>
+                                <h6 class="fw-bold text-muted mb-2">TOTAL PEMBELANJAAN</h6>
                                 <h5 class="text-primary mb-0">Rp {{ number_format($order->total_price, 0, ',', '.') }}</h5>
                             </div>
                         </div>
@@ -31,10 +31,10 @@
                     <form action="{{ route('customer.reviews.store', $order) }}" method="POST" class="needs-validation" novalidate>
                         @csrf
 
-                        <!-- Rating -->
+                        <!-- Penilaian -->
                         <div class="mb-4">
                             <label class="form-label fw-bold mb-3">
-                                How would you rate this package? <span class="text-danger">*</span>
+                                Bagaimana Anda menilai paket ini? <span class="text-danger">*</span>
                             </label>
                             <div class="rating-input" id="ratingInput">
                                 @for($i = 1; $i <= 5; $i++)
@@ -51,59 +51,59 @@
                             @enderror
                         </div>
 
-                        <!-- Title -->
+                        <!-- Judul -->
                         <div class="mb-4">
                             <label for="title" class="form-label fw-bold">
-                                Review Title <span class="text-danger">*</span>
+                                Judul Ulasan <span class="text-danger">*</span>
                             </label>
                             <input type="text" class="form-control form-control-lg @error('title') is-invalid @enderror" 
-                                   id="title" name="title" placeholder="Summarize your experience in a few words"
+                                   id="title" name="title" placeholder="Ringkas pengalaman Anda dalam beberapa kata"
                                    value="{{ old('title') }}" maxlength="255" required>
                             <small class="text-muted d-block mt-2">
-                                <span id="titleCount">0</span>/255 characters
+                                <span id="titleCount">0</span>/255 karakter
                             </small>
                             @error('title')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <!-- Content -->
+                        <!-- Isi -->
                         <div class="mb-4">
                             <label for="content" class="form-label fw-bold">
-                                Tell us more about your experience <span class="text-danger">*</span>
+                                Ceritakan lebih lanjut pengalaman Anda <span class="text-danger">*</span>
                             </label>
                             <textarea class="form-control @error('content') is-invalid @enderror" 
                                       id="content" name="content" rows="6" 
-                                      placeholder="Share your thoughts about the package, service quality, professionalism, and overall satisfaction..."
+                                      placeholder="Bagikan pendapat Anda tentang paket, kualitas layanan, profesionalisme, dan kepuasan secara keseluruhan..."
                                       minlength="10" maxlength="2000" required>{{ old('content') }}</textarea>
-                            <small class="text-muted d-block mt-2">
-                                <span id="contentCount">0</span>/2000 characters (minimum 10)
+                            <small class="text-muted">
+                                <span id="contentCount">0</span>/2000 karakter (minimal 10)
                             </small>
                             @error('content')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <!-- Helpful Tips -->
+                        <!-- Tips yang Membantu -->
                         <div class="mb-4 p-3 bg-info bg-opacity-10 border border-info border-opacity-25 rounded">
                             <h6 class="fw-bold text-info mb-2">
-                                <i class="fas fa-lightbulb"></i> Tips for a helpful review
+                                <i class="fas fa-lightbulb"></i> Tips untuk ulasan yang membantu
                             </h6>
                             <ul class="small text-muted mb-0">
-                                <li>Be honest and fair - share your genuine experience</li>
-                                <li>Be specific - mention what you liked or didn't like</li>
-                                <li>Be constructive - offer suggestions for improvement</li>
-                                <li>Be respectful - remember there's a person behind the service</li>
+                                <li>Jujur dan adil — ceritakan pengalaman Anda yang sebenarnya</li>
+                                <li>Spesifik — sebutkan apa yang Anda suka atau kurang suka</li>
+                                <li>Konstruktif — berikan saran untuk perbaikan</li>
+                                <li>Tetap sopan — ingat ada orang di balik layanan ini</li>
                             </ul>
                         </div>
 
-                        <!-- Submit Button -->
+                        <!-- Tombol Kirim -->
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <a href="{{ route('customer.dashboard') }}" class="btn btn-outline-secondary btn-lg">
-                                Cancel
+                                Batal
                             </a>
                             <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-paper-plane"></i> Submit Review
+                                <i class="fas fa-paper-plane"></i> Kirim Ulasan
                             </button>
                         </div>
                     </form>

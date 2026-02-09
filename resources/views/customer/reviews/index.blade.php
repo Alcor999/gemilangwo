@@ -70,7 +70,7 @@
             @endforeach
         </div>
 
-        <!-- Pagination -->
+        <!-- Paginasi -->
         <div class="mt-4">
             {{ $reviews->links() }}
         </div>

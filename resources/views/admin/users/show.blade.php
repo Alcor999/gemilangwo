@@ -8,7 +8,7 @@
             <p class="text-muted">{{ $user->email }}</p>
         </div>
         <div class="col-md-4 text-end">
-            <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Back</a>
+            <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 
@@ -16,23 +16,23 @@
         <div class="col-md-6">
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0">User Information</h5>
+                    <h5 class="mb-0">Informasi Pengguna</h5>
                 </div>
                 <div class="card-body">
                     <dl class="row">
-                        <dt class="col-sm-4">Name:</dt>
+                        <dt class="col-sm-4">Nama:</dt>
                         <dd class="col-sm-8">{{ $user->name }}</dd>
 
                         <dt class="col-sm-4">Email:</dt>
                         <dd class="col-sm-8">{{ $user->email }}</dd>
 
-                        <dt class="col-sm-4">Phone:</dt>
+                        <dt class="col-sm-4">Telepon:</dt>
                         <dd class="col-sm-8">{{ $user->phone ?? '-' }}</dd>
 
-                        <dt class="col-sm-4">Address:</dt>
+                        <dt class="col-sm-4">Alamat:</dt>
                         <dd class="col-sm-8">{{ $user->address ?? '-' }}</dd>
 
-                        <dt class="col-sm-4">Role:</dt>
+                        <dt class="col-sm-4">Peran:</dt>
                         <dd class="col-sm-8">
                             <span class="badge bg-{{ $user->role === 'admin' ? 'danger' : ($user->role === 'owner' ? 'warning' : 'primary') }}">
                                 {{ ucfirst($user->role) }}
@@ -42,13 +42,13 @@
                         <dt class="col-sm-4">Status:</dt>
                         <dd class="col-sm-8">
                             @if($user->deleted_at)
-                                <span class="badge bg-danger">Inactive</span>
+                                <span class="badge bg-danger">Nonaktif</span>
                             @else
-                                <span class="badge bg-success">Active</span>
+                                <span class="badge bg-success">Aktif</span>
                             @endif
                         </dd>
 
-                        <dt class="col-sm-4">Joined:</dt>
+                        <dt class="col-sm-4">Bergabung:</dt>
                         <dd class="col-sm-8">{{ $user->created_at->format('d M Y') }}</dd>
                     </dl>
                 </div>
@@ -58,7 +58,7 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h5 class="mb-0">Change Role</h5>
+                    <h5 class="mb-0">Ubah Peran</h5>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.users.updateRole', $user) }}" method="POST">
@@ -66,15 +66,15 @@
                         @method('PUT')
 
                         <div class="mb-3">
-                            <label for="role" class="form-label">Role</label>
+                            <label for="role" class="form-label">Peran</label>
                             <select class="form-select" id="role" name="role" required>
-                                <option value="customer" {{ $user->role === 'customer' ? 'selected' : '' }}>Customer</option>
-                                <option value="owner" {{ $user->role === 'owner' ? 'selected' : '' }}>Owner</option>
+                                <option value="customer" {{ $user->role === 'customer' ? 'selected' : '' }}>Pelanggan</option>
+                                <option value="owner" {{ $user->role === 'owner' ? 'selected' : '' }}>Pemilik</option>
                                 <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
                             </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Update Role</button>
+                        <button type="submit" class="btn btn-primary">Perbarui Peran</button>
                     </form>
                 </div>
             </div>

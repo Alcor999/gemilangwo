@@ -60,7 +60,7 @@ class Payment extends Model
                     try {
                         app(NotificationService::class)->notifyPaymentConfirmation($payment);
                     } catch (\Exception $e) {
-                        \Log::warning('SMS notification failed: ' . $e->getMessage());
+                        \Log::warning('SMS notification failed: '.$e->getMessage());
                     }
                 }
             }

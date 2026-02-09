@@ -1,34 +1,34 @@
 <?php
 
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\AnalyticsController as AdminAnalyticsController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DiscountController as AdminDiscountController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
-use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\SupportController as AdminSupportController;
-use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\VendorCategoryController as AdminVendorCategoryController;
 use App\Http\Controllers\Admin\VendorController as AdminVendorController;
+use App\Http\Controllers\Admin\VideoController as AdminVideoController;
+use App\Http\Controllers\Customer\AvailabilityController as CustomerAvailabilityController;
+use App\Http\Controllers\Customer\CalendarController as CustomerCalendarController;
 use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
+use App\Http\Controllers\Customer\GalleryController as CustomerGalleryController;
 use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
 use App\Http\Controllers\Customer\PackageController as CustomerPackageController;
-use App\Http\Controllers\Customer\ReviewController as CustomerReviewController;
 use App\Http\Controllers\Customer\ProfileController as CustomerProfileController;
-use App\Http\Controllers\Customer\WishlistController as CustomerWishlistController;
-use App\Http\Controllers\Customer\GalleryController as CustomerGalleryController;
-use App\Http\Controllers\Customer\AvailabilityController as CustomerAvailabilityController;
+use App\Http\Controllers\Customer\ReviewController as CustomerReviewController;
 use App\Http\Controllers\Customer\SupportTicketController as CustomerSupportTicketController;
 use App\Http\Controllers\Customer\TestimonialController as CustomerTestimonialController;
-use App\Http\Controllers\Customer\CalendarController as CustomerCalendarController;
-use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
+use App\Http\Controllers\Customer\WishlistController as CustomerWishlistController;
+use App\Http\Controllers\EmailTestController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Owner\AnalyticsController as OwnerAnalyticsController;
 use App\Http\Controllers\Owner\CalendarController as OwnerCalendarController;
-use App\Http\Controllers\EmailTestController;
+use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
 use App\Http\Controllers\SmsTestController;
-use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 // Home Route
@@ -47,7 +47,7 @@ Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionControlle
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-    
+
     // Analytics & Reporting
     Route::prefix('analytics')->name('analytics.')->group(function () {
         Route::get('/dashboard', [AdminAnalyticsController::class, 'dashboard'])->name('dashboard');
@@ -58,7 +58,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::get('/payments', [AdminAnalyticsController::class, 'payments'])->name('payments');
         Route::get('/export', [AdminAnalyticsController::class, 'export'])->name('export');
     });
-    
+
     // Vendor Management
     Route::resource('vendor-categories', AdminVendorCategoryController::class)->except(['show']);
     Route::resource('vendors', AdminVendorController::class)->except(['show']);
@@ -71,10 +71,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/packages/{package}/edit', [AdminPackageController::class, 'edit'])->name('packages.edit');
     Route::put('/packages/{package}', [AdminPackageController::class, 'update'])->name('packages.update');
     Route::delete('/packages/{package}', [AdminPackageController::class, 'destroy'])->name('packages.destroy');
-    
+
     // Discount Management
     Route::resource('discounts', AdminDiscountController::class);
-    
+
     // Review Management
     Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
     Route::get('/reviews/{review}', [AdminReviewController::class, 'show'])->name('reviews.show');
@@ -82,23 +82,23 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/reviews/{review}/reject', [AdminReviewController::class, 'reject'])->name('reviews.reject');
     Route::post('/reviews/{review}/feature', [AdminReviewController::class, 'feature'])->name('reviews.feature');
     Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
-    
+
     // Order Management
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::post('/orders/{order}/cancel', [AdminOrderController::class, 'cancel'])->name('orders.cancel');
-    
+
     // Payment Verification (integrated in orders)
     Route::post('/payments/{payment}/approve', [AdminOrderController::class, 'approvePayment'])->name('payments.approve');
     Route::post('/payments/{payment}/reject', [AdminOrderController::class, 'rejectPayment'])->name('payments.reject');
-    
+
     // User Management
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
     Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
     Route::put('/users/{user}/role', [AdminUserController::class, 'updateRole'])->name('users.updateRole');
     Route::delete('/users/{user}', [AdminUserController::class, 'deactivate'])->name('users.deactivate');
-    
+
     // Support & Chat
     Route::get('/support/tickets', [AdminSupportController::class, 'index'])->name('support.tickets.index');
     Route::get('/support/tickets/{id}', [AdminSupportController::class, 'show'])->name('support.tickets.show');
@@ -108,7 +108,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::patch('/support/tickets/{id}/notes', [AdminSupportController::class, 'addNotes'])->name('support.tickets.addNotes');
     Route::get('/support/tickets/{id}/messages', [AdminSupportController::class, 'getNewMessages'])->name('support.tickets.getNewMessages');
     Route::get('/support/recent-tickets', [AdminSupportController::class, 'recentTickets'])->name('support.recentTickets');
-    
+
     // Additional Package Routes
     Route::post('/packages/{package}/upload-image', [AdminPackageController::class, 'uploadImage'])->name('packages.uploadImage');
     Route::get('/packages/{package}/gallery', [AdminPackageController::class, 'gallery'])->name('packages.gallery');
@@ -117,7 +117,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/packages/{package}/availability', [AdminPackageController::class, 'availability'])->name('packages.availability');
     Route::post('/packages/{package}/availability', [AdminPackageController::class, 'storeAvailability'])->name('packages.storeAvailability');
     Route::delete('/availability/{availability}', [AdminPackageController::class, 'destroyAvailability'])->name('packages.destroyAvailability');
-    
+
     // Video Management
     Route::get('/videos', [AdminVideoController::class, 'index'])->name('videos.index');
     Route::get('/videos/package/{package}', [AdminVideoController::class, 'show'])->name('videos.show');
@@ -128,7 +128,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::delete('/videos/{video}', [AdminVideoController::class, 'destroy'])->name('videos.destroy');
     Route::post('/videos/{video}/toggle', [AdminVideoController::class, 'toggle'])->name('videos.toggle');
     Route::post('/videos/package/{package}/reorder', [AdminVideoController::class, 'reorder'])->name('videos.reorder');
-    
+
     // Testimonial Approvals
     Route::get('/testimonials', [AdminTestimonialController::class, 'index'])->name('testimonials.index');
     Route::get('/testimonials/{testimonial}', [AdminTestimonialController::class, 'show'])->name('testimonials.show');
@@ -141,26 +141,26 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 // Customer Routes
 Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer.')->group(function () {
     Route::get('/dashboard', [CustomerDashboardController::class, 'index'])->name('dashboard');
-    
+
     // Browse Packages
     Route::get('/packages', [CustomerPackageController::class, 'index'])->name('packages.index');
     Route::get('/packages/{package}', [CustomerPackageController::class, 'show'])->name('packages.show');
-    
+
     // Orders
     Route::get('/orders', [CustomerOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/create', [CustomerOrderController::class, 'create'])->name('orders.create');
     Route::post('/orders', [CustomerOrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [CustomerOrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/cancel', [CustomerOrderController::class, 'cancel'])->name('orders.cancel');
-    
+
     // Payment Routes
     Route::get('/orders/{order}/payment', [CustomerOrderController::class, 'payment'])->name('orders.payment');
     Route::post('/orders/{order}/select-bank', [CustomerOrderController::class, 'selectBank'])->name('orders.selectBank');
     Route::get('/orders/{order}/payment-confirm', [CustomerOrderController::class, 'paymentConfirm'])->name('orders.paymentConfirm');
-    
+
     // Notification (Midtrans backward compatibility)
     Route::post('/orders/payment/notification', [CustomerOrderController::class, 'notification'])->name('orders.notification');
-    
+
     // Reviews
     Route::get('/reviews', [CustomerReviewController::class, 'index'])->name('reviews.index');
     Route::get('/orders/{order}/review', [CustomerReviewController::class, 'create'])->name('reviews.create');
@@ -189,7 +189,7 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
     Route::get('/availability/check', [CustomerAvailabilityController::class, 'checkAvailability'])->name('availability.check');
     Route::get('/availability/calendar/{package}', [CustomerAvailabilityController::class, 'getCalendar'])->name('availability.calendar');
     Route::post('/availability/check-range', [CustomerAvailabilityController::class, 'checkDateRange'])->name('availability.checkRange');
-    
+
     // Support & Chat
     Route::get('/support/tickets', [CustomerSupportTicketController::class, 'index'])->name('support.tickets.index');
     Route::get('/support/tickets/create', [CustomerSupportTicketController::class, 'create'])->name('support.tickets.create');
@@ -198,7 +198,7 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
     Route::post('/support/tickets/{id}/messages', [CustomerSupportTicketController::class, 'addMessage'])->name('support.tickets.addMessage');
     Route::post('/support/tickets/{id}/close', [CustomerSupportTicketController::class, 'close'])->name('support.tickets.close');
     Route::get('/support/tickets/{id}/messages', [CustomerSupportTicketController::class, 'getNewMessages'])->name('support.tickets.getNewMessages');
-    
+
     // Testimonials
     Route::get('/testimonials', [CustomerTestimonialController::class, 'index'])->name('testimonials.index');
     Route::get('/testimonials/create', [CustomerTestimonialController::class, 'create'])->name('testimonials.create');
@@ -206,7 +206,7 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
     Route::get('/testimonials/{testimonial}/edit', [CustomerTestimonialController::class, 'edit'])->name('testimonials.edit');
     Route::put('/testimonials/{testimonial}', [CustomerTestimonialController::class, 'update'])->name('testimonials.update');
     Route::delete('/testimonials/{testimonial}', [CustomerTestimonialController::class, 'destroy'])->name('testimonials.destroy');
-    
+
     // Calendar
     Route::prefix('calendar')->name('calendar.')->group(function () {
         Route::get('/booking/{package}', [CustomerCalendarController::class, 'bookingCalendar'])->name('booking');
@@ -218,7 +218,7 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
         Route::get('/event/{event}/export', [CustomerCalendarController::class, 'exportEvent'])->name('export-event');
         Route::post('/event/{event}/confirm', [CustomerCalendarController::class, 'confirmEvent'])->name('confirm-event');
     });
-    
+
     // Payment
     Route::get('/orders/{order}/payment', [CustomerOrderController::class, 'payment'])->name('orders.payment');
     Route::get('/orders/payment/finish', [CustomerOrderController::class, 'paymentFinish'])->name('orders.paymentFinish');
@@ -230,7 +230,7 @@ Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->grou
     Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
     Route::get('/statistics', [OwnerDashboardController::class, 'statistics'])->name('statistics');
     Route::get('/payments', [OwnerDashboardController::class, 'payments'])->name('payments');
-    
+
     // Analytics & Reporting
     Route::prefix('analytics')->name('analytics.')->group(function () {
         Route::get('/dashboard', [OwnerAnalyticsController::class, 'dashboard'])->name('dashboard');
@@ -240,7 +240,7 @@ Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->grou
         Route::get('/churn', [OwnerAnalyticsController::class, 'churn'])->name('churn');
         Route::get('/export', [OwnerAnalyticsController::class, 'export'])->name('export');
     });
-    
+
     // Calendar Management
     Route::prefix('calendar')->name('calendar.')->group(function () {
         Route::get('/', [OwnerCalendarController::class, 'index'])->name('index');

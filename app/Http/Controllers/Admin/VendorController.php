@@ -17,12 +17,14 @@ class VendorController extends Controller
         }
         $vendors = $query->orderBy('vendor_category_id')->orderBy('sort_order')->paginate(15);
         $categories = VendorCategory::where('is_active', true)->orderBy('sort_order')->get();
+
         return view('admin.vendors.index', compact('vendors', 'categories'));
     }
 
     public function create()
     {
         $categories = VendorCategory::where('is_active', true)->orderBy('sort_order')->get();
+
         return view('admin.vendors.create', compact('categories'));
     }
 
@@ -47,6 +49,7 @@ class VendorController extends Controller
         }
 
         Vendor::create($validated);
+
         return redirect()->route('admin.vendors.index')
             ->with('success', 'Vendor berhasil ditambahkan.');
     }
@@ -54,6 +57,7 @@ class VendorController extends Controller
     public function edit(Vendor $vendor)
     {
         $categories = VendorCategory::where('is_active', true)->orderBy('sort_order')->get();
+
         return view('admin.vendors.edit', compact('vendor', 'categories'));
     }
 
@@ -77,6 +81,7 @@ class VendorController extends Controller
         }
 
         $vendor->update($validated);
+
         return redirect()->route('admin.vendors.index')
             ->with('success', 'Vendor berhasil diubah.');
     }
@@ -84,6 +89,7 @@ class VendorController extends Controller
     public function destroy(Vendor $vendor)
     {
         $vendor->delete();
+
         return redirect()->route('admin.vendors.index')
             ->with('success', 'Vendor berhasil dihapus.');
     }

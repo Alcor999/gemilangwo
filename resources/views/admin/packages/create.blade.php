@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Create Package')
+@section('title', 'Buat Paket')
 
 @section('content')
 <div class="container-fluid">
@@ -8,14 +8,14 @@
         <div class="col-md-8 offset-md-2">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h5 class="mb-0">Create New Package</h5>
+                    <h5 class="mb-0">Buat Paket Baru</h5>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.packages.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="mb-3">
-                            <label for="name" class="form-label">Package Name *</label>
+                            <label for="name" class="form-label">Nama Paket *</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -23,7 +23,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="description" class="form-label">Description *</label>
+                            <label for="description" class="form-label">Deskripsi *</label>
                             <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4" required>{{ old('description') }}</textarea>
                             @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -33,7 +33,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="price" class="form-label">Price (Rp) *</label>
+                                    <label for="price" class="form-label">Harga (Rp) *</label>
                                     <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}" step="0.01" required>
                                     @error('price')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -42,7 +42,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="max_guests" class="form-label">Max Guests (Optional)</label>
+                                    <label for="max_guests" class="form-label">Maks. Tamu (Opsional)</label>
                                     <input type="number" class="form-control @error('max_guests') is-invalid @enderror" id="max_guests" name="max_guests" value="{{ old('max_guests') }}" min="1">
                                     @error('max_guests')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -52,24 +52,24 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="image" class="form-label">Package Image</label>
+                            <label for="image" class="form-label">Gambar Paket</label>
                             <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*">
-                            <small class="text-muted">Max 2MB, format: JPEG, PNG, JPG, GIF</small>
+                            <small class="text-muted">Maks 2MB, format: JPEG, PNG, JPG, GIF</small>
                             @error('image')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Package Features *</label>
+                            <label class="form-label">Fitur Paket *</label>
                             <div id="features-container">
                                 <div class="input-group mb-2">
                                     <input type="text" class="form-control feature-input" placeholder="e.g., Dekorasi Mewah" name="features[]">
-                                    <button class="btn btn-outline-danger remove-feature" type="button">Remove</button>
+                                    <button class="btn btn-outline-danger remove-feature" type="button">Hapus</button>
                                 </div>
                             </div>
                             <button class="btn btn-sm btn-success" type="button" id="add-feature">
-                                <i class="fas fa-plus"></i> Add Feature
+                                <i class="fas fa-plus"></i> Tambah Fitur
                             </button>
                             @error('features')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -77,8 +77,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Kategori Vendor Wajib Dipilih Customer</label>
-                            <p class="text-muted small">Centang kategori vendor yang harus dipilih customer saat memesan paket ini.</p>
+                            <label class="form-label">Kategori Vendor Wajib Dipilih Pelanggan</label>
+                            <p class="text-muted small">Centang kategori vendor yang harus dipilih pelanggan saat memesan paket ini.</p>
                             <div class="border rounded p-3">
                                 @forelse(($vendorCategories ?? []) as $vc)
                                     <div class="form-check">
@@ -94,8 +94,8 @@
                         <div class="mb-3">
                             <label for="status" class="form-label">Status *</label>
                             <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
-                                <option value="active" {{ old('status') === 'active' ? 'selected' : '' }}>Active</option>
-                                <option value="inactive" {{ old('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                <option value="active" {{ old('status') === 'active' ? 'selected' : '' }}>Aktif</option>
+                                <option value="inactive" {{ old('status') === 'inactive' ? 'selected' : '' }}>Nonaktif</option>
                             </select>
                             @error('status')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -104,10 +104,10 @@
 
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Create Package
+                                <i class="fas fa-save"></i> Buat Paket
                             </button>
                             <a href="{{ route('admin.packages.index') }}" class="btn btn-secondary">
-                                <i class="fas fa-times"></i> Cancel
+                                <i class="fas fa-times"></i> Batal
                             </a>
                         </div>
                     </form>
@@ -124,7 +124,7 @@ document.getElementById('add-feature').addEventListener('click', function() {
     newFeature.className = 'input-group mb-2';
     newFeature.innerHTML = `
         <input type="text" class="form-control feature-input" placeholder="e.g., Catering Berkualitas (3 Menu)" name="features[]">
-        <button class="btn btn-outline-danger remove-feature" type="button">Remove</button>
+        <button class="btn btn-outline-danger remove-feature" type="button">Hapus</button>
     `;
     container.appendChild(newFeature);
     

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->boolean('is_available')->default(true);
             $table->text('notes')->nullable();
             $table->timestamps();
-            
+
             $table->index(['owner_id', 'available_from', 'available_to']);
         });
     }

@@ -793,7 +793,7 @@
                     @foreach($testimonials as $testimonial)
                         <div class="col-md-6 col-lg-4">
                             <div class="card h-100 shadow-sm" style="border: none; border-radius: 12px; overflow: hidden;">
-                                <!-- Video Thumbnail -->
+                                <!-- Gambar Miniatur Video -->
                                 <div class="position-relative" style="height: 220px; background: #f3f4f6; overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; group" data-glightbox data-gallery="testimonials" 
                                      @if($testimonial->type === 'upload')
                                         href="{{ asset('storage/' . $testimonial->video_path) }}"
@@ -848,7 +848,7 @@
                                         {{ Str::limit($testimonial->description, 100) }}
                                     </p>
 
-                                    <!-- Customer Info -->
+                                    <!-- Info Pelanggan -->
                                     <div style="display: flex; align-items: center; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
                                         @if($testimonial->user->avatar)
                                             <img src="{{ asset('storage/' . $testimonial->user->avatar) }}" 

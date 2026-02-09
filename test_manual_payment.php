@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\Bank;
 use App\Models\Order;
 use App\Models\Payment;
-use App\Models\Bank;
 use App\Models\User;
 use App\Services\PaymentService;
 
@@ -10,7 +10,7 @@ use App\Services\PaymentService;
 $user = User::first();
 $package = \App\Models\Package::first();
 
-if (!$user || !$package) {
+if (! $user || ! $package) {
     echo "❌ No user or package found\n";
     exit(1);
 }
@@ -23,7 +23,7 @@ echo "Step 1: Creating test order...\n";
 $order = Order::create([
     'user_id' => $user->id,
     'package_id' => $package->id,
-    'order_number' => 'TEST-' . time(),
+    'order_number' => 'TEST-'.time(),
     'event_date' => now()->addMonths(3),
     'guest_count' => 100,
     'venue' => 'Test Venue',
@@ -36,7 +36,7 @@ echo "✅ Order created: {$order->order_number} (ID: {$order->id})\n\n";
 // Step 2: Select bank and create payment
 echo "Step 2: Selecting bank and creating payment...\n";
 $bank = Bank::where('code', 'bca')->first();
-if (!$bank) {
+if (! $bank) {
     echo "❌ BCA bank not found\n";
     exit(1);
 }
@@ -56,7 +56,7 @@ $order->load('payment.bank', 'package');
 $whatsappLink = $paymentService->generateWhatsAppLink($order, $bank);
 if ($whatsappLink) {
     echo "✅ WhatsApp link generated:\n";
-    echo "   " . substr($whatsappLink, 0, 80) . "...\n\n";
+    echo '   '.substr($whatsappLink, 0, 80)."...\n\n";
 } else {
     echo "❌ Failed to generate WhatsApp link\n\n";
 }
@@ -77,7 +77,7 @@ echo "Step 5: Testing admin payment rejection...\n";
 $order2 = Order::create([
     'user_id' => $user->id,
     'package_id' => $package->id,
-    'order_number' => 'TEST-REJECT-' . time(),
+    'order_number' => 'TEST-REJECT-'.time(),
     'event_date' => now()->addMonths(4),
     'guest_count' => 150,
     'venue' => 'Test Venue 2',

@@ -8,20 +8,21 @@ use Twilio\Rest\Client;
 class SmsService
 {
     private ?Client $twilio = null;
+
     private bool $isConfigured = false;
 
     public function __construct()
     {
         $accountSid = config('services.twilio.account_sid');
         $authToken = config('services.twilio.auth_token');
-        
+
         // Only initialize Twilio if credentials are configured
         if ($accountSid && $authToken) {
             try {
                 $this->twilio = new Client($accountSid, $authToken);
                 $this->isConfigured = true;
             } catch (\Exception $e) {
-                \Log::warning('Twilio initialization failed: ' . $e->getMessage());
+                \Log::warning('Twilio initialization failed: '.$e->getMessage());
                 $this->isConfigured = false;
             }
         } else {
@@ -44,8 +45,9 @@ class SmsService
     public function sendSms(string $phoneNumber, string $message): bool
     {
         // If Twilio not configured, log and return false
-        if (!$this->isConfigured()) {
-            \Log::info('SMS not sent - Twilio not configured. To: ' . $phoneNumber . ' Message: ' . substr($message, 0, 50) . '...');
+        if (! $this->isConfigured()) {
+            \Log::info('SMS not sent - Twilio not configured. To: '.$phoneNumber.' Message: '.substr($message, 0, 50).'...');
+
             return false;
         }
 
@@ -60,10 +62,12 @@ class SmsService
 
             return true;
         } catch (TwilioException $e) {
-            \Log::error('SMS Error: ' . $e->getMessage());
+            \Log::error('SMS Error: '.$e->getMessage());
+
             return false;
         } catch (\Exception $e) {
-            \Log::error('SMS Error (General): ' . $e->getMessage());
+            \Log::error('SMS Error (General): '.$e->getMessage());
+
             return false;
         }
     }
@@ -74,26 +78,29 @@ class SmsService
     public function sendWhatsApp(string $phoneNumber, string $message): bool
     {
         // If Twilio not configured, log and return false
-        if (!$this->isConfigured()) {
-            \Log::info('WhatsApp not sent - Twilio not configured. To: ' . $phoneNumber . ' Message: ' . substr($message, 0, 50) . '...');
+        if (! $this->isConfigured()) {
+            \Log::info('WhatsApp not sent - Twilio not configured. To: '.$phoneNumber.' Message: '.substr($message, 0, 50).'...');
+
             return false;
         }
 
         try {
             $this->twilio->messages->create(
-                'whatsapp:' . $phoneNumber,
+                'whatsapp:'.$phoneNumber,
                 [
-                    'from' => 'whatsapp:' . config('services.twilio.whatsapp_number'),
+                    'from' => 'whatsapp:'.config('services.twilio.whatsapp_number'),
                     'body' => $message,
                 ]
             );
 
             return true;
         } catch (TwilioException $e) {
-            \Log::error('WhatsApp Error: ' . $e->getMessage());
+            \Log::error('WhatsApp Error: '.$e->getMessage());
+
             return false;
         } catch (\Exception $e) {
-            \Log::error('WhatsApp Error (General): ' . $e->getMessage());
+            \Log::error('WhatsApp Error (General): '.$e->getMessage());
+
             return false;
         }
     }
@@ -104,6 +111,7 @@ class SmsService
     public function sendSmsTemplate(string $phoneNumber, string $templateKey, array $data = []): bool
     {
         $message = $this->renderTemplate($templateKey, $data);
+
         return $this->sendSms($phoneNumber, $message);
     }
 
@@ -113,6 +121,7 @@ class SmsService
     public function sendWhatsAppTemplate(string $phoneNumber, string $templateKey, array $data = []): bool
     {
         $message = $this->renderTemplate($templateKey, $data);
+
         return $this->sendWhatsApp($phoneNumber, $message);
     }
 
@@ -137,10 +146,10 @@ class SmsService
             'review_thank_you' => "Terima Kasih atas Review ⭐\n\nReview Anda membantu kami untuk terus meningkatkan kualitas layanan.\n\nHarga spesial untuk booking berikutnya! 🎁",
         ];
 
-        $message = $templates[$templateKey] ?? "Halo, ada pesan untuk Anda.";
+        $message = $templates[$templateKey] ?? 'Halo, ada pesan untuk Anda.';
 
         foreach ($data as $key => $value) {
-            $message = str_replace('{' . $key . '}', $value, $message);
+            $message = str_replace('{'.$key.'}', $value, $message);
         }
 
         return $message;
@@ -157,11 +166,11 @@ class SmsService
 
         // Handle Indonesian numbers
         if (substr($phone, 0, 1) === '0') {
-            $phone = '62' . substr($phone, 1);
+            $phone = '62'.substr($phone, 1);
         } elseif (substr($phone, 0, 2) !== '62') {
-            $phone = '62' . $phone;
+            $phone = '62'.$phone;
         }
 
-        return '+' . $phone;
+        return '+'.$phone;
     }
 }

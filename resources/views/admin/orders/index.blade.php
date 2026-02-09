@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Orders Management')
+@section('title', 'Manajemen Pesanan')
 
 @section('content')
 <div class="container-fluid">
-    <h1 class="mb-4">Order Management</h1>
+    <h1 class="mb-4">Manajemen Pesanan</h1>
 
     <div class="card">
         <div class="card-body">
@@ -13,14 +13,14 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Order ID</th>
-                                <th>Customer</th>
-                                <th>Package</th>
-                                <th>Event Date</th>
-                                <th>Amount</th>
+                                <th>ID Pesanan</th>
+                                <th>Pelanggan</th>
+                                <th>Paket</th>
+                                <th>Tanggal Acara</th>
+                                <th>Jumlah</th>
                                 <th>Status</th>
-                                <th>Payment</th>
-                                <th>Actions</th>
+                                <th>Pembayaran</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,14 +38,14 @@
                                     </td>
                                     <td>
                                         @if($order->payment && $order->payment->isSuccess())
-                                            <span class="badge bg-success">Paid</span>
+                                            <span class="badge bg-success">Sudah Dibayar</span>
                                         @else
-                                            <span class="badge bg-secondary">Unpaid</span>
+                                            <span class="badge bg-secondary">Belum Dibayar</span>
                                         @endif
                                     </td>
                                     <td>
                                         <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-eye"></i> View
+                                            <i class="fas fa-eye"></i> Lihat
                                         </a>
                                     </td>
                                 </tr>
@@ -54,12 +54,12 @@
                     </table>
                 </div>
 
-                <!-- Pagination -->
+                <!-- Paginasi -->
                 <div class="d-flex justify-content-center mt-4">
                     {{ $orders->links() }}
                 </div>
             @else
-                <div class="alert alert-info">No orders yet.</div>
+                <div class="alert alert-info">Belum ada pesanan.</div>
             @endif
         </div>
     </div>

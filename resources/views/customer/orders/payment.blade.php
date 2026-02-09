@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Payment - Midtrans')
+@section('title', 'Pembayaran - Midtrans')
 
 @section('content')
 <style>
@@ -87,34 +87,34 @@
         <div class="col-lg-7">
             <div class="payment-card card">
                 <div class="payment-header">
-                    <h5><i class="fas fa-lock me-2"></i>Complete Payment</h5>
+                    <h5><i class="fas fa-lock me-2"></i>Selesaikan Pembayaran</h5>
                 </div>
                 <div class="card-body p-4">
                     <!-- Info Alert -->
                     <div class="alert alert-info border-0 mb-4">
                         <i class="fas fa-info-circle me-2"></i>
-                        <strong>Complete your payment</strong> to confirm your wedding event booking.
+                        <strong>Selesaikan pembayaran Anda</strong> untuk mengonfirmasi pesanan acara pernikahan Anda.
                     </div>
 
                     <!-- Order Information -->
                     <div class="order-info">
                         <div class="order-info-row">
                             <div>
-                                <div class="order-info-label">Order Number</div>
+                                <div class="order-info-label">Nomor Pesanan</div>
                                 <div class="order-info-value">{{ $order->order_number }}</div>
                             </div>
                             <div style="text-align: right;">
-                                <div class="order-info-label">Package</div>
+                                <div class="order-info-label">Paket</div>
                                 <div class="order-info-value">{{ $order->package->name }}</div>
                             </div>
                         </div>
                         <div class="order-info-row">
                             <div>
-                                <div class="order-info-label">Guest Count</div>
-                                <div class="order-info-value">{{ $order->guest_count }} Guests</div>
+                                <div class="order-info-label">Jumlah Tamu</div>
+                                <div class="order-info-value">{{ $order->guest_count }} Tamu</div>
                             </div>
                             <div style="text-align: right;">
-                                <div class="order-info-label">Event Date</div>
+                                <div class="order-info-label">Tanggal Acara</div>
                                 <div class="order-info-value">{{ $order->event_date->format('d M Y') }}</div>
                             </div>
                         </div>
@@ -122,7 +122,7 @@
 
                     <!-- Amount to Pay -->
                     <div class="amount-section">
-                        <h6>Amount to Pay</h6>
+                        <h6>Jumlah yang Harus Dibayar</h6>
                         <h2>Rp {{ number_format($order->total_price, 0, ',', '.') }}</h2>
                     </div>
 
@@ -132,22 +132,22 @@
                     <!-- Security Info -->
                     <div class="alert alert-info border-0 d-flex align-items-center mb-3">
                         <i class="fas fa-shield-alt me-2 fs-5" style="color: #b8860b;"></i>
-                        <small><strong>Secure Payment:</strong> Powered by Midtrans. Credit Cards, Bank Transfer, E-Wallets & more.</small>
+                        <small><strong>Pembayaran Aman:</strong> Didukung oleh Midtrans. Kartu Kredit, Transfer Bank, E-Wallet, dan lainnya.</small>
                     </div>
 
                     <!-- Test Payment Methods Info -->
                     <div class="card border-warning bg-light">
                         <div class="card-body">
-                            <h6 class="card-title text-warning mb-2"><i class="fas fa-flask me-2"></i>Sandbox Test Payment Methods</h6>
+                            <h6 class="card-title text-warning mb-2"><i class="fas fa-flask me-2"></i>Metode Pembayaran Uji (Sandbox)</h6>
                             <div class="row text-sm">
                                 <div class="col-md-6 mb-2">
-                                    <strong>Credit Card:</strong><br>
+                                    <strong>Kartu Kredit:</strong><br>
                                     <code>4011 1111 1111 1112</code><br>
                                     <small>Exp: 12/25 | CVV: 123</small>
                                 </div>
                                 <div class="col-md-6 mb-2">
-                                    <strong>Bank Transfer:</strong><br>
-                                    <small>BCA, BNI, Mandiri, Permata, etc.</small>
+                                    <strong>Transfer Bank:</strong><br>
+                                    <small>BCA, BNI, Mandiri, Permata, dll.</small>
                                 </div>
                             </div>
                         </div>
@@ -155,23 +155,23 @@
                 </div>
             </div>
 
-            <!-- What Happens Next -->
+            <!-- Apa Selanjutnya -->
             <div class="card mt-4">
                 <div class="card-body">
-                    <h6 class="mb-3"><i class="fas fa-arrow-right me-2" style="color: #b8860b;"></i>What Happens Next?</h6>
+                    <h6 class="mb-3"><i class="fas fa-arrow-right me-2" style="color: #b8860b;"></i>Apa Selanjutnya?</h6>
                     <ol class="mb-0">
-                        <li class="mb-2"><strong>Complete Payment</strong> - Choose your preferred payment method</li>
-                        <li class="mb-2"><strong>Receive Confirmation</strong> - Email confirmation immediately</li>
-                        <li class="mb-2"><strong>Get Updated</strong> - Our team will contact you within 24 hours</li>
-                        <li><strong>Plan Your Wedding</strong> - Start planning your perfect event!</li>
+                        <li class="mb-2"><strong>Selesaikan Pembayaran</strong> - Pilih metode pembayaran yang Anda inginkan</li>
+                        <li class="mb-2"><strong>Terima Konfirmasi</strong> - Konfirmasi via email secara instan</li>
+                        <li class="mb-2"><strong>Dapatkan Pembaruan</strong> - Tim kami akan menghubungi Anda dalam 24 jam</li>
+                        <li><strong>Rencanakan Pernikahan Anda</strong> - Mulai merencanakan acara impian Anda!</li>
                     </ol>
                 </div>
             </div>
 
-            <!-- Back to Order -->
+            <!-- Kembali ke Pesanan -->
             <div class="text-center mt-4 mb-5">
                 <a href="{{ route('customer.orders.show', $order->id) }}" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left me-2"></i>Back to Order
+                    <i class="fas fa-arrow-left me-2"></i>Kembali ke Pesanan
                 </a>
             </div>
         </div>
@@ -181,48 +181,48 @@
 @section('js')
 <script src="https://app.sandbox.midtrans.com/snap/snap.js"></script>
 <script>
-    // Set Midtrans Client Key
+    // Setel Client Key Midtrans
     window.snap = window.snap || {};
     window.snap.clientKey = "{{ $client_key }}";
     
-    // Wait for snap script to load
+    // Tunggu script snap dimuat
     var snapLoadAttempts = 0;
     var maxAttempts = 50;
     var snapToken = "{{ $snap_token }}";
     
     if (!snapToken) {
-        document.getElementById('snap-container').innerHTML = '<div class="alert alert-danger"><strong>Error:</strong> Failed to generate payment token. Please refresh the page.</div>';
+        document.getElementById('snap-container').innerHTML = '<div class="alert alert-danger"><strong>Kesalahan:</strong> Gagal membuat token pembayaran. Silakan muat ulang halaman.</div>';
     } else {
         var checkSnapLoad = setInterval(function() {
             snapLoadAttempts++;
             
             if (typeof window.snap !== 'undefined' && window.snap.pay) {
-                // Snap is loaded
+                // Snap sudah dimuat
                 clearInterval(checkSnapLoad);
                 
                 window.snap.embed(snapToken, {
                     embedId: 'snap-container',
                     onSuccess: function(result){
-                        console.log('Payment success:', result);
+                        console.log('Pembayaran berhasil:', result);
                         window.location.href = "{{ route('customer.orders.paymentFinish') }}?order_id={{ $order->order_number }}";
                     },
                     onPending: function(result){
-                        console.log('Payment pending:', result);
-                        alert('Waiting for your payment!');
+                        console.log('Pembayaran tertunda:', result);
+                        alert('Menunggu pembayaran Anda!');
                     },
                     onError: function(result){
-                        console.error('Payment error:', result);
-                        alert('Payment failed. Please try again.');
+                        console.error('Kesalahan pembayaran:', result);
+                        alert('Pembayaran gagal. Silakan coba lagi.');
                     },
                     onClose: function(){
-                        console.log('Payment closed');
-                        alert('You closed the payment popup without finishing the payment');
+                        console.log('Pembayaran ditutup');
+                        alert('Anda menutup pop-up pembayaran sebelum menyelesaikan pembayaran');
                     }
                 });
             } else if (snapLoadAttempts >= maxAttempts) {
                 clearInterval(checkSnapLoad);
                 console.error('Snap object failed to load after ' + maxAttempts + ' attempts');
-                document.getElementById('snap-container').innerHTML = '<div class="alert alert-danger"><strong>Error:</strong> Failed to load Midtrans payment gateway. Please check your client key and try again. <br><small>If problem persists, please refresh the page or contact support.</small></div>';
+                document.getElementById('snap-container').innerHTML = '<div class="alert alert-danger"><strong>Kesalahan:</strong> Gagal memuat gateway pembayaran Midtrans. Silakan periksa client key Anda dan coba lagi. <br><small>Jika masalah berlanjut, silakan muat ulang halaman atau hubungi dukungan.</small></div>';
             }
         }, 100);
     }

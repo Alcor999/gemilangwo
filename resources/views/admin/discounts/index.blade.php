@@ -1,23 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Manage Discounts')
+@section('title', 'Kelola Diskon')
 
 @section('content')
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h1><i class="fas fa-tag"></i> Manage Discounts</h1>
+            <h1><i class="fas fa-tag"></i> Kelola Diskon</h1>
         </div>
         <div class="col-md-4 text-end">
             <a href="{{ route('admin.discounts.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Create New Discount
+                <i class="fas fa-plus"></i> Buat Diskon Baru
             </a>
         </div>
     </div>
 
     @if ($errors->any())
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Error!</strong>
+            <strong>Kesalahan!</strong>
             <ul class="mb-0">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -39,13 +39,13 @@
             <table class="table table-hover mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th><i class="fas fa-tag"></i> Discount Name</th>
-                        <th>Type</th>
-                        <th>Value</th>
-                        <th>Period</th>
-                        <th>Packages</th>
+                        <th><i class="fas fa-tag"></i> Nama Diskon</th>
+                        <th>Tipe</th>
+                        <th>Nilai</th>
+                        <th>Periode</th>
+                        <th>Paket</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,9 +54,9 @@
                             <td>
                                 <strong>{{ $discount->name }}</strong>
                                 @if ($discount->isActive())
-                                    <span class="badge bg-success ms-2">Active</span>
+                                    <span class="badge bg-success ms-2">Aktif</span>
                                 @else
-                                    <span class="badge bg-secondary ms-2">Inactive</span>
+                                    <span class="badge bg-secondary ms-2">Nonaktif</span>
                                 @endif
                             </td>
                             <td>
@@ -73,31 +73,31 @@
                                     @if ($discount->end_date)
                                         {{ $discount->end_date->format('d M Y') }}
                                     @else
-                                        No Expiry
+                                        Tanpa Batas
                                     @endif
                                 </small>
                             </td>
                             <td>
                                 @if ($discount->packages->count() > 0)
                                     <small class="text-muted">
-                                        {{ $discount->packages->count() }} package(s)
+                                        {{ $discount->packages->count() }} paket
                                     </small>
                                 @else
-                                    <small class="text-muted">All packages</small>
+                                    <small class="text-muted">Semua paket</small>
                                 @endif
                             </td>
                             <td>
                                 @if ($discount->is_active)
-                                    <span class="badge bg-success">Enabled</span>
+                                    <span class="badge bg-success">Aktif</span>
                                 @else
-                                    <span class="badge bg-danger">Disabled</span>
+                                    <span class="badge bg-danger">Nonaktif</span>
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('admin.discounts.show', $discount) }}" class="btn btn-sm btn-info" title="View">
+                                <a href="{{ route('admin.discounts.show', $discount) }}" class="btn btn-sm btn-info" title="Lihat">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{{ route('admin.discounts.edit', $discount) }}" class="btn btn-sm btn-warning" title="Edit">
+                                <a href="{{ route('admin.discounts.edit', $discount) }}" class="btn btn-sm btn-warning" title="Ubah">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <form action="{{ route('admin.discounts.destroy', $discount) }}" method="POST" class="d-inline">
@@ -116,7 +116,7 @@
                     @empty
                         <tr>
                             <td colspan="7" class="text-center py-4">
-                                <p class="text-muted mb-0">No discounts found. <a href="{{ route('admin.discounts.create') }}">Create one now!</a></p>
+                                <p class="text-muted mb-0">Tidak ada diskon. <a href="{{ route('admin.discounts.create') }}">Buat sekarang!</a></p>
                             </td>
                         </tr>
                     @endforelse

@@ -15,6 +15,7 @@ class PackageController extends Controller
     public function index()
     {
         $packages = Package::all();
+
         return view('admin.packages.index', ['packages' => $packages]);
     }
 
@@ -24,6 +25,7 @@ class PackageController extends Controller
     public function create()
     {
         $vendorCategories = VendorCategory::where('is_active', true)->orderBy('sort_order')->get();
+
         return view('admin.packages.create', compact('vendorCategories'));
     }
 
@@ -50,9 +52,9 @@ class PackageController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $imageName = time().'.'.$image->getClientOriginalExtension();
             $image->storeAs('packages', $imageName, 'public');
-            $validated['image'] = 'packages/' . $imageName;
+            $validated['image'] = 'packages/'.$imageName;
         }
 
         $package = Package::create($validated);
@@ -69,6 +71,7 @@ class PackageController extends Controller
     {
         $package->load('vendorCategories');
         $vendorCategories = VendorCategory::where('is_active', true)->orderBy('sort_order')->get();
+
         return view('admin.packages.edit', ['package' => $package, 'vendorCategories' => $vendorCategories]);
     }
 
@@ -95,9 +98,9 @@ class PackageController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $imageName = time().'.'.$image->getClientOriginalExtension();
             $image->storeAs('packages', $imageName, 'public');
-            $validated['image'] = 'packages/' . $imageName;
+            $validated['image'] = 'packages/'.$imageName;
         }
 
         $package->update($validated);
@@ -113,6 +116,7 @@ class PackageController extends Controller
     public function destroy(Package $package)
     {
         $package->delete();
+
         return redirect()->route('admin.packages.index')
             ->with('success', 'Package deleted successfully');
     }

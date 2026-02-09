@@ -11,6 +11,7 @@ class VendorCategoryController extends Controller
     public function index()
     {
         $categories = VendorCategory::withCount('allVendors')->orderBy('sort_order')->paginate(15);
+
         return view('admin.vendor-categories.index', compact('categories'));
     }
 
@@ -33,6 +34,7 @@ class VendorCategoryController extends Controller
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
 
         VendorCategory::create($validated);
+
         return redirect()->route('admin.vendor-categories.index')
             ->with('success', 'Kategori vendor berhasil ditambahkan.');
     }
@@ -46,7 +48,7 @@ class VendorCategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:vendor_categories,slug,' . $vendorCategory->id,
+            'slug' => 'nullable|string|max:255|unique:vendor_categories,slug,'.$vendorCategory->id,
             'description' => 'nullable|string',
             'icon' => 'nullable|string|max:50',
             'sort_order' => 'nullable|integer|min:0',
@@ -55,6 +57,7 @@ class VendorCategoryController extends Controller
         $validated['is_active'] = $request->boolean('is_active', true);
 
         $vendorCategory->update($validated);
+
         return redirect()->route('admin.vendor-categories.index')
             ->with('success', 'Kategori vendor berhasil diubah.');
     }
@@ -65,6 +68,7 @@ class VendorCategoryController extends Controller
             return redirect()->back()->with('error', 'Tidak dapat menghapus kategori yang memiliki vendor. Hapus vendor terlebih dahulu.');
         }
         $vendorCategory->delete();
+
         return redirect()->route('admin.vendor-categories.index')
             ->with('success', 'Kategori vendor berhasil dihapus.');
     }

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Bookings Analysis - Owner Analytics')
+@section('title', 'Analisis Pemesanan - Analitik Owner')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -8,20 +8,20 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <h1 class="h3 mb-0">
-                <i class="fas fa-calendar-check"></i> Bookings Analysis
+                <i class="fas fa-calendar-check"></i> Analisis Pemesanan
             </h1>
-            <p class="text-muted">Track your booking trends and performance</p>
+            <p class="text-muted">Pantau tren dan performa pemesanan Anda</p>
         </div>
     </div>
 
-    <!-- Filters -->
+    <!-- Penyaringan -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <form method="GET" action="{{ route('owner.analytics.bookings') }}" class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label">Year</label>
+                            <label class="form-label">Tahun</label>
                             <select name="year" class="form-select" onchange="this.form.submit()">
                                 @for($y = now()->year - 5; $y <= now()->year; $y++)
                                     <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
@@ -31,7 +31,7 @@
                         <div class="col-md-3">
                             <label class="form-label">&nbsp;</label>
                             <a href="{{ route('owner.analytics.export', ['type' => 'bookings', 'year' => $year]) }}" class="btn btn-outline-primary btn-sm w-100">
-                                <i class="fas fa-download"></i> Export
+                                <i class="fas fa-download"></i> Ekspor
                             </a>
                         </div>
                     </form>
@@ -40,12 +40,12 @@
         </div>
     </div>
 
-    <!-- Key Metrics -->
+    <!-- Metrik Utama -->
     <div class="row mb-4">
         <div class="col-md-3">
             <div class="card border-left-primary">
                 <div class="card-body">
-                    <p class="text-muted small mb-1">Total Bookings</p>
+                    <p class="text-muted small mb-1">Total Pesanan</p>
                     <h4>{{ $bookingData->sum('bookings') }}</h4>
                 </div>
             </div>
@@ -53,7 +53,7 @@
         <div class="col-md-3">
             <div class="card border-left-success">
                 <div class="card-body">
-                    <p class="text-muted small mb-1">Completed Bookings</p>
+                    <p class="text-muted small mb-1">Pesanan Selesai</p>
                     <h4>{{ $bookingData->sum('completed') }}</h4>
                 </div>
             </div>
@@ -61,7 +61,7 @@
         <div class="col-md-3">
             <div class="card border-left-info">
                 <div class="card-body">
-                    <p class="text-muted small mb-1">Completion Rate</p>
+                    <p class="text-muted small mb-1">Tingkat Penyelesaian</p>
                     <h4>{{ round(($bookingData->sum('completed') / max($bookingData->sum('bookings'), 1)) * 100, 2) }}%</h4>
                 </div>
             </div>
@@ -69,19 +69,19 @@
         <div class="col-md-3">
             <div class="card border-left-warning">
                 <div class="card-body">
-                    <p class="text-muted small mb-1">Avg Bookings/Month</p>
+                    <p class="text-muted small mb-1">Rata-rata Pesanan/Bulan</p>
                     <h4>{{ round($bookingData->avg('bookings'), 2) }}</h4>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Chart & Table -->
+    <!-- Grafik & Tabel -->
     <div class="row mb-4">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-chart-bar"></i> Monthly Bookings</h6>
+                    <h6 class="mb-0"><i class="fas fa-chart-bar"></i> Pemesanan Bulanan</h6>
                 </div>
                 <div class="card-body">
                     <canvas id="bookingsChart"></canvas>
@@ -89,18 +89,18 @@
             </div>
         </div>
 
-        <!-- Top Packages -->
+        <!-- Paket Teratas -->
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-fire"></i> Top Packages</h6>
+                    <h6 class="mb-0"><i class="fas fa-fire"></i> Paket Teratas</h6>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-sm mb-0">
                         <thead class="table-light">
                             <tr>
                                 <th>Package</th>
-                                <th class="text-end">Orders</th>
+                                <th class="text-end">Pesanan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -113,7 +113,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="2" class="text-center text-muted py-3">No data</td>
+                                    <td colspan="2" class="text-center text-muted py-3">Tidak ada data</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -123,22 +123,22 @@
         </div>
     </div>
 
-    <!-- Detailed Table -->
+    <!-- Tabel Detail -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-table"></i> Monthly Details</h6>
+                    <h6 class="mb-0"><i class="fas fa-table"></i> Detail Bulanan</h6>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Month</th>
-                                <th class="text-end">Total Bookings</th>
-                                <th class="text-end">Completed</th>
-                                <th class="text-end">Pending</th>
-                                <th class="text-end">Completion %</th>
+                                <th>Bulan</th>
+                                <th class="text-end">Total Pesanan</th>
+                                <th class="text-end">Selesai</th>
+                                <th class="text-end">Menunggu</th>
+                                <th class="text-end">% Selesai</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -152,7 +152,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center text-muted py-4">No booking data</td>
+                                    <td colspan="5" class="text-center text-muted py-4">Tidak ada data pemesanan</td>
                                 </tr>
                             @endforelse
                         </tbody>

@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class RevenueExport implements FromCollection, WithHeadings, WithStyles
 {
     protected $data;
+
     protected $title;
 
     public function __construct($data, $title = 'Revenue Report')
@@ -23,7 +24,7 @@ class RevenueExport implements FromCollection, WithHeadings, WithStyles
         return $this->data->map(function ($item) {
             return [
                 'date' => $item['date'] ?? $item['month'] ?? $item['year'],
-                'revenue' => 'Rp ' . number_format($item['revenue'], 0, ',', '.'),
+                'revenue' => 'Rp '.number_format($item['revenue'], 0, ',', '.'),
                 'transactions' => $item['transactions'] ?? $item['orders'] ?? 0,
             ];
         });

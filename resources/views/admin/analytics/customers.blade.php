@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Customer Analysis - Admin Analytics')
+@section('title', 'Analisis Pelanggan - Analitik Admin')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -8,27 +8,27 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <h1 class="h3 mb-0">
-                <i class="fas fa-users"></i> Customer Acquisition Analysis
+                <i class="fas fa-users"></i> Analisis Akuisisi Pelanggan
             </h1>
-            <p class="text-muted">Track customer growth and trends</p>
+            <p class="text-muted">Pantau pertumbuhan dan tren pelanggan</p>
         </div>
     </div>
 
-    <!-- Filters -->
+    <!-- Penyaringan -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <form method="GET" action="{{ route('admin.analytics.customers') }}" class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label">Period</label>
+                            <label class="form-label">Periode</label>
                             <select name="period" class="form-select" onchange="this.form.submit()">
-                                <option value="monthly" {{ $period === 'monthly' ? 'selected' : '' }}>Monthly</option>
-                                <option value="yearly" {{ $period === 'yearly' ? 'selected' : '' }}>Yearly</option>
+                                <option value="monthly" {{ $period === 'monthly' ? 'selected' : '' }}>Bulanan</option>
+                                <option value="yearly" {{ $period === 'yearly' ? 'selected' : '' }}>Tahunan</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label">Year</label>
+                            <label class="form-label">Tahun</label>
                             <select name="year" class="form-select" onchange="this.form.submit()">
                                 @for($y = now()->year - 5; $y <= now()->year; $y++)
                                     <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
@@ -41,12 +41,12 @@
         </div>
     </div>
 
-    <!-- Chart -->
+    <!-- Grafik -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-chart-line"></i> Customer Growth Trend</h6>
+                    <h6 class="mb-0"><i class="fas fa-chart-line"></i> Tren Pertumbuhan Pelanggan</h6>
                 </div>
                 <div class="card-body">
                     <canvas id="customerChart"></canvas>
@@ -55,20 +55,20 @@
         </div>
     </div>
 
-    <!-- Customer Table -->
+    <!-- Tabel Pelanggan -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-table"></i> Customer Statistics</h6>
+                    <h6 class="mb-0"><i class="fas fa-table"></i> Statistik Pelanggan</h6>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>{{ $period === 'monthly' ? 'Month' : 'Year' }}</th>
-                                <th class="text-end">New Customers</th>
-                                <th class="text-end">Growth Rate</th>
+                                <th>{{ $period === 'monthly' ? 'Bulan' : 'Tahun' }}</th>
+                                <th class="text-end">Pelanggan Baru</th>
+                                <th class="text-end">Tingkat Pertumbuhan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,7 +95,7 @@
                             @empty
                                 <tr>
                                     <td colspan="3" class="text-center text-muted py-4">
-                                        <i class="fas fa-inbox"></i> No customer data available
+                                        <i class="fas fa-inbox"></i> Tidak ada data pelanggan
                                     </td>
                                 </tr>
                             @endforelse
@@ -106,21 +106,21 @@
         </div>
     </div>
 
-    <!-- Top Locations -->
+    <!-- Lokasi Teratas -->
     @if($topCountries->count() > 0)
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header bg-light">
-                        <h6 class="mb-0"><i class="fas fa-map-marker-alt"></i> Top Customer Locations</h6>
+                        <h6 class="mb-0"><i class="fas fa-map-marker-alt"></i> Lokasi Pelanggan Teratas</h6>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>City</th>
-                                    <th class="text-end">Customers</th>
-                                    <th class="text-end">Percentage</th>
+                                    <th>Kota</th>
+                                    <th class="text-end">Pelanggan</th>
+                                    <th class="text-end">Persentase</th>
                                 </tr>
                             </thead>
                             <tbody>

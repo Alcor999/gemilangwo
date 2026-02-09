@@ -23,7 +23,7 @@ class EmailTestController extends Controller
         Mail::to($order->user->email)->send(new OrderConfirmationMail($order));
 
         return response()->json([
-            'message' => 'Order confirmation email sent to ' . $order->user->email,
+            'message' => 'Order confirmation email sent to '.$order->user->email,
             'order_id' => $orderId,
         ]);
     }
@@ -37,7 +37,7 @@ class EmailTestController extends Controller
         Mail::to($payment->order->user->email)->send(new PaymentReceivedMail($payment));
 
         return response()->json([
-            'message' => 'Payment received email sent to ' . $payment->order->user->email,
+            'message' => 'Payment received email sent to '.$payment->order->user->email,
             'payment_id' => $paymentId,
         ]);
     }
@@ -52,7 +52,7 @@ class EmailTestController extends Controller
         Mail::to($order->user->email)->send(new OrderStatusMail($order, $previousStatus));
 
         return response()->json([
-            'message' => 'Order status email sent to ' . $order->user->email,
+            'message' => 'Order status email sent to '.$order->user->email,
             'order_id' => $orderId,
         ]);
     }
@@ -66,7 +66,7 @@ class EmailTestController extends Controller
         Mail::to($review->user->email)->send(new ReviewSubmissionMail($review));
 
         return response()->json([
-            'message' => 'Review submission email sent to ' . $review->user->email,
+            'message' => 'Review submission email sent to '.$review->user->email,
             'review_id' => $reviewId,
         ]);
     }
@@ -78,7 +78,7 @@ class EmailTestController extends Controller
     {
         $adminEmail = config('app.admin_email', 'admin@gemilangwo.test');
 
-        $data = match($type) {
+        $data = match ($type) {
             'new_order' => [
                 'order_id' => 1,
                 'customer_name' => 'John Doe',

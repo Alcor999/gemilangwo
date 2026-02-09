@@ -13,9 +13,7 @@ class ReviewSubmissionMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public Review $review)
-    {
-    }
+    public function __construct(public Review $review) {}
 
     public function envelope(): Envelope
     {

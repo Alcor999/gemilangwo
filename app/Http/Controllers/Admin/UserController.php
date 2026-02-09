@@ -14,6 +14,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::paginate(15);
+
         return view('admin.users.index', ['users' => $users]);
     }
 
@@ -23,6 +24,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         $user->load(['orders', 'reviews']);
+
         return view('admin.users.show', ['user' => $user]);
     }
 

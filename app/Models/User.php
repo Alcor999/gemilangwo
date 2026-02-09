@@ -32,7 +32,6 @@ class User extends Authenticatable
         'prefer_sms',
         'prefer_email',
     ];
-    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -116,7 +115,9 @@ class User extends Authenticatable
     public function videoTestimonials()
     {
         return $this->hasMany(VideoTestimonial::class);
-    }    // Accessors
+    }
+
+    // Accessors
     public function isAdmin(): bool
     {
         return $this->role === 'admin';

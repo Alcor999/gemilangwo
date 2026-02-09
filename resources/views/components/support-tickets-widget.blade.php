@@ -1,4 +1,4 @@
-<!-- Support Tickets Widget -->
+<!-- Widget Tiket Dukungan -->
 <div class="card shadow">
     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
         <h6 class="mb-0">
@@ -23,7 +23,7 @@
                                     #{{ $ticket->id }} - {{ Str::limit($ticket->subject, 35) }}
                                 </h6>
                                 <p class="mb-1 small text-muted">
-                                    {{ $ticket->user->name ?? 'Customer' }}
+                                    {{ $ticket->user->name ?? 'Pelanggan' }}
                                 </p>
                             </div>
                             <div class="text-end ms-2">

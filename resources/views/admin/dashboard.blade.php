@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Dasbor Admin')
 
 @section('content')
 <div class="container-fluid">
-    <h1 class="mb-4" style="font-size: 2rem;">Admin Dashboard</h1>
+    <h1 class="mb-4" style="font-size: 2rem;">Dasbor Admin</h1>
 
     <!-- Statistics Cards -->
     <div class="row mb-4">
@@ -12,7 +12,7 @@
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="mb-2">Total Orders</h6>
+                        <h6 class="mb-2">Total Pesanan</h6>
                         <h3 class="mb-0">{{ $total_orders }}</h3>
                     </div>
                     <i class="fas fa-receipt fa-2x" style="opacity: 0.5;"></i>
@@ -23,7 +23,7 @@
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="mb-2">Total Customers</h6>
+                        <h6 class="mb-2">Total Pelanggan</h6>
                         <h3 class="mb-0">{{ $total_customers }}</h3>
                     </div>
                     <i class="fas fa-users fa-2x" style="opacity: 0.5;"></i>
@@ -34,7 +34,7 @@
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="mb-2">Active Packages</h6>
+                        <h6 class="mb-2">Paket Aktif</h6>
                         <h3 class="mb-0">{{ $total_packages }}</h3>
                     </div>
                     <i class="fas fa-box fa-2x" style="opacity: 0.5;"></i>
@@ -45,7 +45,7 @@
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="mb-2">Total Revenue</h6>
+                        <h6 class="mb-2">Total Pendapatan</h6>
                         <h3 class="mb-0">Rp {{ number_format($total_revenue, 0, ',', '.') }}</h3>
                     </div>
                     <i class="fas fa-money-bill-wave fa-2x" style="opacity: 0.5;"></i>
@@ -54,21 +54,21 @@
         </div>
     </div>
 
-    <!-- Quick Actions -->
+    <!-- Aksi Cepat -->
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Quick Actions</h5>
+                    <h5 class="card-title">Aksi Cepat</h5>
                     <div class="d-grid gap-2 d-sm-flex flex-wrap">
                         <a href="{{ route('admin.packages.create') }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-plus"></i> Add New Package
+                            <i class="fas fa-plus"></i> Tambah Paket Baru
                         </a>
                         <a href="{{ route('admin.orders.index') }}" class="btn btn-info btn-sm">
-                            <i class="fas fa-list"></i> View All Orders
+                            <i class="fas fa-list"></i> Lihat Semua Pesanan
                         </a>
                         <a href="{{ route('admin.users.index') }}" class="btn btn-warning btn-sm">
-                            <i class="fas fa-users"></i> Manage Users
+                            <i class="fas fa-users"></i> Kelola Pengguna
                         </a>
                     </div>
                 </div>
@@ -76,12 +76,12 @@
         </div>
     </div>
 
-    <!-- Recent Orders -->
+    <!-- Pesanan Terbaru -->
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h5 class="mb-0" style="font-size: 1.1rem;">Recent Orders</h5>
+                    <h5 class="mb-0" style="font-size: 1.1rem;">Pesanan Terbaru</h5>
                 </div>
                 <div class="card-body p-2 p-md-3">
                     @if($recent_orders->count() > 0)
@@ -89,13 +89,13 @@
                             <table class="table table-hover table-sm mb-0">
                                 <thead>
                                     <tr>
-                                        <th style="font-size: 0.9rem;">Order ID</th>
-                                        <th style="font-size: 0.9rem;">Customer</th>
-                                        <th style="font-size: 0.9rem;">Package</th>
-                                        <th style="font-size: 0.9rem;">Date</th>
+                                        <th style="font-size: 0.9rem;">ID Pesanan</th>
+                                        <th style="font-size: 0.9rem;">Pelanggan</th>
+                                        <th style="font-size: 0.9rem;">Paket</th>
+                                        <th style="font-size: 0.9rem;">Tanggal</th>
                                         <th style="font-size: 0.9rem;">Total</th>
                                         <th style="font-size: 0.9rem;">Status</th>
-                                        <th style="font-size: 0.9rem;">Actions</th>
+                                        <th style="font-size: 0.9rem;">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -122,7 +122,7 @@
                             </table>
                         </div>
                     @else
-                        <div class="alert alert-info mb-0">No orders yet.</div>
+                        <div class="alert alert-info mb-0">Belum ada pesanan.</div>
                     @endif
                 </div>
             </div>

@@ -16,7 +16,7 @@
     <div class="container">
         <div class="header">
             <h2>Pembayaran Ditolak</h2>
-            <p>Order: {{ $order->order_number }}</p>
+            <p>Pesanan: {{ $order->order_number }}</p>
         </div>
         
         <div class="content">
@@ -36,7 +36,7 @@
             
             <h4>Detail Pesanan</h4>
             <ul>
-                <li><strong>Order Number:</strong> {{ $order->order_number }}</li>
+                <li><strong>Nomor Pesanan:</strong> {{ $order->order_number }}</li>
                 <li><strong>Paket:</strong> {{ $order->package->name }}</li>
                 <li><strong>Jumlah yang Seharusnya Ditransfer:</strong> Rp {{ number_format($order->total_price, 0, ',', '.') }}</li>
             </ul>
@@ -51,18 +51,18 @@
             
             <p style="text-align: center; margin-top: 30px;">
                 <a href="{{ config('app.url') }}/customer/orders/{{ $order->id }}" class="button">
-                    Lihat Order Detail
+                    Lihat Detail Pesanan
                 </a>
             </p>
             
             <p style="color: #666; font-size: 14px; margin-top: 20px; border-top: 1px solid #ddd; padding-top: 20px;">
                 Jika Anda memiliki pertanyaan atau mengalami masalah dengan pembayaran, <br>
-                silakan hubungi tim support kami melalui WhatsApp atau email.
+                silakan hubungi tim dukungan kami melalui WhatsApp atau email.
             </p>
         </div>
         
         <div class="footer">
-            <p>&copy; {{ date('Y') }} Gemilang WO. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} Gemilang WO. Hak cipta dilindungi undang-undang.</p>
         </div>
     </div>
 </body>

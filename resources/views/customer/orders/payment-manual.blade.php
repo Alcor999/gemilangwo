@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Payment Manual')
+@section('title', 'Panduan Pembayaran')
 
 @section('content')
 <style>
@@ -79,7 +79,7 @@
                 <div class="card-body p-4">
                     <!-- Order Info -->
                     <div class="alert alert-info border-0 mb-4">
-                        <strong>Order:</strong> {{ $order->order_number }}<br>
+                        <strong>Pesanan:</strong> {{ $order->order_number }}<br>
                         <strong>Paket:</strong> {{ $order->package->name }}<br>
                         <strong>Jumlah:</strong> Rp {{ number_format($order->total_price, 0, ',', '.') }}
                     </div>
@@ -99,7 +99,7 @@
                         @if ($banks->isEmpty())
                             <div class="alert alert-warning">
                                 <i class="fas fa-exclamation-triangle me-2"></i>
-                                Tidak ada bank yang tersedia. Silakan hubungi support.
+                                Tidak ada bank yang tersedia. Silakan hubungi dukungan.
                             </div>
                         @else
                             @foreach ($banks as $bank)
@@ -130,7 +130,7 @@
                 </div>
             </div>
 
-            <!-- Help Section -->
+            <!-- Bagian Bantuan -->
             <div class="card mt-4">
                 <div class="card-body">
                     <h6 class="mb-3"><i class="fas fa-info-circle me-2"></i>Tanya Jawab</h6>
@@ -167,7 +167,7 @@
                             </h2>
                             <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
-                                    <small>Hubungi kami melalui WhatsApp di halaman berikutnya atau email support untuk bantuan lebih lanjut.</small>
+                                    <small>Hubungi kami melalui WhatsApp di halaman berikutnya atau email dukungan untuk bantuan lebih lanjut.</small>
                                 </div>
                             </div>
                         </div>

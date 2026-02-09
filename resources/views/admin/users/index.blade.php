@@ -4,10 +4,10 @@
 <div class="container-fluid mt-4">
     <div class="row mb-4">
         <div class="col-12 col-sm-8">
-            <h1 class="h3" style="font-size: 1.75rem;">User Management</h1>
+            <h1 class="h3" style="font-size: 1.75rem;">Manajemen Pengguna</h1>
         </div>
         <div class="col-12 col-sm-4 text-sm-end mt-2 mt-sm-0">
-            <a href="{{ route('admin.users.index') }}" class="btn btn-secondary btn-sm w-100 w-sm-auto">Refresh</a>
+            <a href="{{ route('admin.users.index') }}" class="btn btn-secondary btn-sm w-100 w-sm-auto">Muat Ulang</a>
         </div>
     </div>
 
@@ -24,12 +24,12 @@
                 <table class="table table-hover table-sm mb-0">
                     <thead class="table-light">
                         <tr style="font-size: 0.9rem;">
-                            <th>Name</th>
+                            <th>Nama</th>
                             <th>Email</th>
-                            <th class="d-none d-md-table-cell">Phone</th>
-                            <th>Role</th>
+                            <th class="d-none d-md-table-cell">Telepon</th>
+                            <th>Peran</th>
                             <th class="d-none d-sm-table-cell">Status</th>
-                            <th>Actions</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,14 +45,14 @@
                                 </td>
                                 <td class="d-none d-sm-table-cell">
                                     @if($user->deleted_at)
-                                        <span class="badge bg-danger" style="font-size: 0.75rem;">Inactive</span>
+                                        <span class="badge bg-danger" style="font-size: 0.75rem;">Nonaktif</span>
                                     @else
-                                        <span class="badge bg-success" style="font-size: 0.75rem;">Active</span>
+                                        <span class="badge bg-success" style="font-size: 0.75rem;">Aktif</span>
                                     @endif
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
-                                        <a href="{{ route('admin.users.show', $user) }}" class="btn btn-info" title="View">
+                                        <a href="{{ route('admin.users.show', $user) }}" class="btn btn-info" title="Lihat">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <form action="{{ route('admin.users.deactivate', $user) }}" method="POST" class="d-inline">
@@ -71,7 +71,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center py-4 text-muted">No users found</td>
+                                <td colspan="6" class="text-center py-4 text-muted">Tidak ada pengguna</td>
                             </tr>
                         @endforelse
                     </tbody>

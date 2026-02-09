@@ -17,7 +17,7 @@ class SmsTestController extends Controller
     {
         $order = Order::findOrFail($orderId);
         $service = app(NotificationService::class);
-        
+
         $sent = $service->notifyOrderConfirmation($order);
 
         return response()->json([
@@ -35,7 +35,7 @@ class SmsTestController extends Controller
     {
         $order = Order::findOrFail($orderId);
         $service = app(NotificationService::class);
-        
+
         $sent = $service->notifyPaymentReminder($order);
 
         return response()->json([
@@ -53,7 +53,7 @@ class SmsTestController extends Controller
     {
         $payment = Payment::findOrFail($paymentId);
         $service = app(NotificationService::class);
-        
+
         $sent = $service->notifyPaymentConfirmation($payment);
 
         return response()->json([
@@ -71,7 +71,7 @@ class SmsTestController extends Controller
     {
         $order = Order::findOrFail($orderId);
         $service = app(NotificationService::class);
-        
+
         $sent = $service->notifyEventReminder3Days($order);
 
         return response()->json([
@@ -89,7 +89,7 @@ class SmsTestController extends Controller
     {
         $order = Order::findOrFail($orderId);
         $service = app(NotificationService::class);
-        
+
         $sent = $service->notifyEventReminder1Day($order);
 
         return response()->json([
@@ -107,7 +107,7 @@ class SmsTestController extends Controller
     {
         $order = Order::findOrFail($orderId);
         $service = app(NotificationService::class);
-        
+
         $sent = $service->notifyEventCompleted($order);
 
         return response()->json([
@@ -125,7 +125,7 @@ class SmsTestController extends Controller
     {
         $review = Review::findOrFail($reviewId);
         $service = app(NotificationService::class);
-        
+
         $sent = $service->notifyReviewThankYou($review);
 
         return response()->json([

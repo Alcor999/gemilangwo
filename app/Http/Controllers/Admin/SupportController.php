@@ -18,7 +18,7 @@ class SupportController extends Controller
         $priority = request()->get('priority', '');
         $category = request()->get('category', '');
         $search = request()->get('search', '');
-        
+
         $query = SupportTicket::with('user', 'assignedTo');
 
         // Filter by status
@@ -38,9 +38,9 @@ class SupportController extends Controller
 
         // Search by subject or ID
         if ($search && $search !== '') {
-            $query->where(function($q) use ($search) {
-                $q->where('subject', 'like', '%' . $search . '%')
-                  ->orWhere('id', 'like', '%' . $search . '%');
+            $query->where(function ($q) use ($search) {
+                $q->where('subject', 'like', '%'.$search.'%')
+                    ->orWhere('id', 'like', '%'.$search.'%');
             });
         }
 
@@ -63,7 +63,7 @@ class SupportController extends Controller
     public function show($id)
     {
         $ticket = SupportTicket::findOrFail($id);
-        
+
         // Mark messages as read
         $ticket->markMessagesAsRead();
 
@@ -79,7 +79,7 @@ class SupportController extends Controller
     public function assign(Request $request, $id)
     {
         $ticket = SupportTicket::findOrFail($id);
-        
+
         $validated = $request->validate([
             'assigned_to' => 'required|exists:users,id',
         ]);
@@ -99,7 +99,7 @@ class SupportController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $ticket = SupportTicket::findOrFail($id);
-        
+
         $validated = $request->validate([
             'status' => 'required|in:open,in_progress,waiting_customer,resolved,closed',
         ]);
@@ -125,7 +125,7 @@ class SupportController extends Controller
     public function addMessage(Request $request, $id)
     {
         $ticket = SupportTicket::findOrFail($id);
-        
+
         $validated = $request->validate([
             'message' => 'required|string|min:1',
         ]);
@@ -145,7 +145,7 @@ class SupportController extends Controller
     public function addNotes(Request $request, $id)
     {
         $ticket = SupportTicket::findOrFail($id);
-        
+
         $validated = $request->validate([
             'internal_notes' => 'required|string',
         ]);
@@ -165,16 +165,16 @@ class SupportController extends Controller
     public function getNewMessages($id)
     {
         $ticket = SupportTicket::findOrFail($id);
-        
+
         $lastMessageId = request()->query('last_message_id', 0);
-        
+
         $messages = $ticket->messages()
             ->where('id', '>', $lastMessageId)
             ->with('sender')
             ->get();
 
         return response()->json([
-            'messages' => $messages->map(fn($msg) => [
+            'messages' => $messages->map(fn ($msg) => [
                 'id' => $msg->id,
                 'sender_name' => $msg->sender->name,
                 'sender_type' => $msg->sender_type,

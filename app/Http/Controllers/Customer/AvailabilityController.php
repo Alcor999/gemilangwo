@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Availability;
 use App\Models\Package;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class AvailabilityController extends Controller
 {
@@ -17,7 +17,7 @@ class AvailabilityController extends Controller
         ]);
 
         $date = Carbon::parse($request->date)->toDateString();
-        
+
         // Get all packages and check availability
         $packages = Package::all();
         $availability = [];
@@ -43,7 +43,7 @@ class AvailabilityController extends Controller
             ->map(function ($order) {
                 return [
                     'id' => $order->id,
-                    'title' => 'Booking: ' . $order->user->name,
+                    'title' => 'Booking: '.$order->user->name,
                     'start' => $order->created_at->toDateString(),
                     'end' => $order->created_at->addDays(1)->toDateString(),
                     'backgroundColor' => '#b8860b',
@@ -74,8 +74,8 @@ class AvailabilityController extends Controller
         return response()->json([
             'available' => $conflictingOrders === 0,
             'conflicts' => $conflictingOrders,
-            'message' => $conflictingOrders === 0 
-                ? 'Tanggal tersedia!' 
+            'message' => $conflictingOrders === 0
+                ? 'Tanggal tersedia!'
                 : "Paket sudah dipesan {$conflictingOrders} kali pada rentang tanggal ini",
         ]);
     }

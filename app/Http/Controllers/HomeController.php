@@ -12,6 +12,7 @@ class HomeController extends Controller
     public function index()
     {
         $packages = Package::where('status', 'active')->get();
+
         return view('home', ['packages' => $packages]);
     }
 }

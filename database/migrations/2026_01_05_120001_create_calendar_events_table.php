@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamp('confirmed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            
+
             // Indexes for faster queries
             $table->index(['package_id', 'event_date']);
             $table->index(['order_id']);

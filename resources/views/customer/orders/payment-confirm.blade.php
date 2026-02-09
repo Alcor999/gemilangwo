@@ -91,14 +91,14 @@
 
                     <!-- Order Summary -->
                     <div class="mb-4">
-                        <h6 class="mb-3" style="color: #666; font-weight: 600;">Order Summary</h6>
+                        <h6 class="mb-3" style="color: #666; font-weight: 600;">Ringkasan Pesanan</h6>
                         <div class="row">
                             <div class="col-6">
-                                <small class="text-muted">Order Number</small>
+                                <small class="text-muted">Nomor Pesanan</small>
                                 <div style="font-weight: 600;">{{ $order->order_number }}</div>
                             </div>
                             <div class="col-6">
-                                <small class="text-muted">Package</small>
+                                <small class="text-muted">Paket</small>
                                 <div style="font-weight: 600;">{{ $order->package->name }}</div>
                             </div>
                         </div>
@@ -121,7 +121,7 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="account-value" id="accountNumber">{{ $bank->account_number }}</div>
                                 <button type="button" class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyToClipboard()">
-                                    <i class="fas fa-copy me-1"></i>Copy
+                                    <i class="fas fa-copy me-1"></i>Salin
                                 </button>
                             </div>
                         </div>
@@ -146,7 +146,7 @@
                     @else
                         <div class="alert alert-warning">
                             <i class="fas fa-exclamation-triangle me-2"></i>
-                            Bank information not found. Please contact support.
+                            Informasi bank tidak ditemukan. Silakan hubungi dukungan.
                         </div>
                     @endif
 
@@ -169,14 +169,14 @@
                             </a>
                         @else
                             <button class="btn btn-whatsapp flex-grow-1" disabled>
-                                <i class="fab fa-whatsapp me-2"></i>WhatsApp Unavailable
+                                <i class="fab fa-whatsapp me-2"></i>WhatsApp Tidak Tersedia
                             </button>
                         @endif
                     </div>
 
                     <div class="mt-3">
                         <a href="{{ route('customer.orders.show', $order->id) }}" class="btn btn-outline-secondary w-100">
-                            <i class="fas fa-arrow-left me-2"></i>Kembali ke Order
+                            <i class="fas fa-arrow-left me-2"></i>Kembali ke Pesanan
                         </a>
                     </div>
                 </div>
@@ -188,12 +188,12 @@
                     <h6 class="mb-3"><i class="fas fa-hourglass-half me-2"></i>Status Pembayaran</h6>
                     <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded">
                         <div>
-                            <strong>Verification Status</strong><br>
-                            <small class="text-muted">Updated at {{ $payment->updated_at->format('d M Y H:i') }}</small>
+                            <strong>Status Verifikasi</strong><br>
+                            <small class="text-muted">Diperbarui pada {{ $payment->updated_at->format('d M Y H:i') }}</small>
                         </div>
                         <div>
                             <span class="status-badge status-pending">
-                                <i class="fas fa-clock me-1"></i>Pending
+                                <i class="fas fa-clock me-1"></i>Menunggu
                             </span>
                         </div>
                     </div>
@@ -207,7 +207,7 @@
     function copyToClipboard() {
         const accountNumber = document.getElementById('accountNumber').textContent;
         navigator.clipboard.writeText(accountNumber).then(() => {
-            alert('Nomor rekening berhasil dicopy!');
+            alert('Nomor rekening berhasil disalin!');
         });
     }
 </script>

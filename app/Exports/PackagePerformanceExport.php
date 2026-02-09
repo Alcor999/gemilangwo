@@ -21,9 +21,9 @@ class PackagePerformanceExport implements FromCollection, WithHeadings, WithStyl
         return $this->data->map(function ($item) {
             return [
                 'Package' => $item->name,
-                'Price' => 'Rp ' . number_format($item->price, 0, ',', '.'),
+                'Price' => 'Rp '.number_format($item->price, 0, ',', '.'),
                 'Bookings' => $item->total_bookings,
-                'Revenue' => 'Rp ' . number_format($item->total_revenue, 0, ',', '.'),
+                'Revenue' => 'Rp '.number_format($item->total_revenue, 0, ',', '.'),
             ];
         });
     }

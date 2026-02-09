@@ -12,7 +12,7 @@ class DiscountSeeder extends Seeder
     public function run(): void
     {
         $admin = User::where('role', 'admin')->first();
-        if (!$admin) {
+        if (! $admin) {
             $admin = User::first();
         }
 

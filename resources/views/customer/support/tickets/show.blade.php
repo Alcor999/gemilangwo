@@ -65,7 +65,7 @@
                     @endforeach
                 </div>
 
-                <!-- New Message Form -->
+                <!-- Form Pesan Baru -->
                 @if ($ticket->status !== 'closed')
                     <div class="card-footer bg-light">
                         <form id="messageForm" class="d-flex gap-2">
@@ -85,7 +85,7 @@
             </div>
         </div>
 
-        <!-- Sidebar: Ticket Details -->
+        <!-- Sidebar: Detail Tiket -->
         <div class="col-lg-4">
             <!-- Ticket Status Card -->
             <div class="card shadow mb-3">
@@ -205,7 +205,7 @@
     </div>
 </div>
 
-<!-- Scripts for real-time message polling -->
+<!-- Skrip untuk polling pesan real-time -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const chatContainer = document.getElementById('chatContainer');
@@ -216,25 +216,25 @@ document.addEventListener('DOMContentLoaded', function () {
     let isUserTyping = false;
     let pollInterval = null;
 
-    // Track if user is typing
+    // Lacak apakah pengguna sedang mengetik
     messageInput.addEventListener('focus', function () {
         isUserTyping = true;
-        // Stop polling while typing
+        // Hentikan polling saat sedang mengetik
         if (pollInterval) clearInterval(pollInterval);
     });
 
     messageInput.addEventListener('blur', function () {
         isUserTyping = false;
-        // Resume polling after 1 second
+        // Lanjutkan polling setelah 1 detik
         setTimeout(startPolling, 1000);
     });
 
-    // Scroll to bottom
+    // Gulir ke bawah
     function scrollToBottom() {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    // Submit message
+    // Kirim pesan
     messageForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 
@@ -257,36 +257,36 @@ document.addEventListener('DOMContentLoaded', function () {
                 loadNewMessages();
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Kesalahan:', error);
             alert('Gagal mengirim pesan');
         }
     });
 
-    // Poll for new messages without page reload
+    // Polling pesan baru tanpa memuat ulang halaman
     async function loadNewMessages() {
         try {
             const response = await fetch('{{ route("customer.support.tickets.getNewMessages", $ticket->id) }}?last_message_id=' + lastMessageId);
             const data = await response.json();
 
             if (data.messages && data.messages.length > 0) {
-                // Add new messages to chat
+                // Tambahkan pesan baru ke chat
                 data.messages.forEach(message => {
                     const messageDiv = createMessageElement(message);
                     chatContainer.appendChild(messageDiv);
                     lastMessageId = message.id;
-                    // Update data attribute to prevent duplicates on reload
+                    // Perbarui data attribute untuk mencegah duplikasi saat reload
                     chatContainer.dataset.lastMessageId = lastMessageId;
                 });
                 
-                // Scroll to bottom
+                // Gulir ke bawah
                 setTimeout(scrollToBottom, 100);
             }
         } catch (error) {
-            console.error('Error loading messages:', error);
+            console.error('Gagal memuat pesan baru:', error);
         }
     }
 
-    // Create message DOM element
+    // Buat elemen DOM untuk pesan
     function createMessageElement(message) {
         const div = document.createElement('div');
         div.className = 'mb-3';

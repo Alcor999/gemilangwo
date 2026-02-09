@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Pending Payments')
+@section('title', 'Pembayaran Menunggu Verifikasi')
 
 @section('content')
 <div class="container-fluid mt-4">
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4><i class="fas fa-hourglass-half me-2"></i>Pending Payments</h4>
+                <h4><i class="fas fa-hourglass-half me-2"></i>Pembayaran Menunggu Verifikasi</h4>
                 <div>
                     <a href="{{ route('admin.payments.verified') }}" class="btn btn-sm btn-outline-success">
-                        <i class="fas fa-check me-1"></i>Verified ({{ \App\Models\Payment::where('verification_status', 'verified')->count() }})
+                        <i class="fas fa-check me-1"></i>Terverifikasi ({{ \App\Models\Payment::where('verification_status', 'verified')->count() }})
                     </a>
                 </div>
             </div>
@@ -25,7 +25,7 @@
             @if ($payments->isEmpty())
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle me-2"></i>
-                    No pending payments at the moment.
+                    Tidak ada pembayaran yang menunggu verifikasi saat ini.
                 </div>
             @else
                 <div class="card" style="box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
@@ -33,13 +33,13 @@
                         <table class="table table-hover mb-0">
                             <thead style="background-color: #f8f9fa;">
                                 <tr>
-                                    <th>Order Number</th>
-                                    <th>Customer</th>
-                                    <th>Amount</th>
+                                    <th>Nomor Pesanan</th>
+                                    <th>Pelanggan</th>
+                                    <th>Jumlah</th>
                                     <th>Bank</th>
                                     <th>Status</th>
-                                    <th>Created</th>
-                                    <th>Action</th>
+                                    <th>Dibuat</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,7 +61,7 @@
                                         </td>
                                         <td>
                                             <span class="badge bg-warning text-dark">
-                                                <i class="fas fa-clock me-1"></i>Pending
+                                                <i class="fas fa-clock me-1"></i>Menunggu
                                             </span>
                                         </td>
                                         <td>
@@ -69,7 +69,7 @@
                                         </td>
                                         <td>
                                             <a href="{{ route('admin.payments.verify', $payment->id) }}" class="btn btn-sm btn-primary">
-                                                <i class="fas fa-eye me-1"></i>Verify
+                                                <i class="fas fa-eye me-1"></i>Verifikasi
                                             </a>
                                         </td>
                                     </tr>

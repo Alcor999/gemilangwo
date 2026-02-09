@@ -16,11 +16,11 @@ class TestimonialController extends Controller
         $pendingTestimonials = VideoTestimonial::where('is_active', false)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
-        
+
         $publishedTestimonials = VideoTestimonial::where('is_active', true)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
-        
+
         return view('admin.testimonials.index', [
             'pendingTestimonials' => $pendingTestimonials,
             'publishedTestimonials' => $publishedTestimonials,
@@ -45,7 +45,7 @@ class TestimonialController extends Controller
         if ($request->expectsJson()) {
             // AJAX request
             $testimonial->update(['is_active' => true]);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Testimonial approved successfully',
@@ -54,7 +54,7 @@ class TestimonialController extends Controller
 
         // Form submission
         $testimonial->update(['is_active' => true]);
-        
+
         return redirect()->route('admin.testimonials.index')
             ->with('success', 'Testimonial approved successfully');
     }

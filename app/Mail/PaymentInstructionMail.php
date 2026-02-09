@@ -2,9 +2,9 @@
 
 namespace App\Mail;
 
+use App\Models\Bank;
 use App\Models\Order;
 use App\Models\Payment;
-use App\Models\Bank;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -25,7 +25,7 @@ class PaymentInstructionMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Instruksi Pembayaran - ' . $this->order->order_number,
+            subject: 'Instruksi Pembayaran - '.$this->order->order_number,
         );
     }
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Blokir Tanggal - ' . $blockedDate->package->name)
+@section('title', 'Ubah Blokir Tanggal - ' . $blockedDate->package->name)
 
 @section('content')
 <div class="container-fluid">
@@ -11,7 +11,7 @@
                 <i class="fas fa-arrow-left"></i> Kembali ke Kalender
             </a>
             <h1 style="font-size: 2rem; font-weight: 700; color: #1e293b; margin: 0 0 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-edit" style="color: #3b82f6;"></i> Edit Blokir Tanggal
+                <i class="fas fa-edit" style="color: #3b82f6;"></i> Ubah Blokir Tanggal
             </h1>
             <p style="color: #64748b; margin: 0; font-size: 0.95rem;">{{ $blockedDate->package->name }}</p>
         </div>

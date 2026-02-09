@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Order;
+use App\Models\Package;
 use App\Models\Review;
 use App\Models\User;
-use App\Models\Package;
-use App\Models\Order;
 use Illuminate\Database\Seeder;
 
 class ReviewSeeder extends Seeder
@@ -21,6 +21,7 @@ class ReviewSeeder extends Seeder
 
         if ($users->isEmpty() || $packages->isEmpty()) {
             $this->command->info('Skipping ReviewSeeder: Not enough users or packages in database.');
+
             return;
         }
 
@@ -91,8 +92,9 @@ class ReviewSeeder extends Seeder
                 ->first();
 
             // Skip if no completed order exists for this user
-            if (!$order) {
+            if (! $order) {
                 $userIndex++;
+
                 continue;
             }
 
@@ -100,7 +102,7 @@ class ReviewSeeder extends Seeder
             $order->update(['package_id' => $package->id]);
 
             // Check if review already exists
-            if (!Review::where('order_id', $order->id)->exists()) {
+            if (! Review::where('order_id', $order->id)->exists()) {
                 Review::create(array_merge($reviewData, [
                     'user_id' => $user->id,
                     'package_id' => $package->id,

@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Carbon\Carbon;
 
 class BlockedDate extends Model
 {
@@ -93,7 +92,7 @@ class BlockedDate extends Model
      */
     public function getColorClass()
     {
-        return match($this->block_type) {
+        return match ($this->block_type) {
             'unavailable' => 'bg-red-200 border-red-500',
             'maintenance' => 'bg-orange-200 border-orange-500',
             'reserved' => 'bg-yellow-200 border-yellow-500',
@@ -107,7 +106,7 @@ class BlockedDate extends Model
      */
     public function getTypeLabel()
     {
-        return match($this->block_type) {
+        return match ($this->block_type) {
             'unavailable' => 'Tidak Tersedia',
             'maintenance' => 'Maintenance',
             'reserved' => 'Dipesan',

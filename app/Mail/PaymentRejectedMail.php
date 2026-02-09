@@ -22,7 +22,7 @@ class PaymentRejectedMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Pembayaran Ditolak - ' . $this->order->order_number,
+            subject: 'Pembayaran Ditolak - '.$this->order->order_number,
         );
     }
 
@@ -32,7 +32,7 @@ class PaymentRejectedMail extends Mailable implements ShouldQueue
             view: 'emails.payment-rejected',
             with: [
                 'order' => $this->order,
-                'reason' => $this->reason
+                'reason' => $this->reason,
             ]
         );
     }

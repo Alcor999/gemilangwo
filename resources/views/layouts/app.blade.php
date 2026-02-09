@@ -499,7 +499,7 @@
                         <!-- Divider -->
                         <hr style="margin: 0.5rem 0; border-color: #e9ecef;">
                         
-                        <!-- Calendar Management -->
+                        <!-- Kelola Kalender -->
                         <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'owner.calendar') !== false ? 'active' : '' }}" href="{{ route('owner.calendar.index') }}">
                             <i class="fas fa-calendar-alt"></i> Kalender & Pemesanan
                         </a>
@@ -518,12 +518,12 @@
                         <!-- Divider -->
                         <hr style="margin: 0.5rem 0; border-color: #e9ecef;">
 
-                        <!-- Customer Features -->
+                        <!-- Fitur Pelanggan -->
                         <a class="nav-link {{ Route::currentRouteName() == 'customer.profile.show' ? 'active' : '' }}" href="{{ route('customer.profile.show') }}">
                             <i class="fas fa-user-circle"></i> Profil Saya
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'customer.wishlist.index' ? 'active' : '' }}" href="{{ route('customer.wishlist.index') }}">
-                            <i class="fas fa-heart"></i> Wishlist
+                            <i class="fas fa-heart"></i> Daftar Keinginan Saya
                         </a>
                         <a class="nav-link {{ Route::currentRouteName() == 'customer.reviews.index' ? 'active' : '' }}" href="{{ route('customer.reviews.index') }}">
                             <i class="fas fa-star"></i> Ulasan Saya
@@ -535,12 +535,12 @@
                         <!-- Divider -->
                         <hr style="margin: 0.5rem 0; border-color: #e9ecef;">
                         
-                        <!-- Calendar & Events -->
+                        <!-- Kalender & Acara -->
                         <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'customer.calendar') !== false ? 'active' : '' }}" href="{{ route('customer.calendar.confirmation') }}">
                             <i class="fas fa-calendar-check"></i> Acara Saya
                         </a>
                         
-                        <!-- Support & Communication -->
+                        <!-- Dukungan & Komunikasi -->
                         <a class="nav-link {{ strpos(Route::currentRouteName() ?? '', 'customer.support.tickets') !== false ? 'active' : '' }}" href="{{ route('customer.support.tickets.index') }}">
                             <i class="fas fa-headset"></i> Tiket Dukungan
                         </a>
@@ -586,13 +586,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/app-ui.js') }}"></script>
     <script>
-        // Sidebar toggle for mobile
+        // Toggle sidebar untuk mobile
         document.getElementById('sidebarToggle')?.addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
             sidebar?.classList.toggle('show');
         });
 
-        // Close sidebar when a link is clicked on mobile
+        // Tutup sidebar saat link diklik di mobile
         if (window.innerWidth <= 768) {
             document.querySelectorAll('.sidebar .nav-link').forEach(link => {
                 link.addEventListener('click', function() {

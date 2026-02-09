@@ -3,13 +3,13 @@
 @section('title', 'Kelola Kalender - ' . $selectedPackage->name)
 
 @section('content')
-<!-- Header Section -->
+<!-- Bagian Header -->
 <div style="background: #f8fafc; padding: 1.5rem 0; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0;">
     <h1 style="font-size: 2rem; font-weight: 700; color: #1e293b; margin: 0 0 0.5rem;">📅 Kelola Kalender</h1>
     <p style="color: #64748b; margin: 0; font-size: 0.95rem;">Atur tanggal terblokir dan lihat heatmap ketersediaan paket Anda</p>
 </div>
 
-<!-- Package Info Card -->
+<!-- Kartu Info Paket -->
 <div style="background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0; margin-bottom: 1.5rem; padding: 1.5rem;">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
         <div>
@@ -31,7 +31,7 @@
     </div>
 </div>
 
-<!-- Action Buttons -->
+<!-- Tombol Aksi -->
 <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
     <a href="{{ route('owner.calendar.blocked.create', ['package_id' => $selectedPackage->id]) }}" 
        style="display: inline-flex; align-items: center; padding: 0.75rem 1.5rem; background: #ef4444; color: white; border-radius: 0.375rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; border: none; cursor: pointer; transition: background 0.2s;">
@@ -40,7 +40,7 @@
     
     <div style="position: relative; display: inline-block;" id="exportContainer">
         <button type="button" id="exportBtn" onclick="toggleExportMenu()" style="display: inline-flex; align-items: center; padding: 0.75rem 1.5rem; background: #10b981; color: white; border-radius: 0.375rem; border: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: background 0.2s;">
-            📥 Export
+            📥 Ekspor
         </button>
         <div id="exportMenu" style="display: none; position: absolute; top: calc(100% + 0.5rem); left: 0; background: white; border: 1px solid #e2e8f0; border-radius: 0.375rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 220px; z-index: 100;">
             <a href="{{ route('owner.calendar.export', ['package' => $selectedPackage->id, 'type' => 'all']) }}" download style="display: block; padding: 0.75rem 1rem; color: #374151; text-decoration: none; border-bottom: 1px solid #f3f4f6; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">📊 Semua Data</a>
@@ -50,11 +50,11 @@
     </div>
 </div>
 
-<!-- Main Grid -->
+<!-- Grid Utama -->
 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
-    <!-- Calendar Panel -->
+    <!-- Panel Kalender -->
     <div style="background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0; overflow: hidden;">
-        <!-- Month Navigation -->
+        <!-- Navigasi Bulan -->
         <div style="padding: 1.5rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc; display: flex; justify-content: space-between; align-items: center;">
             <h2 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin: 0;">
                 📆 {{ now()->createFromDate($year, $month, 1)->locale('id_ID')->format('F Y') }}
@@ -75,16 +75,16 @@
             </div>
         </div>
 
-        <!-- Calendar Grid -->
+        <!-- Grid Kalender -->
         <div style="padding: 1.5rem;">
-            <!-- Day Headers -->
+            <!-- Header Hari -->
             <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; margin-bottom: 1rem;">
                 @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as $day)
                     <div style="text-align: center; font-weight: 600; color: #64748b; padding: 0.75rem 0; font-size: 0.875rem;">{{ $day }}</div>
                 @endforeach
             </div>
 
-            <!-- Calendar Days -->
+            <!-- Hari Kalender -->
             <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; margin-bottom: 1.5rem;">
                 @php
                     $firstDay = $startOfMonth->copy()->startOfWeek();
@@ -120,7 +120,7 @@
                 @endwhile
             </div>
 
-            <!-- Legend -->
+            <!-- Legenda -->
             <div style="padding-top: 1rem; border-top: 1px solid #e2e8f0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                     <div style="width: 1rem; height: 1rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.25rem;"></div>
@@ -140,7 +140,7 @@
 
     <!-- Sidebar -->
     <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-        <!-- Stats Card -->
+        <!-- Kartu Statistik -->
         <div style="background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%); border-radius: 0.5rem; color: white; padding: 1.5rem;">
             <h3 style="font-size: 0.875rem; font-weight: 600; opacity: 0.95; margin: 0 0 1rem; text-transform: uppercase; letter-spacing: 0.05em;">📊 Statistik</h3>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -155,7 +155,7 @@
             </div>
         </div>
 
-        <!-- Blocked Dates -->
+        <!-- Tanggal Terblokir -->
         <div style="background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0; overflow: hidden; display: flex; flex-direction: column;">
             <div style="padding: 1rem 1.25rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
                 <h3 style="font-size: 0.875rem; font-weight: 700; color: #1e293b; margin: 0; margin-bottom: 0.25rem;">🚫 Tanggal Terblokir</h3>
@@ -172,7 +172,7 @@
                                     <p style="font-size: 0.75rem; color: #475569; margin: 0.5rem 0 0;">{{ $blocked->reason }}</p>
                                 @endif
                                 <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                                    <a href="{{ route('owner.calendar.blocked.edit', $blocked) }}" style="color: #6366f1; text-decoration: none; font-size: 0.75rem; font-weight: 600;">✏️ Edit</a>
+                                    <a href="{{ route('owner.calendar.blocked.edit', $blocked) }}" style="color: #6366f1; text-decoration: none; font-size: 0.75rem; font-weight: 600;">✏️ Ubah</a>
                                     <form action="{{ route('owner.calendar.blocked.destroy', $blocked) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
@@ -192,7 +192,7 @@
             </div>
         </div>
 
-        <!-- Upcoming Events -->
+        <!-- Acara Mendatang -->
         <div style="background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0; overflow: hidden; display: flex; flex-direction: column;">
             <div style="padding: 1rem 1.25rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
                 <h3 style="font-size: 0.875rem; font-weight: 700; color: #1e293b; margin: 0; margin-bottom: 0.25rem;">📅 Acara Bulan Ini</h3>
@@ -225,53 +225,53 @@
         const btn = document.getElementById('exportBtn');
         
         if (!menu || !btn) {
-            console.error('Export menu or button elements not found');
+            console.error('Menu atau tombol ekspor tidak ditemukan');
             return;
         }
         
         const isVisible = menu.style.display !== 'none';
         menu.style.display = isVisible ? 'none' : 'block';
         btn.style.background = isVisible ? '#10b981' : '#059669';
-        console.log('Export menu toggled:', !isVisible);
+        console.log('Menu ekspor diubah:', !isVisible);
     }
     
-    // Initialize export menu listeners when DOM is ready
+    // Inisialisasi event menu ekspor saat DOM siap
     document.addEventListener('DOMContentLoaded', function() {
         const menu = document.getElementById('exportMenu');
         const container = document.getElementById('exportContainer');
         const btn = document.getElementById('exportBtn');
         
-        console.log('Initializing export menu. Menu:', !!menu, 'Container:', !!container, 'Button:', !!btn);
+        console.log('Inisialisasi menu ekspor. Menu:', !!menu, 'Container:', !!container, 'Tombol:', !!btn);
         
         if (!menu || !container || !btn) {
-            console.error('Export menu elements not found in DOM');
+            console.error('Elemen menu ekspor tidak ditemukan di DOM');
             return;
         }
         
-        // Close menu when clicking outside
+        // Tutup menu saat klik di luar
         document.addEventListener('click', function(event) {
             if (container && !container.contains(event.target)) {
                 menu.style.display = 'none';
                 btn.style.background = '#10b981';
-                console.log('Closed export menu (clicked outside)');
+                console.log('Menu ekspor ditutup (klik di luar)');
             }
         });
         
-        // Prevent menu from closing when clicking menu items or button
+        // Cegah menu tertutup saat klik item menu atau tombol
         menu.addEventListener('click', function(e) {
             e.stopPropagation();
-            console.log('Export menu item clicked:', e.target.href || e.target.textContent);
+            console.log('Item menu ekspor diklik:', e.target.href || e.target.textContent);
         });
         
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
         });
         
-        // Add download tracking
+        // Pelacakan unduhan
         const exportLinks = menu.querySelectorAll('a');
         exportLinks.forEach((link, index) => {
             link.addEventListener('click', function(e) {
-                console.log('Export link clicked:', this.textContent.trim(), 'URL:', this.href);
+                console.log('Tautan ekspor diklik:', this.textContent.trim(), 'URL:', this.href);
             });
         });
     });

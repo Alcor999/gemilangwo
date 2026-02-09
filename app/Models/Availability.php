@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Availability extends Model
 {
@@ -38,14 +38,14 @@ class Availability extends Model
     public function scopeAvailable($query)
     {
         return $query->where('is_available', true)
-                     ->where('available_from', '<=', now())
-                     ->where('available_to', '>=', now());
+            ->where('available_from', '<=', now())
+            ->where('available_to', '>=', now());
     }
 
     public function scopeUpcoming($query)
     {
         return $query->where('available_from', '>', now())
-                     ->where('is_available', true);
+            ->where('is_available', true);
     }
 
     /**
@@ -54,6 +54,7 @@ class Availability extends Model
     public function isAvailableOn($date)
     {
         $checkDate = Carbon::parse($date)->toDateString();
+
         return $this->is_available &&
                $this->available_from <= $checkDate &&
                $this->available_to >= $checkDate;

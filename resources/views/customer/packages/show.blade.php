@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Package Details')
+@section('title', 'Detail Paket')
 
 @section('content')
 <div class="container-fluid">
@@ -18,11 +18,11 @@
                     <h1 class="card-title">{{ $package->name }}</h1>
                     <h2 class="text-primary mb-3">Rp {{ number_format($package->price, 0, ',', '.') }}</h2>
                     
-                    <h5 class="mt-4 mb-3">Package Description</h5>
+                    <h5 class="mt-4 mb-3">Deskripsi Paket</h5>
                     <p class="card-text">{{ $package->description }}</p>
 
                     @if($package->features)
-                        <h5 class="mt-4 mb-3">Included Features</h5>
+                        <h5 class="mt-4 mb-3">Fitur yang Termasuk</h5>
                         <ul class="list-group list-group-flush mb-4">
                             @foreach(is_array($package->features) ? $package->features : json_decode($package->features, true) ?? [] as $feature)
                                 <li class="list-group-item">
@@ -35,7 +35,7 @@
                     @if($package->max_guests)
                         <p class="text-muted">
                             <i class="fas fa-users me-2"></i>
-                            Maximum {{ $package->max_guests }} guests
+                            Maksimal {{ $package->max_guests }} tamu
                         </p>
                     @endif
                 </div>
@@ -45,24 +45,24 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Ready to Book?</h5>
+                    <h5 class="card-title">Siap Pesan?</h5>
                     <a href="{{ route('customer.orders.create') }}" class="btn btn-primary w-100 mb-2" data-package="{{ $package->id }}">
-                        <i class="fas fa-calendar"></i> Book This Package
+                        <i class="fas fa-calendar"></i> Pesan Paket Ini
                     </a>
                     <a href="{{ route('customer.packages.index') }}" class="btn btn-secondary w-100">
-                        <i class="fas fa-arrow-left"></i> Back to Packages
+                        <i class="fas fa-arrow-left"></i> Kembali ke Daftar Paket
                     </a>
                 </div>
             </div>
 
             <div class="card mt-4">
                 <div class="card-body">
-                    <h6 class="mb-3">Why Choose Us?</h6>
+                    <h6 class="mb-3">Mengapa Memilih Kami?</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-star text-warning me-2"></i>Professional Service</li>
-                        <li class="mb-2"><i class="fas fa-star text-warning me-2"></i>Attention to Detail</li>
-                        <li class="mb-2"><i class="fas fa-star text-warning me-2"></i>24/7 Support</li>
-                        <li><i class="fas fa-star text-warning me-2"></i>Proven Experience</li>
+                        <li class="mb-2"><i class="fas fa-star text-warning me-2"></i>Layanan Profesional</li>
+                        <li class="mb-2"><i class="fas fa-star text-warning me-2"></i>Perhatian pada Detail</li>
+                        <li class="mb-2"><i class="fas fa-star text-warning me-2"></i>Dukungan 24/7</li>
+                        <li><i class="fas fa-star text-warning me-2"></i>Pengalaman Terbukti</li>
                     </ul>
                 </div>
             </div>

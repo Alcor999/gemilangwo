@@ -416,7 +416,7 @@
                 <a href="{{ route('login') }}">Masuk di sini</a>
             </p>
 
-            <!-- Back to Home -->
+            <!-- Kembali ke Beranda -->
             <a href="{{ route('home') }}" class="login-back-link">
                 <i class="fas fa-arrow-left me-2"></i>Kembali ke Beranda
             </a>

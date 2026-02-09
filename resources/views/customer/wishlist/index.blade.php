@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-5">
     <h2 class="h3 fw-bold mb-4">
-        <i class="fas fa-heart text-danger"></i> Wishlist Saya
+        <i class="fas fa-heart text-danger"></i> Daftar Keinginan Saya
     </h2>
 
     @if($wishlists->count() > 0)
@@ -24,8 +24,8 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="button" class="btn btn-danger btn-sm"
-                                    data-confirm="Hapus &quot;{{ $wishlist->package->name }}&quot; dari wishlist?"
-                                    data-confirm-title="Hapus dari Wishlist"
+                                    data-confirm="Hapus &quot;{{ $wishlist->package->name }}&quot; dari daftar keinginan?"
+                                    data-confirm-title="Hapus dari Daftar Keinginan"
                                     data-confirm-btn="Ya, Hapus"
                                     data-confirm-danger="1">
                                     <i class="fas fa-trash"></i>
@@ -70,7 +70,7 @@
             @endforeach
         </div>
 
-        <!-- Pagination -->
+        <!-- Paginasi -->
         @if($wishlists->hasPages())
             <div class="mt-5">
                 {{ $wishlists->links() }}
@@ -79,8 +79,8 @@
     @else
         <div class="alert alert-info text-center py-5">
             <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
-            <h5>Wishlist Anda Masih Kosong</h5>
-            <p class="text-muted mb-3">Tambahkan paket favorit ke wishlist untuk menyimpannya.</p>
+            <h5>Daftar Keinginan Anda Masih Kosong</h5>
+            <p class="text-muted mb-3">Tambahkan paket favorit ke daftar keinginan untuk menyimpannya.</p>
             <a href="{{ route('customer.packages.index') }}" class="btn btn-primary">
                 <i class="fas fa-search"></i> Jelajahi Paket
             </a>

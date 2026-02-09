@@ -2,34 +2,41 @@
 
 @section('content')
 <div class="container mt-4">
-    <h1 class="h3 mb-4">Payment Reports</h1>
+    @php
+        $statusLabels = [
+            'success' => 'Berhasil',
+            'pending' => 'Menunggu',
+            'failed' => 'Gagal',
+        ];
+    @endphp
+    <h1 class="h3 mb-4">Laporan Pembayaran</h1>
 
     <div class="row mb-4">
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h5 class="mb-0">Payment Methods</h5>
+                    <h5 class="mb-0">Metode Pembayaran</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-sm">
                             <thead>
                                 <tr>
-                                    <th>Payment Method</th>
-                                    <th>Count</th>
+                                    <th>Metode Pembayaran</th>
+                                    <th>Jumlah</th>
                                     <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($payment_methods as $method)
                                     <tr>
-                                        <td>{{ $method->payment_method ? ucfirst(str_replace('_', ' ', $method->payment_method)) : 'Unpaid' }}</td>
+                                        <td>{{ $method->payment_method ? ucfirst(str_replace('_', ' ', $method->payment_method)) : 'Belum Dibayar' }}</td>
                                         <td><span class="badge bg-primary">{{ $method->count }}</span></td>
                                         <td>Rp{{ number_format($method->total, 0, ',', '.') }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="text-center text-muted">No data</td>
+                                        <td colspan="3" class="text-center text-muted">Tidak ada data</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -42,7 +49,7 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h5 class="mb-0">Payment Status</h5>
+                    <h5 class="mb-0">Status Pembayaran</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -50,7 +57,7 @@
                             <thead>
                                 <tr>
                                     <th>Status</th>
-                                    <th>Count</th>
+                                    <th>Jumlah</th>
                                     <th>Total</th>
                                 </tr>
                             </thead>
@@ -59,7 +66,7 @@
                                     <tr>
                                         <td>
                                             <span class="badge bg-{{ $status->status === 'success' ? 'success' : ($status->status === 'pending' ? 'warning' : 'danger') }}">
-                                                {{ ucfirst($status->status) }}
+                                                {{ $statusLabels[$status->status] ?? ucfirst($status->status) }}
                                             </span>
                                         </td>
                                         <td>{{ $status->count }}</td>
@@ -67,7 +74,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="text-center text-muted">No data</td>
+                                        <td colspan="3" class="text-center text-muted">Tidak ada data</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -80,18 +87,18 @@
 
     <div class="card shadow-sm">
         <div class="card-header">
-            <h5 class="mb-0">Recent Payment Transactions</h5>
+            <h5 class="mb-0">Transaksi Pembayaran Terbaru</h5>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead class="table-light">
                         <tr>
-                            <th>Order Number</th>
-                            <th>Amount</th>
-                            <th>Method</th>
+                            <th>Nomor Pesanan</th>
+                            <th>Jumlah</th>
+                            <th>Metode</th>
                             <th>Status</th>
-                            <th>Date</th>
+                            <th>Tanggal</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -106,18 +113,18 @@
                                 </td>
                                 <td>
                                     @if($payment->status === 'success')
-                                        <span class="badge bg-success">Success</span>
+                                        <span class="badge bg-success">Berhasil</span>
                                     @elseif($payment->status === 'pending')
-                                        <span class="badge bg-warning">Pending</span>
+                                        <span class="badge bg-warning">Menunggu</span>
                                     @else
-                                        <span class="badge bg-danger">Failed</span>
+                                        <span class="badge bg-danger">Gagal</span>
                                     @endif
                                 </td>
                                 <td>{{ isset($payment->created_at) ? \Carbon\Carbon::parse($payment->created_at)->format('d M Y H:i') : '-' }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center py-4 text-muted">No payments found</td>
+                                <td colspan="5" class="text-center py-4 text-muted">Tidak ada pembayaran</td>
                             </tr>
                         @endforelse
                     </tbody>

@@ -14,7 +14,7 @@ class PackageSeeder extends Seeder
     {
         // Get or create an owner user
         $owner = \App\Models\User::where('role', 'owner')->first();
-        if (!$owner) {
+        if (! $owner) {
             $owner = \App\Models\User::create([
                 'name' => 'Wedding Owner',
                 'email' => 'owner@wedding.test',
@@ -42,7 +42,7 @@ class PackageSeeder extends Seeder
                 'Transportasi Pengantin',
                 'Hair & Make Up untuk Pengantin',
                 'Honeymoon Planning',
-                'Post Wedding Photoshoot'
+                'Post Wedding Photoshoot',
             ]),
             'image' => null,
             'status' => 'active',
@@ -64,7 +64,7 @@ class PackageSeeder extends Seeder
                 'Sound System',
                 'Transportasi Pengantin',
                 'Hair & Make Up',
-                'Dokumentasi Digital'
+                'Dokumentasi Digital',
             ]),
             'image' => null,
             'status' => 'active',
@@ -84,7 +84,7 @@ class PackageSeeder extends Seeder
                 'Fotografi',
                 'Master of Ceremony',
                 'Sound System',
-                'Dokumentasi Foto Digital'
+                'Dokumentasi Foto Digital',
             ]),
             'image' => null,
             'status' => 'active',
@@ -109,7 +109,7 @@ class PackageSeeder extends Seeder
                 'Honeymoon Planning',
                 'Post Wedding + Pre Wedding Photoshoot',
                 'Event Coordinator 24/7',
-                'Guest Experience Manager'
+                'Guest Experience Manager',
             ]),
             'image' => null,
             'status' => 'active',
@@ -128,7 +128,7 @@ class PackageSeeder extends Seeder
                 'DJ Entertainment',
                 'Fotografi Dasar',
                 'Sound System',
-                'Master of Ceremony'
+                'Master of Ceremony',
             ]),
             'image' => null,
             'status' => 'active',
@@ -152,7 +152,7 @@ class PackageSeeder extends Seeder
                 'Hair & Make Up + Stylist',
                 'Honeymoon Arrangement',
                 'Post Wedding Photoshoot',
-                'Event Coordinator'
+                'Event Coordinator',
             ]),
             'image' => null,
             'status' => 'active',

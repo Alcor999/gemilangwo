@@ -462,7 +462,7 @@
                         <span class="info-value">owner@gemilangwo.test</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">Customer:</span>
+                        <span class="info-label">Pelanggan:</span>
                         <span class="info-value">budi@gemilangwo.test</span>
                     </div>
                     <div class="info-item" style="border-top: 1px solid #e5e7eb; margin-top: 0.75rem; padding-top: 0.75rem;">
@@ -472,7 +472,7 @@
                 </div>
             </div>
 
-            <!-- Back to Home -->
+            <!-- Kembali ke Beranda -->
             <a href="{{ route('home') }}" class="login-back-link">
                 <i class="fas fa-arrow-left me-2"></i>Kembali ke Beranda
             </a>

@@ -104,8 +104,8 @@
                     </table>
                 </div>
 
-                <!-- Pagination -->
-                <nav aria-label="Page navigation">
+                <!-- Paginasi -->
+                <nav aria-label="Navigasi halaman">
                     {{ $tickets->links() }}
                 </nav>
             @endif

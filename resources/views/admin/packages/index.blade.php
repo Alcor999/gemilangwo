@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Manage Packages')
+@section('title', 'Kelola Paket')
 
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Manage Packages</h1>
+        <h1>Kelola Paket</h1>
         <a href="{{ route('admin.packages.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Create New Package
+            <i class="fas fa-plus"></i> Buat Paket Baru
         </a>
     </div>
 
@@ -16,12 +16,12 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Package Name</th>
-                        <th>Price</th>
-                        <th>Max Guests</th>
+                        <th>Nama Paket</th>
+                        <th>Harga</th>
+                        <th>Maks. Tamu</th>
                         <th>Status</th>
-                        <th>Created</th>
-                        <th>Actions</th>
+                        <th>Dibuat</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,12 +36,12 @@
                             <td>{{ $package->max_guests ?? '-' }}</td>
                             <td>
                                 <span class="badge {{ $package->status === 'active' ? 'bg-success' : 'bg-secondary' }}">
-                                    {{ ucfirst($package->status) }}
+                                    {{ $package->status === 'active' ? 'Aktif' : 'Nonaktif' }}
                                 </span>
                             </td>
                             <td>{{ $package->created_at->format('d M Y') }}</td>
                             <td>
-                                <a href="{{ route('admin.packages.edit', $package->id) }}" class="btn btn-sm btn-warning" title="Edit">
+                                <a href="{{ route('admin.packages.edit', $package->id) }}" class="btn btn-sm btn-warning" title="Ubah">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <form action="{{ route('admin.packages.destroy', $package->id) }}" method="POST" class="d-inline">
@@ -63,7 +63,7 @@
         </div>
     @else
         <div class="alert alert-info">
-            No packages yet. <a href="{{ route('admin.packages.create') }}">Create the first package</a>
+            Belum ada paket. <a href="{{ route('admin.packages.create') }}">Buat paket pertama</a>
         </div>
     @endif
 </div>

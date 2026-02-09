@@ -50,16 +50,17 @@ class Package extends Model
             ->where('start_date', '<=', now())
             ->where(function ($query) {
                 $query->whereNull('end_date')
-                      ->orWhere('end_date', '>=', now());
+                    ->orWhere('end_date', '>=', now());
             });
     }
 
     public function getDiscountedPrice()
     {
         $discount = $this->activeDiscounts()->first();
-        if (!$discount) {
+        if (! $discount) {
             return $this->price;
         }
+
         return $discount->getDiscountedPrice($this->price);
     }
 
@@ -89,6 +90,7 @@ class Package extends Model
         for ($i = 5; $i >= 1; $i--) {
             $distribution[$i] = $this->approvedReviews()->where('rating', $i)->count();
         }
+
         return $distribution;
     }
 
@@ -179,4 +181,3 @@ class Package extends Model
         return $this->calendarEvents()->where('is_confirmed', true);
     }
 }
-

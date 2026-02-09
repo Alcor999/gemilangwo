@@ -50,9 +50,12 @@ class VideoTestimonial extends Model
      */
     public function getYoutubeId()
     {
-        if (!$this->youtube_url) return null;
-        
+        if (! $this->youtube_url) {
+            return null;
+        }
+
         preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/', $this->youtube_url, $matches);
+
         return $matches[1] ?? null;
     }
 
@@ -63,8 +66,10 @@ class VideoTestimonial extends Model
     {
         if ($this->type === 'youtube') {
             $id = $this->getYoutubeId();
+
             return $id ? "https://www.youtube.com/embed/{$id}" : null;
         }
+
         return null;
     }
 

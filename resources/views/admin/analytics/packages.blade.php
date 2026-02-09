@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Package Performance - Admin Analytics')
+@section('title', 'Performa Paket - Analitik Admin')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -8,27 +8,27 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <h1 class="h3 mb-0">
-                <i class="fas fa-box"></i> Package Performance Analysis
+                <i class="fas fa-box"></i> Analisis Performa Paket
             </h1>
-            <p class="text-muted">Track which packages are performing best</p>
+            <p class="text-muted">Pantau paket mana yang performanya paling baik</p>
         </div>
     </div>
 
-    <!-- Filters -->
+    <!-- Penyaringan -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <form method="GET" action="{{ route('admin.analytics.packages') }}" class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label">Period</label>
+                            <label class="form-label">Periode</label>
                             <select name="period" class="form-select" onchange="this.form.submit()">
-                                <option value="month" {{ $period === 'month' ? 'selected' : '' }}>Monthly</option>
-                                <option value="yearly" {{ $period === 'yearly' ? 'selected' : '' }}>Yearly</option>
+                                <option value="month" {{ $period === 'month' ? 'selected' : '' }}>Bulanan</option>
+                                <option value="yearly" {{ $period === 'yearly' ? 'selected' : '' }}>Tahunan</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label">Year</label>
+                            <label class="form-label">Tahun</label>
                             <select name="year" class="form-select" onchange="this.form.submit()">
                                 @for($y = now()->year - 5; $y <= now()->year; $y++)
                                     <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
@@ -41,12 +41,12 @@
         </div>
     </div>
 
-    <!-- Chart -->
+    <!-- Grafik -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-chart-bar"></i> Package Bookings</h6>
+                    <h6 class="mb-0"><i class="fas fa-chart-bar"></i> Pemesanan per Paket</h6>
                 </div>
                 <div class="card-body">
                     <canvas id="packagesChart"></canvas>
@@ -55,23 +55,23 @@
         </div>
     </div>
 
-    <!-- Package Details -->
+    <!-- Detail Paket -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0"><i class="fas fa-table"></i> Package Performance Details</h6>
+                    <h6 class="mb-0"><i class="fas fa-table"></i> Detail Performa Paket</h6>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Package Name</th>
-                                <th class="text-end">Price</th>
-                                <th class="text-end">Total Bookings</th>
-                                <th class="text-end">Total Revenue</th>
-                                <th class="text-end">Avg Value</th>
-                                <th class="text-end">% of Total</th>
+                                <th>Nama Paket</th>
+                                <th class="text-end">Harga</th>
+                                <th class="text-end">Total Pesanan</th>
+                                <th class="text-end">Total Pendapatan</th>
+                                <th class="text-end">Rata-rata</th>
+                                <th class="text-end">% dari Total</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -101,7 +101,7 @@
                             @empty
                                 <tr>
                                     <td colspan="6" class="text-center text-muted py-4">
-                                        <i class="fas fa-inbox"></i> No package data available
+                                        <i class="fas fa-inbox"></i> Tidak ada data paket
                                     </td>
                                 </tr>
                             @endforelse

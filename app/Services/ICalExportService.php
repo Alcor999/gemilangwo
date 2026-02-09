@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\CalendarEvent;
 use App\Models\BlockedDate;
+use App\Models\CalendarEvent;
 use App\Models\Package;
 use Carbon\Carbon;
 
@@ -15,12 +15,12 @@ class ICalExportService
     public function generateCalendarFile($packageId, $type = 'all')
     {
         $package = Package::find($packageId);
-        if (!$package) {
+        if (! $package) {
             return null;
         }
 
         $events = [];
-        
+
         if ($type === 'all' || $type === 'events') {
             $calendarEvents = CalendarEvent::where('package_id', $packageId)
                 ->where('is_confirmed', true)
@@ -44,13 +44,13 @@ class ICalExportService
     private function buildEventsFromCalendarEvents($calendarEvents)
     {
         $events = [];
-        
+
         foreach ($calendarEvents as $event) {
             $startDate = $event->event_start ?? $event->event_date;
             $endDate = $event->event_end ?? $event->event_date;
 
             $events[] = [
-                'uid' => 'event-' . $event->id . '@gemilangwo.com',
+                'uid' => 'event-'.$event->id.'@gemilangwo.com',
                 'dtstart' => $startDate->format('Ymd'),
                 'dtend' => $endDate->addDay()->format('Ymd'), // iCal end date is exclusive
                 'summary' => $this->buildEventSummary($event),
@@ -70,12 +70,12 @@ class ICalExportService
     private function buildEventsFromBlockedDates($blockedDates)
     {
         $events = [];
-        
+
         foreach ($blockedDates as $blocked) {
             $endDate = $blocked->end_date->copy()->addDay(); // iCal end date is exclusive
 
             $events[] = [
-                'uid' => 'blocked-' . $blocked->id . '@gemilangwo.com',
+                'uid' => 'blocked-'.$blocked->id.'@gemilangwo.com',
                 'dtstart' => $blocked->start_date->format('Ymd'),
                 'dtend' => $endDate->format('Ymd'),
                 'summary' => $this->buildBlockedDateSummary($blocked),
@@ -100,7 +100,7 @@ class ICalExportService
         $content .= "PRODID:-//Wedding App//Wedding Package Calendar//EN\r\n";
         $content .= "CALSCALE:GREGORIAN\r\n";
         $content .= "METHOD:PUBLISH\r\n";
-        $content .= "X-WR-CALNAME:" . $this->escapeString($package->name) . "\r\n";
+        $content .= 'X-WR-CALNAME:'.$this->escapeString($package->name)."\r\n";
         $content .= "X-WR-TIMEZONE:Asia/Jakarta\r\n";
         $content .= "BEGIN:VTIMEZONE\r\n";
         $content .= "TZID:Asia/Jakarta\r\n";
@@ -127,30 +127,30 @@ class ICalExportService
     private function buildVEvent($event, $timestamp)
     {
         $vEvent = "BEGIN:VEVENT\r\n";
-        $vEvent .= "UID:" . $event['uid'] . "\r\n";
-        $vEvent .= "DTSTAMP:" . $timestamp . "\r\n";
-        $vEvent .= "DTSTART;VALUE=DATE:" . $event['dtstart'] . "\r\n";
-        $vEvent .= "DTEND;VALUE=DATE:" . $event['dtend'] . "\r\n";
-        $vEvent .= "SUMMARY:" . $this->escapeString($event['summary']) . "\r\n";
-        
-        if (!empty($event['description'])) {
-            $vEvent .= "DESCRIPTION:" . $this->escapeString($event['description']) . "\r\n";
+        $vEvent .= 'UID:'.$event['uid']."\r\n";
+        $vEvent .= 'DTSTAMP:'.$timestamp."\r\n";
+        $vEvent .= 'DTSTART;VALUE=DATE:'.$event['dtstart']."\r\n";
+        $vEvent .= 'DTEND;VALUE=DATE:'.$event['dtend']."\r\n";
+        $vEvent .= 'SUMMARY:'.$this->escapeString($event['summary'])."\r\n";
+
+        if (! empty($event['description'])) {
+            $vEvent .= 'DESCRIPTION:'.$this->escapeString($event['description'])."\r\n";
         }
-        
-        if (!empty($event['location'])) {
-            $vEvent .= "LOCATION:" . $this->escapeString($event['location']) . "\r\n";
+
+        if (! empty($event['location'])) {
+            $vEvent .= 'LOCATION:'.$this->escapeString($event['location'])."\r\n";
         }
-        
-        $vEvent .= "STATUS:" . $event['status'] . "\r\n";
-        
+
+        $vEvent .= 'STATUS:'.$event['status']."\r\n";
+
         if (isset($event['transp'])) {
-            $vEvent .= "TRANSP:" . $event['transp'] . "\r\n";
+            $vEvent .= 'TRANSP:'.$event['transp']."\r\n";
         } else {
             $vEvent .= "TRANSP:OPAQUE\r\n";
         }
 
-        if (!empty($event['color'])) {
-            $vEvent .= "COLOR:" . $event['color'] . "\r\n";
+        if (! empty($event['color'])) {
+            $vEvent .= 'COLOR:'.$event['color']."\r\n";
         }
 
         $vEvent .= "SEQUENCE:0\r\n";
@@ -166,10 +166,10 @@ class ICalExportService
     {
         $order = $event->order;
         $package = $event->package;
-        
-        $summary = "Acara: " . $package->name;
+
+        $summary = 'Acara: '.$package->name;
         if ($order && $order->user) {
-            $summary .= " - " . $order->user->name;
+            $summary .= ' - '.$order->user->name;
         }
 
         return $summary;
@@ -181,15 +181,15 @@ class ICalExportService
     private function buildEventDescription($event)
     {
         $order = $event->order;
-        $description = "Paket: " . $event->package->name . "\n";
-        
+        $description = 'Paket: '.$event->package->name."\n";
+
         if ($order) {
-            $description .= "Tanggal Acara: " . $order->event_date->format('d F Y') . "\n";
-            $description .= "Lokasi: " . $order->event_location . "\n";
-            $description .= "Jumlah Tamu: " . $order->guest_count . "\n";
-            
+            $description .= 'Tanggal Acara: '.$order->event_date->format('d F Y')."\n";
+            $description .= 'Lokasi: '.$order->event_location."\n";
+            $description .= 'Jumlah Tamu: '.$order->guest_count."\n";
+
             if ($event->notes) {
-                $description .= "Catatan: " . $event->notes . "\n";
+                $description .= 'Catatan: '.$event->notes."\n";
             }
         }
 
@@ -201,7 +201,7 @@ class ICalExportService
      */
     private function buildBlockedDateSummary($blocked)
     {
-        return $blocked->getTypeLabel() . " - " . $blocked->package->name;
+        return $blocked->getTypeLabel().' - '.$blocked->package->name;
     }
 
     /**
@@ -209,7 +209,7 @@ class ICalExportService
      */
     private function getBlockedDateColor($blocked)
     {
-        return match($blocked->block_type) {
+        return match ($blocked->block_type) {
             'unavailable' => '#ef4444', // Red
             'maintenance' => '#f97316', // Orange
             'reserved' => '#eab308',    // Yellow
@@ -228,7 +228,7 @@ class ICalExportService
         $string = str_replace(';', '\\;', $string);
         $string = str_replace("\n", '\\n', $string);
         $string = str_replace("\r", '', $string);
-        
+
         return $string;
     }
 
@@ -239,7 +239,7 @@ class ICalExportService
     {
         $slug = str_replace(' ', '-', strtolower($package->name));
         $date = now()->format('Y-m-d');
-        
+
         return "calendar-{$slug}-{$date}-{$type}.ics";
     }
 }
