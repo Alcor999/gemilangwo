@@ -12,620 +12,607 @@
     <!-- GLightbox -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
     
     <style>
-        * {
-            font-family: 'Poppins', sans-serif;
-        }
-
         :root {
             --primary: #b8860b;
             --secondary: #8b7355;
-            --dark: #1f2937;
-            --light: #f9fafb;
-            --border-color: #e5e7eb;
+            --dark: #2A1F18;
+            --light: #FCF9F2;
+            --white: #ffffff;
+            --border-color: rgba(184, 134, 11, 0.2);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6, .brand-logo {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .accent-font {
+            font-family: 'Great Vibes', cursive;
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: -10px;
+            display: block;
         }
 
         body {
             background-color: var(--light);
             color: var(--dark);
+            overflow-x: hidden;
         }
 
-        /* Navbar Styling */
+        /* Glassmorphism Navbar */
         .navbar {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: rgba(252, 249, 242, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(184, 134, 11, 0.15);
             padding: 1rem 0;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
         .navbar-brand {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            letter-spacing: -0.5px;
+            color: var(--dark) !important;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-brand i {
+            color: var(--primary);
         }
 
         .nav-link {
             font-weight: 500;
-            margin-left: 1rem;
-            color: white !important;
-            transition: all 0.3s ease;
+            margin-left: 1.5rem;
+            color: var(--dark) !important;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .nav-link:hover {
-            opacity: 0.8;
-            transform: translateY(-2px);
+            color: var(--primary) !important;
         }
 
         .btn-login {
-            background-color: white;
+            background: transparent;
             color: var(--primary);
             font-weight: 600;
-            padding: 0.5rem 1.5rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            padding: 0.5rem 1.8rem;
+            border-radius: 30px;
+            transition: var(--transition);
+            border: 1px solid var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
         }
 
         .btn-login:hover {
-            background-color: rgba(255, 255, 255, 0.9);
+            background: var(--primary);
+            color: white !important;
             transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(184, 134, 11, 0.2);
         }
 
         /* Hero Section */
         .hero-section {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(rgba(42, 31, 24, 0.4), rgba(42, 31, 24, 0.7)), url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
             color: white;
-            padding: 6rem 0;
+            padding: 10rem 0 8rem;
             text-align: center;
             position: relative;
-            overflow: hidden;
-        }
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 50%);
-            animation: heroShine 15s ease-in-out infinite;
-        }
-        @keyframes heroShine {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-25%, -25%); }
-        }
-        .hero-section h1 {
-            animation: fadeInUp 0.8s ease-out;
-        }
-        .hero-section p {
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-        }
-        .hero-section .btn-primary-custom {
-            animation: fadeInUp 0.8s ease-out 0.4s both;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(25px); }
-            to { opacity: 1; transform: translateY(0); }
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
         }
 
         .hero-section h1 {
-            font-size: 3.5rem;
+            font-size: 4.5rem;
             font-weight: 700;
-            margin-bottom: 1rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: elegantFadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(30px);
         }
 
         .hero-section p {
             font-size: 1.25rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            animation: elegantFadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+        }
+
+        .hero-accent {
+            color: var(--white);
+            animation: elegantFadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .btn-primary-custom {
-            background-color: white;
-            color: var(--primary);
-            padding: 0.75rem 2rem;
-            font-weight: 600;
-            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2.5rem;
+            font-weight: 500;
+            border-radius: 30px;
             border: none;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1rem;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            animation: elegantFadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+            text-decoration: none;
         }
 
         .btn-primary-custom:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 15px 30px rgba(184, 134, 11, 0.3);
+            background: #cd9a15;
+            color: white;
+        }
+
+        @keyframes elegantFadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Packages Section */
         .packages-section {
-            padding: 5rem 0;
-            background-color: white;
+            padding: 7rem 0;
+            background-color: var(--light);
+            position: relative;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;
         }
 
         .section-title h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 3rem;
+            font-weight: 600;
             color: var(--dark);
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .section-title p {
             font-size: 1.1rem;
-            color: #6b7280;
+            color: var(--secondary);
+            font-weight: 300;
         }
 
         /* Package Card */
         .package-card {
             background: white;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: all 0.3s ease;
+            border: 1px solid rgba(184, 134, 11, 0.1);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            transition: var(--transition);
             height: 100%;
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
         }
 
         .package-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-15px);
             border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(184, 134, 11, 0.15);
-        }
-        .packages-section .col-md-6,
-        .packages-section .col-lg-4 {
-            animation: cardFadeIn 0.6s ease-out both;
-        }
-        .packages-section .col-md-6:nth-child(1),
-        .packages-section .col-lg-4:nth-child(1) { animation-delay: 0.1s; }
-        .packages-section .col-md-6:nth-child(2),
-        .packages-section .col-lg-4:nth-child(2) { animation-delay: 0.2s; }
-        .packages-section .col-md-6:nth-child(3),
-        .packages-section .col-lg-4:nth-child(3) { animation-delay: 0.3s; }
-        .packages-section .col-md-6:nth-child(4),
-        .packages-section .col-lg-4:nth-child(4) { animation-delay: 0.4s; }
-        .packages-section .col-md-6:nth-child(5),
-        .packages-section .col-lg-4:nth-child(5) { animation-delay: 0.5s; }
-        .packages-section .col-md-6:nth-child(6),
-        .packages-section .col-lg-4:nth-child(6) { animation-delay: 0.6s; }
-        @keyframes cardFadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            box-shadow: 0 30px 60px rgba(184, 134, 11, 0.1);
         }
 
         .package-card.featured {
-            border-color: var(--secondary);
-            background: linear-gradient(135deg, rgba(139, 115, 85, 0.05) 0%, rgba(184, 134, 11, 0.05) 100%);
-            transform: scale(1.05);
+            border-color: var(--primary);
+            background: linear-gradient(to bottom, #ffffff, #FCF9F2);
+            transform: scale(1.03);
+            box-shadow: 0 20px 50px rgba(184, 134, 11, 0.15);
         }
 
-        .package-card.featured::before {
-            content: "POPULER";
+        .package-card.featured:hover {
+            transform: scale(1.03) translateY(-10px);
+        }
+
+        .featured-badge {
             position: absolute;
-            top: -10px;
-            right: -40px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            top: 20px;
+            right: -35px;
+            background: var(--primary);
             color: white;
             padding: 0.5rem 3rem;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             transform: rotate(45deg);
-        }
-
-        .package-header {
-            margin-bottom: 1.5rem;
+            z-index: 10;
         }
 
         .package-icon {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: var(--primary);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+            stroke-width: 1px;
         }
 
         .package-name {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.8rem;
+            font-weight: 600;
             color: var(--dark);
             margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
         }
 
         .package-desc {
-            color: #6b7280;
+            color: var(--secondary);
             font-size: 0.95rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
         }
 
         .package-price {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--primary);
             margin: 1.5rem 0;
+            font-family: 'Playfair Display', serif;
         }
 
         .package-price-original {
             font-size: 1.2rem;
-            color: #9ca3af;
+            color: #a0aec0;
             text-decoration: line-through;
             margin-bottom: 0.5rem;
-            font-weight: 500;
+            font-weight: 400;
         }
 
         .discount-badge {
             display: inline-block;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
+            background: rgba(184, 134, 11, 0.1);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
             margin-bottom: 1rem;
-            text-transform: uppercase;
-        }
-
-        .discount-badge.flash-sale {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.7;
-            }
+            border: 1px solid rgba(184, 134, 11, 0.2);
         }
 
         .package-features {
             list-style: none;
             padding: 0;
-            margin: 1.5rem 0;
+            margin: 2rem 0;
             flex-grow: 1;
         }
 
         .package-features li {
-            padding: 0.75rem 0;
-            color: #6b7280;
-            border-bottom: 1px solid var(--border-color);
+            padding: 0.85rem 0;
+            color: #4a5568;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .package-features li:last-child {
-            border-bottom: none;
-        }
-
-        .package-features li:before {
-            content: "✓ ";
-            color: var(--secondary);
-            font-weight: 700;
-            margin-right: 0.5rem;
+        .package-features li i {
+            color: var(--primary);
+            font-size: 0.8rem;
         }
 
         .package-guests {
-            background: var(--light);
+            background: rgba(184, 134, 11, 0.05);
             padding: 1rem;
-            border-radius: 8px;
+            border-radius: 12px;
             margin: 1.5rem 0;
             text-align: center;
-        }
-
-        .package-guests strong {
-            color: var(--primary);
+            border: 1px dashed rgba(184, 134, 11, 0.3);
         }
 
         .package-btn {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 1rem 2rem;
+            border-radius: 30px;
             font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-
-        .package-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(184, 134, 11, 0.3);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 3rem 0 1rem;
             text-align: center;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 992px) {
-            .hero-section h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-section p {
-                font-size: 1.1rem;
-            }
-
-            .section-title h2 {
-                font-size: 2rem;
-            }
-
-            .packages-section {
-                padding: 3rem 0;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .navbar-brand {
-                font-size: 1.25rem;
-            }
-
-            .nav-link {
-                margin-left: 0;
-                padding: 0.5rem 0;
-            }
-
-            .btn-login {
-                padding: 0.4rem 1rem;
-                font-size: 0.9rem;
-                margin-top: 0.5rem;
-            }
-
-            .hero-section {
-                padding: 3rem 1rem;
-            }
-
-            .hero-section h1 {
-                font-size: 1.75rem;
-                margin-bottom: 1rem;
-            }
-
-            .hero-section p {
-                font-size: 1rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .btn-primary-custom {
-                padding: 0.6rem 1.5rem;
-                font-size: 0.9rem;
-            }
-
-            .section-title {
-                margin-bottom: 2rem;
-            }
-
-            .section-title h2 {
-                font-size: 1.5rem;
-                margin-bottom: 0.5rem;
-            }
-
-            .section-title p {
-                font-size: 0.95rem;
-            }
-
-            .package-card {
-                padding: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .package-card.featured {
-                transform: scale(1);
-            }
-
-            .package-icon {
-                font-size: 2rem;
-                margin-bottom: 0.75rem;
-            }
-
-            .package-name {
-                font-size: 1.25rem;
-                margin-bottom: 0.5rem;
-            }
-
-            .package-price {
-                font-size: 1.5rem;
-                margin: 1rem 0;
-            }
-
-            .package-features li {
-                padding: 0.5rem 0;
-                font-size: 0.9rem;
-            }
-
-            .package-btn {
-                padding: 0.6rem 1rem;
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .navbar-brand {
-                font-size: 1rem;
-            }
-
-            .hero-section {
-                padding: 2rem 0.75rem;
-            }
-
-            .hero-section h1 {
-                font-size: 1.4rem;
-                margin-bottom: 0.75rem;
-            }
-
-            .hero-section p {
-                font-size: 0.95rem;
-                margin-bottom: 1.25rem;
-            }
-
-            .btn-primary-custom {
-                padding: 0.5rem 1.25rem;
-                font-size: 0.85rem;
-            }
-
-            .section-title h2 {
-                font-size: 1.25rem;
-            }
-
-            .package-card {
-                padding: 1rem;
-                border-radius: 8px;
-            }
-
-            .package-icon {
-                font-size: 1.75rem;
-            }
-
-            .package-name {
-                font-size: 1.1rem;
-            }
-
-            .package-price {
-                font-size: 1.25rem;
-            }
-
-            .package-desc {
-                font-size: 0.85rem;
-                margin-bottom: 1rem;
-            }
-
-            .package-features {
-                margin: 1rem 0;
-            }
-
-            .package-features li {
-                padding: 0.4rem 0;
-                font-size: 0.85rem;
-            }
-
-            footer {
-                padding: 2rem 1rem 0.5rem;
-            }
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            text-decoration: none;
+            display: block;
         }
 
         .package-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(184, 134, 11, 0.3);
+            background: var(--primary);
             color: white;
+            box-shadow: 0 10px 20px rgba(184, 134, 11, 0.2);
+            text-decoration: none;
         }
 
-        .package-btn:active {
-            transform: translateY(0);
+        .featured .package-btn {
+            background: var(--primary);
+            color: white;
+        }
+        .featured .package-btn:hover {
+            background: var(--secondary);
+            border-color: var(--secondary);
         }
 
         /* Why Choose Us Section */
         .features-section {
-            padding: 5rem 0;
-            background: linear-gradient(135deg, rgba(184, 134, 11, 0.05) 0%, rgba(139, 115, 85, 0.05) 100%);
+            padding: 7rem 0;
+            background: white;
+            position: relative;
         }
 
         .feature-item {
             text-align: center;
-            padding: 2rem;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            background: var(--light);
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-10px);
+            background: white;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
         }
 
         .feature-icon {
-            font-size: 3rem;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 2rem;
             color: var(--primary);
-            margin-bottom: 1rem;
+            box-shadow: 0 10px 20px rgba(184, 134, 11, 0.1);
         }
 
         .feature-item h4 {
             font-weight: 600;
             color: var(--dark);
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
         }
 
         .feature-item p {
-            color: #6b7280;
+            color: var(--secondary);
             font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+            font-weight: 300;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            padding: 7rem 0;
+            background: var(--light);
+            border-top: 1px solid rgba(184, 134, 11, 0.1);
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(184, 134, 11, 0.1);
+        }
+
+        .video-thumbnail-wrapper {
+            position: relative;
+            height: 240px;
+            overflow: hidden;
+            background: #e2e8f0;
+        }
+
+        .video-thumbnail-wrapper img {
+            transition: transform 0.7s ease;
+        }
+
+        .testimonial-card:hover .video-thumbnail-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .play-btn-overlay {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transition: var(--transition);
+            color: var(--primary);
+            font-size: 24px;
+            padding-left: 6px;
+        }
+
+        .testimonial-card:hover .play-btn-overlay {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .testimonial-body {
+            padding: 2.5rem;
+        }
+
+        .testimonial-user-info img {
+            border: 2px solid var(--primary);
+            padding: 2px;
         }
 
         /* Footer */
         .footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 3rem 0 1rem;
-            text-align: center;
+            background: var(--dark);
+            color: rgba(255,255,255,0.7);
+            padding: 5rem 0 2rem;
+            position: relative;
         }
 
-        .footer p {
-            color: #9ca3af;
+        .footer-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        
+        .footer-brand i {
+            color: var(--primary);
+        }
+
+        .footer-block h5 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-block h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-block ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-block ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-block ul li a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-block ul li a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
             font-size: 0.9rem;
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .hero-section h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-section p {
-                font-size: 1rem;
-            }
-
-            .section-title h2 {
-                font-size: 2rem;
-            }
-
-            .package-card.featured {
-                transform: scale(1);
-            }
+        @media (max-width: 992px) {
+            .hero-section h1 { font-size: 3.5rem; }
+            .section-title h2 { font-size: 2.5rem; }
+            .packages-section { padding: 5rem 0; }
         }
 
-        /* Alert styling */
-        .alert-info {
-            background-color: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            color: #1e40af;
+        @media (max-width: 768px) {
+            .hero-section h1 { font-size: 2.5rem; }
+            .hero-section p { font-size: 1rem; }
+            .section-title h2 { font-size: 2rem; }
+            .package-card.featured { transform: scale(1); }
+            .navbar { background: rgba(255, 255, 255, 0.98); }
+            .nav-link { margin-left: 0; padding: 0.8rem 0; }
+            .hero-section { padding: 8rem 0 5rem; min-height: 70vh; }
+        }
+
+        /* Utilities */
+        .glass-panel {
+            background: rgba(252, 249, 242, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 10px 20px;
         }
     </style>
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
-                <i class="fas fa-ring"></i> Gemilang WO
+                <i class="fas fa-ring"></i> Gemilang <span style="font-weight: 300;">WO</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="border:none; box-shadow:none;">
+                <i class="fas fa-bars" style="color: var(--dark); font-size: 1.5rem;"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
                     <li class="nav-item">
                         <a class="nav-link" href="#packages">Paket</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#features">Mengapa Kami</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#testimonials">Testimoni</a>
+                    </li>
                     @auth
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isOwner() ? route('owner.dashboard') : route('customer.dashboard')) }}">
+                            <a class="nav-link btn-login ms-lg-3 px-4" href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : (auth()->user()->isOwner() ? route('owner.dashboard') : route('customer.dashboard')) }}">
                                 Dasbor
                             </a>
                         </li>
                         <li class="nav-item">
-                            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                 @csrf
-                                <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">Keluar</button>
+                                <button type="submit" class="nav-link shadow-none" style="background: none; border: none; cursor: pointer; color: #e53e3e !important;">Keluar</button>
                             </form>
                         </li>
                     @else
-                        <li class="nav-item">
-                            <a href="{{ route('login') }}" class="btn btn-login">Masuk</a>
+                        <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                            <a href="{{ route('login') }}" class="btn-login" style="text-decoration:none; display:inline-block;">Masuk / Daftar</a>
                         </li>
                     @endauth
                 </ul>
@@ -635,18 +622,69 @@
 
     <!-- Hero Section -->
     <section class="hero-section">
-        <div class="container">
-            <h1>Wujudkan Hari Pernikahan Impian Anda</h1>
-            <p>Layanan perencanaan dan pengelolaan pernikahan profesional sesuai impian Anda</p>
+        <div class="container relative" style="z-index: 2;">
+            <span class="accent-font hero-accent">Magical moments</span>
+            <h1>Wujudkan Pernikahan<br>Impian Anda</h1>
+            <p>Layanan perencanaan dan pengelolaan pernikahan premium. Karena setiap kisah cinta layak dirayakan dengan sempurna.</p>
             @auth
-                <a href="{{ route('customer.packages.index') }}" class="btn btn-primary-custom">
-                    <i class="fas fa-calendar-check"></i> Mulai Rencanakan
+                <a href="{{ route('customer.packages.index') }}" class="btn-primary-custom">
+                    Mulai Rencanakan <i class="fas fa-arrow-right"></i>
                 </a>
             @else
-                <a href="{{ route('login') }}" class="btn btn-primary-custom">
-                    <i class="fas fa-sign-in-alt"></i> Masuk untuk Memesan
+                <a href="{{ route('login') }}" class="btn-primary-custom">
+                    Pesan Sekarang <i class="fas fa-arrow-right"></i>
                 </a>
             @endauth
+        </div>
+    </section>
+
+    <!-- Features Section (Moved up for better flow) -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-title">
+                <span class="accent-font">Why choose us</span>
+                <h2>Layanan Bintang Lima</h2>
+                <p>Kami mendedikasikan perhatian penuh untuk hari paling berharga Anda.</p>
+            </div>
+
+            <div class="row g-5">
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h4>Kualitas Premium</h4>
+                        <p>Vendor eksklusif dan perlengkapan berkelas untuk menjamin acara spektakuler.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h4>Sentuhan Personal</h4>
+                        <p>Desain acara yang sangat personal menyesuaikan dengan selera estetika Anda.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h4>Tim Ahli</h4>
+                        <p>Koreografer acara dan koordinator lapangan profesional dengan jam terbang tinggi.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>Layanan Andal</h4>
+                        <p>Bebas cemas. Kami memastikan segalanya berjalan lancar tanpa celah satu pun.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -654,20 +692,24 @@
     <section class="packages-section" id="packages">
         <div class="container">
             <div class="section-title">
-                <h2>Paket Pernikahan Kami</h2>
-                <p>Pilih paket yang paling sesuai untuk hari spesial Anda</p>
+                <span class="accent-font">Our collections</span>
+                <h2>Pilihan Paket Eksklusif</h2>
+                <p>Temukan paket yang didesain khusus untuk merayakan cinta Anda</p>
             </div>
 
-            <div class="row g-4">
+            <div class="row g-5 justify-content-center">
                 @forelse($packages as $package)
                     <div class="col-md-6 col-lg-4">
-                        <div class="package-card {{ $loop->iteration == 4 ? 'featured' : '' }}">
-                            <div class="package-header">
+                        <div class="package-card {{ $loop->iteration == 2 ? 'featured' : '' }}">
+                            @if($loop->iteration == 2)
+                            <div class="featured-badge">Terpopuler</div>
+                            @endif
+                            <div class="package-header text-center">
                                 <div class="package-icon">
-                                    <i class="fas fa-heart"></i>
+                                    <i class="fas fa-gem"></i>
                                 </div>
                                 <h3 class="package-name">{{ $package->name }}</h3>
-                                <p class="package-desc">Cocok untuk perayaan Anda</p>
+                                <p class="package-desc">Pilihan tepat untuk merayakan hari bahagia.</p>
                             </div>
 
                             @php
@@ -676,50 +718,57 @@
                                 $finalPrice = $discount ? $discount->getDiscountedPrice($originalPrice) : $originalPrice;
                             @endphp
 
-                            @if ($discount)
-                                <div class="discount-badge flash-sale">
-                                    @if ($discount->type === 'percentage')
-                                        <i class="fas fa-fire"></i> {{ $discount->value }}% DISKON
-                                    @else
-                                        <i class="fas fa-fire"></i> Hemat Rp {{ number_format($discount->value, 0, ',', '.') }}
-                                    @endif
-                                </div>
-                                <div class="package-price-original">
-                                    Rp{{ number_format($originalPrice, 0, ',', '.') }}
-                                </div>
-                            @endif
+                            <div class="text-center">
+                                @if ($discount)
+                                    <div class="discount-badge text-center">
+                                        @if ($discount->type === 'percentage')
+                                            <i class="fas fa-star"></i> Spesial Diskon {{ $discount->value }}%
+                                        @else
+                                            <i class="fas fa-star"></i> Promo Hemat
+                                        @endif
+                                    </div>
+                                    <div class="package-price-original">
+                                        Rp{{ number_format($originalPrice, 0, ',', '.') }}
+                                    </div>
+                                @endif
 
-                            <div class="package-price">
-                                Rp{{ number_format($finalPrice, 0, ',', '.') }}
+                                <div class="package-price">
+                                    Rp{{ number_format($finalPrice, 0, ',', '.') }}
+                                </div>
                             </div>
 
                             <div class="package-guests">
-                                <i class="fas fa-users"></i> <strong>Hingga {{ $package->max_guests }} Tamu</strong>
+                                <i class="fas fa-users" style="color: var(--primary);"></i> Kapasitas: <strong>Hingga {{ $package->max_guests }} Tamu</strong>
                             </div>
 
                             <ul class="package-features">
                                 @forelse(json_decode($package->features ?? '[]') as $feature)
-                                    <li>{{ $feature }}</li>
+                                    <li><i class="fas fa-check"></i> {{ $feature }}</li>
                                 @empty
-                                    <li>Perencanaan pernikahan lengkap</li>
+                                    <li><i class="fas fa-check"></i> Full Wedding Planning</li>
+                                    <li><i class="fas fa-check"></i> Premium Venue Selection</li>
+                                    <li><i class="fas fa-check"></i> Catering 5 Star</li>
                                 @endforelse
                             </ul>
 
-                            @auth
-                                <a href="{{ route('customer.orders.create', ['package' => $package->id]) }}" class="package-btn">
-                                    <i class="fas fa-check-circle"></i> Pesan Sekarang
-                                </a>
-                            @else
-                                <a href="{{ route('login') }}" class="package-btn">
-                                    <i class="fas fa-lock"></i> Masuk untuk Memesan
-                                </a>
-                            @endauth
+                            <div class="mt-auto pt-4">
+                                @auth
+                                    <a href="{{ route('customer.orders.create', ['package' => $package->id]) }}" class="package-btn">
+                                        Pesan Sekarang
+                                    </a>
+                                @else
+                                    <a href="{{ route('login') }}" class="package-btn">
+                                        Masuk Akun
+                                    </a>
+                                @endauth
+                            </div>
                         </div>
                     </div>
                 @empty
                     <div class="col-12">
-                        <div class="alert alert-info" role="alert">
-                            <i class="fas fa-info-circle"></i> Belum ada paket tersedia saat ini.
+                        <div class="text-center py-5">
+                            <i class="fas fa-gem" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
+                            <h4 style="color: var(--secondary);">Koleksi paket sedang disiapkan.</h4>
                         </div>
                     </div>
                 @endforelse
@@ -727,61 +776,13 @@
         </div>
     </section>
 
-    <!-- Why Choose Us Section -->
-    <section class="features-section" id="features">
-        <div class="container">
-            <div class="section-title">
-                <h2>Mengapa Memilih Kami</h2>
-                <p>Rasakan layanan terbaik di setiap detail</p>
-            </div>
-
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-3">
-                    <div class="feature-item">
-                        <div class="feature-icon">
-                            <i class="fas fa-award"></i>
-                        </div>
-                        <h4>Tim Profesional</h4>
-                        <p>Koordinator berpengalaman yang siap mendukung acara Anda</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="feature-item">
-                        <div class="feature-icon">
-                            <i class="fas fa-handshake"></i>
-                        </div>
-                        <h4>Sentuhan Personal</h4>
-                        <p>Paket yang disesuaikan dengan preferensi Anda</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="feature-item">
-                        <div class="feature-icon">
-                            <i class="fas fa-check-double"></i>
-                        </div>
-                        <h4>Layanan Andal</h4>
-                        <p>Komitmen penuh untuk membuat hari Anda berkesan</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="feature-item">
-                        <div class="feature-icon">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>Kualitas Premium</h4>
-                        <p>Vendor dan perlengkapan terbaik untuk acara Anda</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Video Testimonials Section -->
-    <section class="testimonials-section" style="padding: 4rem 0; background: white; border-top: 1px solid var(--border-color);">
+    <section class="testimonials-section" id="testimonials">
         <div class="container">
             <div class="section-title">
-                <h2>Cerita Pasangan Kami</h2>
-                <p>Lihat pengalaman klien kami bersama layanan kami</p>
+                <span class="accent-font">Love stories</span>
+                <h2>Cerita Indah Mereka</h2>
+                <p>Bagian kecil dari banyak kebahagiaan yang telah kami ciptakan</p>
             </div>
 
             @php
@@ -789,12 +790,12 @@
             @endphp
 
             @if($testimonials->count() > 0)
-                <div class="row g-4">
+                <div class="row g-5">
                     @foreach($testimonials as $testimonial)
                         <div class="col-md-6 col-lg-4">
-                            <div class="card h-100 shadow-sm" style="border: none; border-radius: 12px; overflow: hidden;">
+                            <div class="testimonial-card">
                                 <!-- Gambar Miniatur Video -->
-                                <div class="position-relative" style="height: 220px; background: #f3f4f6; overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; group" data-glightbox data-gallery="testimonials" 
+                                <div class="video-thumbnail-wrapper" data-glightbox data-gallery="testimonials" 
                                      @if($testimonial->type === 'upload')
                                         href="{{ asset('storage/' . $testimonial->video_path) }}"
                                      @else
@@ -803,73 +804,66 @@
                                     @if($testimonial->thumbnail_path)
                                         <img src="{{ asset('storage/' . $testimonial->thumbnail_path) }}" 
                                              alt="{{ $testimonial->title }}" 
-                                             class="w-100 h-100" 
-                                             loading="lazy"
-                                             style="object-fit: cover;">
+                                             class="w-100 h-100 object-fit-cover" 
+                                             loading="lazy">
                                     @else
-                                        <div class="text-center">
-                                            <i class="fas fa-video" style="font-size: 3rem; color: #d1d5db;"></i>
+                                        <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-light">
+                                            <i class="fas fa-film text-muted stroke-1" style="font-size: 4rem; opacity:0.2;"></i>
                                         </div>
                                     @endif
 
                                     <!-- Play Button Overlay -->
-                                    <div class="position-absolute inset-0 d-flex align-items-center justify-content-center" 
-                                         style="background: rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s ease;">
-                                        <div class="btn-play" style="width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-                                            <i class="fas fa-play" style="font-size: 24px; color: var(--primary); margin-left: 4px;"></i>
+                                    <div class="position-absolute inset-0 d-flex align-items-center justify-content-center pointer-events-none" style="top:0;left:0;right:0;bottom:0;">
+                                        <div class="play-btn-overlay">
+                                            <i class="fas fa-play"></i>
                                         </div>
                                     </div>
-
-                                    <!-- Type Badge -->
-                                    <span class="position-absolute top-0 end-0 m-2 badge bg-{{ $testimonial->type === 'youtube' ? 'danger' : 'info' }}">
-                                        {{ ucfirst($testimonial->type) }}
-                                    </span>
                                 </div>
 
-                                <div class="card-body">
+                                <div class="testimonial-body">
                                     <!-- Title -->
-                                    <h5 class="card-title" style="font-weight: 600; color: var(--dark);">
+                                    <h5 style="font-weight: 600; color: var(--dark); font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 10px;">
                                         {{ $testimonial->title }}
                                     </h5>
 
                                     <!-- Rating -->
                                     @if($testimonial->rating)
-                                        <div class="mb-2">
-                                            <div class="text-warning">
+                                        <div class="mb-3">
+                                            <div style="color: var(--primary); font-size: 0.9rem;">
                                                 @for($i = 0; $i < 5; $i++)
-                                                    <i class="fas fa-star{{ $i < $testimonial->rating ? '' : ' fa-star-o' }}"></i>
+                                                    <i class="fa{{ $i < $testimonial->rating ? 's' : 'r' }} fa-star"></i>
                                                 @endfor
                                             </div>
                                         </div>
                                     @endif
 
                                     <!-- Description -->
-                                    <p class="card-text text-muted" style="font-size: 0.95rem; margin-bottom: 1rem;">
-                                        {{ Str::limit($testimonial->description, 100) }}
+                                    <p class="text-muted" style="font-size: 0.95rem; margin-bottom: 2rem; font-weight: 300; line-height: 1.6;">
+                                        "{{ Str::limit($testimonial->description, 120) }}"
                                     </p>
 
                                     <!-- Info Pelanggan -->
-                                    <div style="display: flex; align-items: center; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                                    <div class="d-flex align-items-center testimonial-user-info" style="gap: 1rem; padding-top: 1.5rem; border-top: 1px solid rgba(0,0,0,0.05);">
                                         @if($testimonial->user->avatar)
                                             <img src="{{ asset('storage/' . $testimonial->user->avatar) }}" 
                                                  alt="{{ $testimonial->user->name }}" 
                                                  class="rounded-circle" 
-                                                 style="width: 40px; height: 40px; object-fit: cover;">
+                                                 style="width: 45px; height: 45px; object-fit: cover;">
                                         @else
-                                            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" 
-                                                 style="width: 40px; height: 40px; color: white; font-weight: 600;">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                                 style="width: 45px; height: 45px; background: rgba(184, 134, 11, 0.1); color: var(--primary); font-weight: 600; font-size: 1.1rem;">
                                                 {{ strtoupper(substr($testimonial->user->name, 0, 1)) }}
                                             </div>
                                         @endif
                                         <div>
-                                            <p class="mb-0" style="font-weight: 600; font-size: 0.9rem;">{{ $testimonial->user->name }}</p>
-                                            <p class="mb-0 text-muted" style="font-size: 0.85rem;">
+                                            <h6 class="mb-1" style="font-weight: 600; font-size: 0.95rem; color: var(--dark);">{{ $testimonial->user->name }}</h6>
+                                            <span class="text-muted" style="font-size: 0.8rem;">
                                                 @if($testimonial->order)
                                                     {{ $testimonial->order->package->name }}
                                                 @else
-                                                    Pasangan Terverifikasi
+                                                    Klien Gemilang WO
                                                 @endif
-                                            </p>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -878,20 +872,21 @@
                     @endforeach
                 </div>
 
-                <div class="text-center mt-4">
+                <div class="text-center mt-5 pt-4">
                     @auth
-                        <a href="{{ route('customer.testimonials.create') }}" class="btn" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 0.75rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600;">
-                            <i class="fas fa-star"></i> Bagikan Cerita Anda
+                        <a href="{{ route('customer.testimonials.create') }}" class="btn-primary-custom" style="padding: 0.8rem 2rem;">
+                            Bagikan Cerita Anda <i class="fas fa-heart"></i>
                         </a>
                     @else
-                        <a href="{{ route('login') }}" class="btn" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 0.75rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600;">
-                            <i class="fas fa-star"></i> Bagikan Cerita Anda
+                        <a href="{{ route('login') }}" class="btn-primary-custom" style="padding: 0.8rem 2rem;">
+                            Bagikan Cerita Anda <i class="fas fa-heart"></i>
                         </a>
                     @endauth
                 </div>
             @else
-                <div class="alert alert-info" role="alert" style="text-align: center;">
-                    <i class="fas fa-info-circle"></i> Jadilah yang pertama membagikan cerita pernikahan Anda!
+                <div class="text-center py-5">
+                    <span class="accent-font" style="font-size: 2rem; color: #a0aec0;">Jadilah yang pertama</span>
+                    <p class="mt-3 text-muted">Bagikan kisah manis Anda bersama pengalaman layanan kami.</p>
                 </div>
             @endif
         </div>
@@ -900,37 +895,73 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2026 Gemilang WO - Penyelenggara Pernikahan Profesional. Hak cipta dilindungi undang-undang.</p>
+            <div class="row g-5">
+                <div class="col-lg-4">
+                    <a href="#" class="footer-brand" style="text-decoration:none;">
+                        <i class="fas fa-ring"></i> Gemilang WO
+                    </a>
+                    <p style="color: rgba(255,255,255,0.7); font-size:0.95rem; line-height: 1.6; margin-bottom: 2rem;">
+                        Penyedia layanan penyelenggara pernikahan mewah dan profesional untuk mewujudkan momen sakral sekali seumur hidup Anda dengan sempurna.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="#" style="color: white; background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s; text-decoration:none;" onmouseover="this.style.background='var(--primary)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'"><i class="fab fa-instagram"></i></a>
+                        <a href="#" style="color: white; background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s; text-decoration:none;" onmouseover="this.style.background='var(--primary)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" style="color: white; background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s; text-decoration:none;" onmouseover="this.style.background='var(--primary)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 offset-lg-1 col-md-4 footer-block">
+                    <h5>Tautan Cepat</h5>
+                    <ul>
+                        <li><a href="#packages">Koleksi Paket</a></li>
+                        <li><a href="#features">Mengapa Kami</a></li>
+                        <li><a href="#testimonials">Testimoni</a></li>
+                        <li><a href="#">Galeri</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 footer-block">
+                    <h5>Dukungan</h5>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Syarat & Ketentuan</a></li>
+                        <li><a href="#">Kebijakan Privasi</a></li>
+                        <li><a href="#">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 py-4 py-lg-0 footer-block">
+                    <h5>Kontak Kami</h5>
+                    <ul style="color: rgba(255,255,255,0.7); font-size: 0.95rem;">
+                        <li class="d-flex gap-3 mb-3"><i class="fas fa-map-marker-alt" style="color: var(--primary); margin-top:5px;"></i> <span>Jl. Kemang Raya No. 12, Jakarta Selatan, 12730</span></li>
+                        <li class="d-flex gap-3 mb-3"><i class="fas fa-phone" style="color: var(--primary); margin-top:5px;"></i> <span>+62 812 3456 7890</span></li>
+                        <li class="d-flex gap-3"><i class="fas fa-envelope" style="color: var(--primary); margin-top:5px;"></i> <span>hello@gemilangwo.com</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; {{ date('Y') }} Gemilang Wedding Organizer. All rights reserved.
+            </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- GLightbox JS -->
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
     
     <script>
-        // Initialize GLightbox for video testimonials
+        // Navbar Scrolled Effect
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.getElementById('mainNav').classList.add('scrolled');
+            } else {
+                document.getElementById('mainNav').classList.remove('scrolled');
+            }
+        });
+
+        // Initialize GLightbox
         const glightbox = GLightbox({
             selector: '[data-glightbox]',
             autoplayVideos: true,
             videosWidth: 900,
-            videoHeight: 506,
-        });
-
-        // Hover effect for play button on testimonials
-        document.querySelectorAll('.testimonials-section .card').forEach(card => {
-            const thumb = card.querySelector('[data-glightbox]');
-            if (thumb) {
-                card.addEventListener('mouseenter', () => {
-                    const overlay = card.querySelector('[style*="background: rgba"]');
-                    if (overlay) overlay.style.opacity = '1';
-                });
-                card.addEventListener('mouseleave', () => {
-                    const overlay = card.querySelector('[style*="background: rgba"]');
-                    if (overlay) overlay.style.opacity = '0';
-                });
-            }
         });
     </script>
 </body>

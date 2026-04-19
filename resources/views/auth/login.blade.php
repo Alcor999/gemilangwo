@@ -3,90 +3,118 @@
 @section('title', 'Masuk - Gemilang WO')
 
 @section('styles')
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+    :root {
+        --primary: #b8860b;
+        --secondary: #8b7355;
+        --dark: #2A1F18;
+        --light: #FCF9F2;
+    }
+
     html, body {
         height: 100%;
         margin: 0;
         padding: 0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: var(--light);
+        color: var(--dark);
     }
 
-    .login-container {
-        min-height: 100vh;
+    .auth-wrapper {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%);
-        padding: 1rem;
+        min-height: 100vh;
+        width: 100vw;
     }
 
-    .login-card {
-        width: 100%;
-        max-width: 450px;
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 20px 60px rgba(184, 134, 11, 0.2);
-        overflow: hidden;
-        animation: slideUp 0.4s ease;
+    .auth-banner {
+        flex: 1;
+        display: none;
+        background: linear-gradient(rgba(42, 31, 24, 0.4), rgba(42, 31, 24, 0.7)), url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+        position: relative;
     }
 
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
+    @media (min-width: 992px) {
+        .auth-banner {
+            display: block;
         }
     }
 
-    .login-header {
-        background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%);
-        padding: 2.5rem 2rem;
-        text-align: center;
+    .auth-banner-content {
+        position: absolute;
+        bottom: 10%;
+        left: 10%;
         color: white;
+        max-width: 80%;
     }
 
-    .login-icon {
+    .auth-banner-content h1 {
+        font-family: 'Playfair Display', serif;
         font-size: 3.5rem;
+        font-weight: 700;
         margin-bottom: 1rem;
+        line-height: 1.2;
     }
 
-    .login-header h2 {
+    .auth-banner-content p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        font-weight: 300;
+    }
+
+    .auth-form-container {
+        width: 100%;
+        max-width: 550px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 4rem;
+        background: white;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.03);
+        z-index: 10;
+        position: relative;
+    }
+
+    @media (max-width: 991px) {
+        .auth-form-container {
+            max-width: 100%;
+            padding: 2rem;
+            align-items: center;
+        }
+        .auth-form-wrapper {
+            width: 100%;
+            max-width: 450px;
+        }
+    }
+
+    .brand-logo {
+        font-family: 'Playfair Display', serif;
         font-size: 1.8rem;
         font-weight: 700;
-        margin-bottom: 0.3rem;
-        letter-spacing: 0.5px;
+        color: var(--dark);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 3rem;
     }
 
-    .login-header p {
-        font-size: 1rem;
-        margin: 0;
-        opacity: 0.95;
-        font-weight: 500;
+    .brand-logo i {
+        color: var(--primary);
+        margin-right: 10px;
     }
 
-    .login-body {
-        padding: 2.5rem 2rem;
+    .auth-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--dark);
     }
 
-    .alert {
-        border-radius: 8px;
-        border: none;
-        margin-bottom: 1.5rem;
-        animation: slideDown 0.3s ease;
-    }
-
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .auth-subtitle {
+        color: #6b7280;
+        margin-bottom: 2.5rem;
+        font-size: 0.95rem;
     }
 
     .form-group {
@@ -94,72 +122,73 @@
     }
 
     .form-label {
-        font-size: 1rem;
+        font-size: 0.9rem;
         font-weight: 600;
-        margin-bottom: 0.75rem;
-        color: #1f2937;
+        margin-bottom: 0.5rem;
+        color: #374151;
         display: block;
     }
 
     .input-group {
         display: flex;
         align-items: center;
-        border-radius: 8px;
+        border-radius: 12px;
         background-color: #f9fafb;
+        border: 1px solid #e5e7eb;
+        transition: all 0.3s ease;
         overflow: hidden;
     }
 
+    .input-group:focus-within {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(184, 134, 11, 0.1);
+        background-color: white;
+    }
+
     .input-group-text {
-        background-color: #f3f4f6;
+        background: transparent;
         border: none;
-        padding: 0 1rem;
-        color: #b8860b;
-        width: 45px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        padding: 0 1.2rem;
+        color: #9ca3af;
+    }
+
+    .input-group:focus-within .input-group-text {
+        color: var(--primary);
     }
 
     .form-control {
         border: none;
-        background-color: #f9fafb;
-        padding: 0.875rem 1rem;
-        font-size: 1rem;
+        background: transparent;
+        padding: 1rem 1rem 1rem 0;
+        font-size: 0.95rem;
         flex: 1;
-        transition: all 0.3s ease;
+        width: 100%;
+        color: var(--dark);
+        font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
     .form-control:focus {
         outline: none;
-        background-color: white;
-        box-shadow: inset 0 0 0 2px rgba(184, 134, 11, 0.2);
     }
 
     .form-check {
+        display: flex;
+        align-items: center;
         margin-bottom: 1.5rem;
     }
 
     .form-check-input {
-        width: 1.25rem;
-        height: 1.25rem;
+        width: 1.2rem;
+        height: 1.2rem;
         border: 2px solid #d1d5db;
+        border-radius: 4px;
         cursor: pointer;
         transition: all 0.2s ease;
-        margin-top: 0.3rem;
-    }
-
-    .form-check-input:checked {
-        background-color: #b8860b;
-        border-color: #b8860b;
-    }
-
-    .form-check-input:focus {
-        box-shadow: 0 0 0 0.25rem rgba(184, 134, 11, 0.25);
-        border-color: #b8860b;
+        accent-color: var(--primary);
     }
 
     .form-check-label {
-        font-size: 1rem;
+        font-size: 0.9rem;
         color: #4b5563;
         cursor: pointer;
         margin-left: 0.5rem;
@@ -167,222 +196,124 @@
 
     .btn-login {
         width: 100%;
-        padding: 0.875rem 1.5rem;
-        font-size: 1.05rem;
+        padding: 1rem;
+        font-size: 1rem;
         font-weight: 600;
-        background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background: var(--primary);
         color: white;
         border: none;
-        border-radius: 8px;
+        border-radius: 12px;
         cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(184, 134, 11, 0.3);
-        margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2rem;
     }
 
     .btn-login:hover {
+        background: var(--secondary);
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(184, 134, 11, 0.4);
+        box-shadow: 0 10px 20px rgba(184, 134, 11, 0.2);
     }
 
-    .btn-login:active {
-        transform: translateY(0);
-    }
-
-    .divider {
-        height: 1px;
-        background-color: #e5e7eb;
-        margin: 1.5rem 0;
-    }
-
-    .login-register {
+    .auth-footer {
         text-align: center;
-        font-size: 1rem;
+        font-size: 0.95rem;
         color: #4b5563;
-        margin-bottom: 1.5rem;
     }
 
-    .login-register a {
-        color: #b8860b;
+    .auth-footer a {
+        color: var(--primary);
         font-weight: 600;
         text-decoration: none;
         transition: all 0.2s ease;
     }
 
-    .login-register a:hover {
-        opacity: 0.8;
+    .auth-footer a:hover {
+        text-decoration: underline;
     }
 
     .login-info {
-        background-color: #f8f5ff;
-        border-left: 4px solid #b8860b;
-        border-radius: 6px;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
+        background-color: #fdfbf7;
+        border: 1px dashed rgba(184, 134, 11, 0.3);
+        border-radius: 12px;
+        padding: 1.2rem;
+        margin-top: 2rem;
     }
 
     .login-info-title {
-        color: #b8860b;
-        font-size: 0.95rem;
+        color: var(--primary);
+        font-size: 0.85rem;
         font-weight: 700;
-        margin-bottom: 1rem;
-        margin-top: 0;
-    }
-
-    .login-info-content {
-        font-size: 0.9rem;
-        color: #374151;
+        margin-bottom: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
     .info-item {
         display: flex;
-        flex-direction: column;
-        margin-bottom: 0.75rem;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
     }
 
     .info-label {
         font-weight: 600;
-        color: #374151;
-        font-size: 0.9rem;
+        color: #4b5563;
     }
 
     .info-value {
         color: #6b7280;
         font-family: 'Courier New', monospace;
-        font-size: 0.85rem;
-        margin-top: 0.25rem;
-    }
-
-    .login-back-link {
-        display: block;
-        text-align: center;
-        color: white;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 1rem;
-        transition: all 0.2s ease;
-        margin-top: 1rem;
-    }
-
-    .login-back-link:hover {
-        opacity: 0.8;
     }
 
     .invalid-feedback {
         color: #dc2626;
-        font-size: 0.875rem;
+        font-size: 0.85rem;
         margin-top: 0.5rem;
         display: block;
     }
 
-    @media (max-width: 640px) {
-        .login-container {
-            padding: 0.5rem;
-        }
-
-        .login-card {
-            max-width: 100%;
-        }
-
-        .login-header {
-            padding: 2rem 1.5rem;
-        }
-
-        .login-header h2 {
-            font-size: 1.5rem;
-        }
-
-        .login-icon {
-            font-size: 3rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .login-body {
-            padding: 1.75rem 1.5rem;
-        }
-
-        .form-label {
-            font-size: 0.95rem;
-        }
-
-        .form-control {
-            font-size: 0.95rem;
-            padding: 0.75rem 0.875rem;
-        }
-
-        .btn-login {
-            padding: 0.75rem 1.25rem;
-            font-size: 0.95rem;
-        }
-
-        .login-register {
-            font-size: 0.9rem;
-        }
-
-        .login-info {
-            padding: 0.875rem;
-        }
-
-        .login-info-title {
-            font-size: 0.9rem;
-        }
-
-        .login-info-content {
-            font-size: 0.85rem;
-        }
-
-        .info-value {
-            font-size: 0.8rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .login-header {
-            padding: 1.5rem 1rem;
-        }
-
-        .login-body {
-            padding: 1.5rem 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .login-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .login-header h2 {
-            font-size: 1.3rem;
-        }
-
-        .login-header p {
-            font-size: 0.9rem;
-        }
+    .alert-danger {
+        background: #fef2f2;
+        border-left: 4px solid #ef4444;
+        padding: 1rem;
+        color: #b91c1c;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
     }
 </style>
 @endsection
 
 @section('content')
-<div class="login-container">
-    <div class="login-card">
-        <!-- Header -->
-        <div class="login-header">
-            <div class="login-icon">
-                <i class="fas fa-ring"></i>
-            </div>
-            <h2>Gemilang WO</h2>
-            <p>Masuk ke Akun Anda</p>
+<div class="auth-wrapper">
+    <!-- Image Banner -->
+    <div class="auth-banner">
+        <div class="auth-banner-content">
+            <h1>Ciptakan Hari Sempurna Anda Bersama Kami</h1>
+            <p>Akses dasbor personal Anda dan mulai rencanakan momen menakjubkan yang akan dikenang seumur hidup.</p>
         </div>
+    </div>
 
-        <!-- Body -->
-        <div class="login-body">
+    <!-- Form Section -->
+    <div class="auth-form-container">
+        <div class="auth-form-wrapper">
+            <a href="{{ route('home') }}" class="brand-logo">
+                <i class="fas fa-ring"></i> Gemilang WO
+            </a>
+
+            <h2 class="auth-title">Selamat Datang</h2>
+            <p class="auth-subtitle">Masukkan kredensial Anda untuk melanjutkan ke dasbor.</p>
+
             @if ($errors->any())
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <strong>Kesalahan!</strong> Gagal masuk. Silakan periksa kredensial Anda.
+                <div class="alert-danger">
+                    <i class="fas fa-exclamation-circle me-2 fs-5"></i>
+                    Gagal masuk. Silakan periksa kembali email dan sandi Anda.
                 </div>
             @endif
 
@@ -393,89 +324,66 @@
                 <div class="form-group">
                     <label for="email" class="form-label">Alamat Email</label>
                     <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-envelope"></i>
-                        </span>
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                         <input id="email" type="email" 
-                               class="form-control @error('email') is-invalid @enderror" 
+                               class="form-control" 
                                name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
                                placeholder="you@example.com">
                     </div>
-                    @error('email')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
                 </div>
 
                 <!-- Password Field -->
                 <div class="form-group">
                     <label for="password" class="form-label">Kata Sandi</label>
                     <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-lock"></i>
-                        </span>
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         <input id="password" type="password" 
-                               class="form-control @error('password') is-invalid @enderror" 
+                               class="form-control" 
                                name="password" required autocomplete="current-password"
-                               placeholder="Masukkan kata sandi Anda">
+                               placeholder="Masukkan kata sandi">
                     </div>
-                    @error('password')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
                 </div>
 
                 <!-- Remember Me -->
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="remember" id="remember" 
-                           {{ old('remember') ? 'checked' : '' }}>
-                    <label class="form-check-label" for="remember">
-                        Ingat saya untuk lain waktu
-                    </label>
+                    <input type="checkbox" class="form-check-input" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                    <label class="form-check-label" for="remember">Ingat saya untuk login berikutnya</label>
                 </div>
 
                 <!-- Login Button -->
                 <button type="submit" class="btn-login">
-                    <i class="fas fa-sign-in-alt me-2"></i> Masuk ke Gemilang WO
+                    Masuk Sekarang <i class="fas fa-arrow-right ms-2"></i>
                 </button>
             </form>
 
-            <!-- Divider -->
-            <div class="divider"></div>
-
-            <!-- Register Link -->
-            <p class="login-register">
-                Belum punya akun?<br>
-                <a href="{{ route('register') }}">Daftar di sini</a>
-            </p>
+            <div class="auth-footer">
+                Belum memiliki akun pelanggan? <a href="{{ route('register') }}">Buat Profil Baru</a>
+            </div>
 
             <!-- Test Accounts Info -->
             <div class="login-info">
-                <p class="login-info-title">
-                    <i class="fas fa-info-circle me-2"></i>Akun Uji Coba
-                </p>
-                <div class="login-info-content">
-                    <div class="info-item">
-                        <span class="info-label">Admin:</span>
-                        <span class="info-value">admin@gemilangwo.test</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Owner:</span>
-                        <span class="info-value">owner@gemilangwo.test</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Pelanggan:</span>
-                        <span class="info-value">budi@gemilangwo.test</span>
-                    </div>
-                    <div class="info-item" style="border-top: 1px solid #e5e7eb; margin-top: 0.75rem; padding-top: 0.75rem;">
-                        <span class="info-label">Kata Sandi:</span>
-                        <span class="info-value">password123</span>
-                    </div>
+                <p class="login-info-title"><i class="fas fa-key me-2"></i>Akses Uji Coba</p>
+                <div class="info-item">
+                    <span class="info-label">Admin:</span>
+                    <span class="info-value">admin@gemilangwo.test</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Owner:</span>
+                    <span class="info-value">owner@gemilangwo.test</span>
+                </div>
+                <div class="info-item border-bottom pb-2 mb-2">
+                    <span class="info-label">Pelanggan:</span>
+                    <span class="info-value">budi@gemilangwo.test</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Kata Sandi:</span>
+                    <span class="info-value">password123</span>
                 </div>
             </div>
-
-            <!-- Kembali ke Beranda -->
-            <a href="{{ route('home') }}" class="login-back-link">
-                <i class="fas fa-arrow-left me-2"></i>Kembali ke Beranda
-            </a>
+            
+            <div class="mt-4 text-center">
+                <a href="{{ route('home') }}" class="text-muted text-decoration-none" style="font-size: 0.85rem;"><i class="fas fa-arrow-left me-1"></i> Kembali ke Halaman Utama</a>
+            </div>
         </div>
     </div>
 </div>

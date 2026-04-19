@@ -8,7 +8,7 @@
         <div class="col-lg-8">
             <div class="card" style="box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: none;">
                 <div style="background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%); color: white; padding: 2rem; border-radius: 8px 8px 0 0;">
-                    <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Verifikasi Pembayaran</h5>
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;"><i class="fas fa-check-circle me-2"></i>Verifikasi Pembayaran</h5>
                 </div>
 
                 <div class="card-body p-4">

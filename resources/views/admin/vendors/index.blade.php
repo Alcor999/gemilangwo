@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h1><i class="fas fa-store"></i> Daftar Vendor</h1>
+            <h1 class="mb-1" style="font-family: \'Playfair Display\', serif; font-size: 2rem; font-weight: 600; color: var(--text-dark);"><i class="fas fa-store"></i> Daftar Vendor</h1>
             <p class="text-muted">Kelola vendor yang bisa dipilih customer untuk setiap kategori.</p>
         </div>
         <div class="col-md-4 text-end">

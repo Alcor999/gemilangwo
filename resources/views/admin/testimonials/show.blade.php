@@ -22,8 +22,8 @@
         <!-- Video Preview -->
         <div class="col-lg-6 mb-4">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">Pratinjau Video</h5>
+                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Pratinjau Video</h5>
                 </div>
                 <div class="card-body">
                     @if ($testimonial->type === 'youtube' && $testimonial->youtube_url)
@@ -66,8 +66,8 @@
         <!-- Detail Testimoni -->
         <div class="col-lg-6 mb-4">
             <div class="card shadow-sm border-0 mb-3">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">Detail Testimoni</h5>
+                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Detail Testimoni</h5>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
@@ -162,7 +162,7 @@
             @if (!$testimonial->is_active)
                 <div class="card shadow-sm border-0 border-success">
                     <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">Setujui atau Tolak?</h5>
+                        <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Setujui atau Tolak?</h5>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('admin.testimonials.approve', $testimonial) }}" method="POST" class="d-inline">
@@ -180,7 +180,7 @@
             @else
                 <div class="card shadow-sm border-0">
                     <div class="card-header bg-secondary text-white">
-                        <h5 class="mb-0">Kelola Testimoni Dipublikasikan</h5>
+                        <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Kelola Testimoni Dipublikasikan</h5>
                     </div>
                     <div class="card-body">
                         @if (!$testimonial->is_featured)

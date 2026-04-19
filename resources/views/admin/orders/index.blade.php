@@ -10,8 +10,8 @@
         <div class="card-body">
             @if($orders->count() > 0)
                 <div class="table-responsive">
-                    <table class="table">
-                        <thead>
+                    <table class="table table-hover align-middle mb-0">
+                        <thead style="background: rgba(0,0,0,0.02);">
                             <tr>
                                 <th>ID Pesanan</th>
                                 <th>Pelanggan</th>

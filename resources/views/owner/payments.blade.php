@@ -15,12 +15,12 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h5 class="mb-0">Metode Pembayaran</h5>
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Metode Pembayaran</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-sm">
-                            <thead>
+                            <thead style="background: rgba(0,0,0,0.02);">
                                 <tr>
                                     <th>Metode Pembayaran</th>
                                     <th>Jumlah</th>
@@ -49,12 +49,12 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h5 class="mb-0">Status Pembayaran</h5>
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Status Pembayaran</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-sm">
-                            <thead>
+                            <thead style="background: rgba(0,0,0,0.02);">
                                 <tr>
                                     <th>Status</th>
                                     <th>Jumlah</th>
@@ -87,7 +87,7 @@
 
     <div class="card shadow-sm">
         <div class="card-header">
-            <h5 class="mb-0">Transaksi Pembayaran Terbaru</h5>
+            <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Transaksi Pembayaran Terbaru</h5>
         </div>
         <div class="card-body">
             <div class="table-responsive">

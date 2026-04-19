@@ -6,7 +6,7 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-light">
                 <h1>
                     <i class="fas fa-ticket-alt"></i> Tiket Dukungan Saya
                 </h1>

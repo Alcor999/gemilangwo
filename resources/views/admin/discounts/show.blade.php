@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h1><i class="fas fa-eye"></i> Detail Diskon</h1>
+            <h1 class="mb-1" style="font-family: \'Playfair Display\', serif; font-size: 2rem; font-weight: 600; color: var(--text-dark);"><i class="fas fa-eye"></i> Detail Diskon</h1>
         </div>
         <div class="col-md-4 text-end">
             <a href="{{ route('admin.discounts.edit', $discount) }}" class="btn btn-warning">
@@ -102,12 +102,12 @@
 
             @if ($discount->packages->count() > 0)
                 <div class="card">
-                    <div class="card-header bg-light">
-                        <h5 class="mb-0"><i class="fas fa-box"></i> Paket yang Berlaku</h5>
+                    <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
+                        <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;"><i class="fas fa-box"></i> Paket yang Berlaku</h5>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-sm mb-0">
-                            <thead>
+                            <thead style="background: rgba(0,0,0,0.02);">
                                 <tr>
                                     <th>Nama Paket</th>
                                     <th>Harga Awal</th>
@@ -145,8 +145,8 @@
 
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> Info</h5>
+                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;"><i class="fas fa-info-circle"></i> Info</h5>
                 </div>
                 <div class="card-body">
                     <p class="small">

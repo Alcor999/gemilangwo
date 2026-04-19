@@ -6,7 +6,7 @@
 <div class="container-fluid mt-4">
     <div class="row">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-light">
                 <h4><i class="fas fa-check-circle me-2"></i>Pembayaran Terverifikasi</h4>
                 <div>
                     <a href="{{ route('admin.payments.pending') }}" class="btn btn-sm btn-outline-warning">

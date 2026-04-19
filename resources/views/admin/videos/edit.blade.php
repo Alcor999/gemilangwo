@@ -22,7 +22,7 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="card">
-                <div class="card-header bg-light">
+                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
                     <h6 class="mb-0"><i class="fas fa-video"></i> Detail Video</h6>
                 </div>
                 <div class="card-body">

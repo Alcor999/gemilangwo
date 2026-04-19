@@ -16,7 +16,7 @@
         <div class="col-md-6">
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0">Informasi Pengguna</h5>
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Informasi Pengguna</h5>
                 </div>
                 <div class="card-body">
                     <dl class="row">
@@ -58,7 +58,7 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h5 class="mb-0">Ubah Peran</h5>
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Ubah Peran</h5>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.users.updateRole', $user) }}" method="POST">

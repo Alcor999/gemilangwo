@@ -54,7 +54,7 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-light">
+                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
                     <h6 class="mb-0"><i class="fas fa-crown"></i> Pelanggan Teratas berdasarkan Nilai Seumur Hidup</h6>
                 </div>
                 <div class="table-responsive">
@@ -103,7 +103,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-light">
+                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
                     <h6 class="mb-0"><i class="fas fa-redo"></i> Analisis Pelanggan Berulang</h6>
                 </div>
                 <div class="table-responsive">

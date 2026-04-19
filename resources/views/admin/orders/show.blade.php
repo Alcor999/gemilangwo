@@ -8,7 +8,7 @@
         <div class="col-md-8">
             <div class="card mb-4">
                 <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Pesanan {{ $order->order_number }}</h5>
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Pesanan {{ $order->order_number }}</h5>
                     <span class="badge-status badge-{{ strtolower(str_replace('_', '-', $order->status)) }}">
                         {{ ucfirst(str_replace('_', ' ', $order->status)) }}
                     </span>

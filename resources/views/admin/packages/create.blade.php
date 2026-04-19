@@ -7,8 +7,8 @@
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <div class="card">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">Buat Paket Baru</h5>
+                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Buat Paket Baru</h5>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.packages.store') }}" method="POST" enctype="multipart/form-data">

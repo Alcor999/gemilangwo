@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h1><i class="fas fa-plus-circle"></i> Buat Diskon Baru</h1>
+            <h1 class="mb-1" style="font-family: \'Playfair Display\', serif; font-size: 2rem; font-weight: 600; color: var(--text-dark);"><i class="fas fa-plus-circle"></i> Buat Diskon Baru</h1>
         </div>
         <div class="col-md-4 text-end">
             <a href="{{ route('admin.discounts.index') }}" class="btn btn-secondary">
@@ -168,8 +168,8 @@
 
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Tips</h5>
+                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;"><i class="fas fa-lightbulb"></i> Tips</h5>
                 </div>
                 <div class="card-body">
                     <h6>Contoh Flash Sale</h6>

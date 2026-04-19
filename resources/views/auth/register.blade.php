@@ -3,330 +3,254 @@
 @section('title', 'Daftar - Gemilang WO')
 
 @section('styles')
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+    :root {
+        --primary: #b8860b;
+        --secondary: #8b7355;
+        --dark: #2A1F18;
+        --light: #FCF9F2;
+    }
+
     html, body {
         height: 100%;
         margin: 0;
         padding: 0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: var(--light);
+        color: var(--dark);
     }
 
-    .login-container {
-        min-height: 100vh;
+    .auth-wrapper {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%);
-        padding: 1rem;
+        min-height: 100vh;
+        width: 100vw;
     }
 
-    .login-card {
-        width: 100%;
-        max-width: 450px;
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 20px 60px rgba(184, 134, 11, 0.2);
-        overflow: hidden;
-        animation: slideUp 0.4s ease;
+    .auth-banner {
+        flex: 1;
+        display: none;
+        background: linear-gradient(rgba(42, 31, 24, 0.4), rgba(42, 31, 24, 0.7)), url('https://images.unsplash.com/photo-1544531586-fde5298cdd40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+        position: relative;
     }
 
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
+    @media (min-width: 992px) {
+        .auth-banner {
+            display: block;
         }
     }
 
-    .login-header {
-        background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%);
-        padding: 2.5rem 2rem;
-        text-align: center;
+    .auth-banner-content {
+        position: absolute;
+        bottom: 10%;
+        left: 10%;
         color: white;
+        max-width: 80%;
     }
 
-    .login-icon {
+    .auth-banner-content h1 {
+        font-family: 'Playfair Display', serif;
         font-size: 3.5rem;
+        font-weight: 700;
         margin-bottom: 1rem;
+        line-height: 1.2;
     }
 
-    .login-header h2 {
+    .auth-banner-content p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        font-weight: 300;
+    }
+
+    .auth-form-container {
+        width: 100%;
+        max-width: 550px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 4rem;
+        background: white;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.03);
+        z-index: 10;
+        position: relative;
+        overflow-y: auto;
+    }
+
+    @media (max-width: 991px) {
+        .auth-form-container {
+            max-width: 100%;
+            padding: 2rem;
+            align-items: center;
+        }
+        .auth-form-wrapper {
+            width: 100%;
+            max-width: 450px;
+        }
+    }
+
+    .brand-logo {
+        font-family: 'Playfair Display', serif;
         font-size: 1.8rem;
         font-weight: 700;
-        margin-bottom: 0.3rem;
-        letter-spacing: 0.5px;
+        color: var(--dark);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 2rem;
     }
 
-    .login-header p {
-        font-size: 1rem;
-        margin: 0;
-        opacity: 0.95;
-        font-weight: 500;
+    .brand-logo i {
+        color: var(--primary);
+        margin-right: 10px;
     }
 
-    .login-body {
-        padding: 2.5rem 2rem;
+    .auth-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--dark);
     }
 
-    .alert {
-        border-radius: 8px;
-        border: none;
-        margin-bottom: 1.5rem;
-        animation: slideDown 0.3s ease;
-    }
-
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .auth-subtitle {
+        color: #6b7280;
+        margin-bottom: 2.5rem;
+        font-size: 0.95rem;
     }
 
     .form-group {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
     }
 
     .form-label {
-        font-size: 1rem;
+        font-size: 0.9rem;
         font-weight: 600;
-        margin-bottom: 0.75rem;
-        color: #1f2937;
+        margin-bottom: 0.5rem;
+        color: #374151;
         display: block;
     }
 
     .input-group {
         display: flex;
         align-items: center;
-        border-radius: 8px;
+        border-radius: 12px;
         background-color: #f9fafb;
+        border: 1px solid #e5e7eb;
+        transition: all 0.3s ease;
         overflow: hidden;
     }
 
+    .input-group:focus-within {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(184, 134, 11, 0.1);
+        background-color: white;
+    }
+
     .input-group-text {
-        background-color: #f3f4f6;
+        background: transparent;
         border: none;
-        padding: 0 1rem;
-        color: #b8860b;
-        width: 45px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        padding: 0 1.2rem;
+        color: #9ca3af;
+    }
+
+    .input-group:focus-within .input-group-text {
+        color: var(--primary);
     }
 
     .form-control {
         border: none;
-        background-color: #f9fafb;
-        padding: 0.875rem 1rem;
-        font-size: 1rem;
+        background: transparent;
+        padding: 1rem 1rem 1rem 0;
+        font-size: 0.95rem;
         flex: 1;
-        transition: all 0.3s ease;
+        width: 100%;
+        color: var(--dark);
+        font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
     .form-control:focus {
         outline: none;
-        background-color: white;
-        box-shadow: inset 0 0 0 2px rgba(184, 134, 11, 0.2);
-    }
-
-    .form-check {
-        margin-bottom: 1.5rem;
-    }
-
-    .form-check-input {
-        width: 1.25rem;
-        height: 1.25rem;
-        border: 2px solid #d1d5db;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        margin-top: 0.3rem;
-    }
-
-    .form-check-input:checked {
-        background-color: #b8860b;
-        border-color: #b8860b;
-    }
-
-    .form-check-input:focus {
-        box-shadow: 0 0 0 0.25rem rgba(184, 134, 11, 0.25);
-        border-color: #b8860b;
-    }
-
-    .form-check-label {
-        font-size: 1rem;
-        color: #4b5563;
-        cursor: pointer;
-        margin-left: 0.5rem;
     }
 
     .btn-login {
         width: 100%;
-        padding: 0.875rem 1.5rem;
-        font-size: 1.05rem;
+        padding: 1rem;
+        font-size: 1rem;
         font-weight: 600;
-        background: linear-gradient(135deg, #b8860b 0%, #8b7355 100%);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background: var(--primary);
         color: white;
         border: none;
-        border-radius: 8px;
+        border-radius: 12px;
         cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(184, 134, 11, 0.3);
-        margin-bottom: 1.5rem;
-    }
-
-    .btn-login:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(184, 134, 11, 0.4);
-    }
-
-    .btn-login:active {
-        transform: translateY(0);
-    }
-
-    .divider {
-        height: 1px;
-        background-color: #e5e7eb;
-        margin: 1.5rem 0;
-    }
-
-    .login-register {
-        text-align: center;
-        font-size: 1rem;
-        color: #4b5563;
-        margin-bottom: 1.5rem;
-    }
-
-    .login-register a {
-        color: #b8860b;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-
-    .login-register a:hover {
-        opacity: 0.8;
-    }
-
-    .login-back-link {
-        display: block;
-        text-align: center;
-        color: white;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 1rem;
-        transition: all 0.2s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2rem;
         margin-top: 1rem;
     }
 
-    .login-back-link:hover {
-        opacity: 0.8;
+    .btn-login:hover {
+        background: var(--secondary);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(184, 134, 11, 0.2);
+    }
+
+    .auth-footer {
+        text-align: center;
+        font-size: 0.95rem;
+        color: #4b5563;
+    }
+
+    .auth-footer a {
+        color: var(--primary);
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .auth-footer a:hover {
+        text-decoration: underline;
     }
 
     .invalid-feedback {
         color: #dc2626;
-        font-size: 0.875rem;
+        font-size: 0.85rem;
         margin-top: 0.5rem;
         display: block;
     }
 
-    @media (max-width: 640px) {
-        .login-container {
-            padding: 0.5rem;
-        }
-
-        .login-card {
-            max-width: 100%;
-        }
-
-        .login-header {
-            padding: 2rem 1.5rem;
-        }
-
-        .login-header h2 {
-            font-size: 1.5rem;
-        }
-
-        .login-icon {
-            font-size: 3rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .login-body {
-            padding: 1.75rem 1.5rem;
-        }
-
-        .form-label {
-            font-size: 0.95rem;
-        }
-
-        .form-control {
-            font-size: 0.95rem;
-            padding: 0.75rem 0.875rem;
-        }
-
-        .btn-login {
-            padding: 0.75rem 1.25rem;
-            font-size: 0.95rem;
-        }
-
-        .login-register {
-            font-size: 0.9rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .login-header {
-            padding: 1.5rem 1rem;
-        }
-
-        .login-body {
-            padding: 1.5rem 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .login-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .login-header h2 {
-            font-size: 1.3rem;
-        }
-
-        .login-header p {
-            font-size: 0.9rem;
-        }
+    .alert-danger {
+        background: #fef2f2;
+        border-left: 4px solid #ef4444;
+        padding: 1rem;
+        color: #b91c1c;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
     }
 </style>
 @endsection
 
 @section('content')
-<div class="login-container">
-    <div class="login-card">
-        <!-- Header -->
-        <div class="login-header">
-            <div class="login-icon">
-                <i class="fas fa-ring"></i>
-            </div>
-            <h2>Gemilang WO</h2>
-            <p>Buat Akun Anda</p>
-        </div>
+<div class="auth-wrapper">
+    <!-- Form Section -->
+    <div class="auth-form-container">
+        <div class="auth-form-wrapper">
+            <a href="{{ route('home') }}" class="brand-logo">
+                <i class="fas fa-ring"></i> Gemilang WO
+            </a>
 
-        <!-- Body -->
-        <div class="login-body">
+            <h2 class="auth-title">Daftar Akun Klien</h2>
+            <p class="auth-subtitle">Mari bergabung dan mulai rancang setiap detil perayaan Anda.</p>
+
             @if ($errors->any())
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <strong>Kesalahan!</strong> Silakan periksa formulir dan coba lagi.
+                <div class="alert-danger">
+                    <i class="fas fa-exclamation-circle me-2 fs-5"></i>
+                    Silakan periksa kembali isian formulir di bawah ini.
                 </div>
             @endif
 
@@ -337,13 +261,11 @@
                 <div class="form-group">
                     <label for="name" class="form-label">Nama Lengkap</label>
                     <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-user"></i>
-                        </span>
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
                         <input id="name" type="text" 
-                               class="form-control @error('name') is-invalid @enderror" 
+                               class="form-control" 
                                name="name" value="{{ old('name') }}" required autocomplete="name" autofocus
-                               placeholder="Masukkan nama lengkap Anda">
+                               placeholder="Contoh: Budi Santoso">
                     </div>
                     @error('name')
                         <span class="invalid-feedback">{{ $message }}</span>
@@ -352,13 +274,11 @@
 
                 <!-- Email Field -->
                 <div class="form-group">
-                    <label for="email" class="form-label">Alamat Email</label>
+                    <label for="email" class="form-label">Email Aktif</label>
                     <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-envelope"></i>
-                        </span>
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                         <input id="email" type="email" 
-                               class="form-control @error('email') is-invalid @enderror" 
+                               class="form-control" 
                                name="email" value="{{ old('email') }}" required autocomplete="email"
                                placeholder="you@example.com">
                     </div>
@@ -369,15 +289,13 @@
 
                 <!-- Password Field -->
                 <div class="form-group">
-                    <label for="password" class="form-label">Kata Sandi</label>
+                    <label for="password" class="form-label">Kata Sandi Akses</label>
                     <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-lock"></i>
-                        </span>
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         <input id="password" type="password" 
-                               class="form-control @error('password') is-invalid @enderror" 
+                               class="form-control" 
                                name="password" required autocomplete="new-password"
-                               placeholder="Buat kata sandi">
+                               placeholder="Minimal 8 karakter">
                     </div>
                     @error('password')
                         <span class="invalid-feedback">{{ $message }}</span>
@@ -386,40 +304,37 @@
 
                 <!-- Confirm Password Field -->
                 <div class="form-group">
-                    <label for="password_confirmation" class="form-label">Konfirmasi Kata Sandi</label>
+                    <label for="password_confirmation" class="form-label">Konfirmasi Sandi</label>
                     <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-lock"></i>
-                        </span>
+                        <span class="input-group-text"><i class="fas fa-shield-alt"></i></span>
                         <input id="password_confirmation" type="password" 
-                               class="form-control @error('password_confirmation') is-invalid @enderror" 
+                               class="form-control" 
                                name="password_confirmation" required autocomplete="new-password"
-                               placeholder="Konfirmasi kata sandi Anda">
+                               placeholder="Ulangi kata sandi Anda">
                     </div>
-                    @error('password_confirmation')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
                 </div>
 
                 <!-- Register Button -->
                 <button type="submit" class="btn-login">
-                    <i class="fas fa-user-plus me-2"></i> Buat Akun
+                    Buat Akun Klien <i class="fas fa-user-plus ms-2"></i>
                 </button>
             </form>
 
-            <!-- Divider -->
-            <div class="divider"></div>
+            <div class="auth-footer">
+                Sudah memiliki ruang akses? <a href="{{ route('login') }}">Masuk Disini</a>
+            </div>
+            
+            <div class="mt-4 pt-4 border-top text-center">
+                <a href="{{ route('home') }}" class="text-muted text-decoration-none" style="font-size: 0.85rem;"><i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda Utama</a>
+            </div>
+        </div>
+    </div>
 
-            <!-- Login Link -->
-            <p class="login-register">
-                Sudah punya akun?<br>
-                <a href="{{ route('login') }}">Masuk di sini</a>
-            </p>
-
-            <!-- Kembali ke Beranda -->
-            <a href="{{ route('home') }}" class="login-back-link">
-                <i class="fas fa-arrow-left me-2"></i>Kembali ke Beranda
-            </a>
+    <!-- Image Banner (Right Side for Register to contrast with Login) -->
+    <div class="auth-banner" style="background: linear-gradient(rgba(42, 31, 24, 0.4), rgba(42, 31, 24, 0.7)), url('https://images.unsplash.com/photo-1544531586-fde5298cdd40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;">
+        <div class="auth-banner-content" style="right: 10%; left: auto; text-align: right;">
+            <h1>Momen Terindah Di Tangan Yang Tepat</h1>
+            <p>Jelajahi paket unggulan kami dan realisasikan konsep magis di hari spesial Anda tanpa stres.</p>
         </div>
     </div>
 </div>

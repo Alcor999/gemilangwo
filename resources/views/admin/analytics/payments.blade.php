@@ -45,7 +45,7 @@
     <div class="row mb-4">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header bg-light">
+                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
                     <h6 class="mb-0"><i class="fas fa-chart-pie"></i> Distribusi Metode Pembayaran</h6>
                 </div>
                 <div class="card-body">
@@ -57,7 +57,7 @@
         <!-- Ringkasan -->
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header bg-light">
+                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
                     <h6 class="mb-0"><i class="fas fa-chart-bar"></i> Ringkasan</h6>
                 </div>
                 <div class="card-body">
@@ -82,7 +82,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-light">
+                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
                     <h6 class="mb-0"><i class="fas fa-table"></i> Detail Metode Pembayaran</h6>
                 </div>
                 <div class="table-responsive">

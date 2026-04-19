@@ -17,12 +17,12 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h5 class="mb-0">Pesanan per Paket</h5>
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Pesanan per Paket</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-sm">
-                            <thead>
+                            <thead style="background: rgba(0,0,0,0.02);">
                                 <tr>
                                     <th>Nama Paket</th>
                                     <th>Pesanan</th>
@@ -51,12 +51,12 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h5 class="mb-0">Pesanan per Status</h5>
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Pesanan per Status</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-sm">
-                            <thead>
+                            <thead style="background: rgba(0,0,0,0.02);">
                                 <tr>
                                     <th>Status</th>
                                     <th>Jumlah</th>
@@ -91,7 +91,7 @@
         <div class="col-md-12">
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h5 class="mb-0">Pelanggan Berulang</h5>
+                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Pelanggan Berulang</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
