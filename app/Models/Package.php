@@ -162,13 +162,15 @@ class Package extends Model
 
     public function vendorCategories()
     {
-        return $this->belongsToMany(VendorCategory::class, 'package_vendor_category');
+        return $this->belongsToMany(VendorCategory::class, 'package_vendor_category')
+                    ->withPivot('default_vendor_id');
     }
 
     public function requiredVendorCategories()
     {
         return $this->belongsToMany(VendorCategory::class, 'package_vendor_category')
-            ->where('vendor_categories.is_active', true);
+            ->where('vendor_categories.is_active', true)
+            ->withPivot('default_vendor_id');
     }
 
     public function hasVendorSelection(): bool

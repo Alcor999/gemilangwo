@@ -39,10 +39,10 @@
 
                         <div id="vendorSelectionSection" class="mb-4" style="display: none;">
                             <h6 class="border-bottom pb-2 mb-3"><i class="fas fa-store me-2"></i>Pilih Vendor</h6>
-                            <p class="text-muted small">Pilih satu vendor untuk setiap kategori di bawah ini. Total biaya akan disesuaikan.</p>
+                            <p class="text-muted small">Pilih vendor. Jika Anda memilih vendor <b>(Default)</b>, harganya sudah termasuk dalah paket. Memilih vendor unggulan lain akan menyesuaikan harga akhir pesanan.</p>
                             <div id="vendorCategoriesContainer"></div>
                             <div id="vendorTotalPreview" class="alert alert-info mt-3" style="display: none;">
-                                <strong>Subtotal Vendor:</strong> Rp <span id="vendorTotalAmount">0</span>
+                                <strong>Penyesuaian Biaya Vendor:</strong> <span id="vendorTotalAmount">0</span>
                             </div>
                         </div>
 
@@ -101,11 +101,24 @@
             'price' => (float) $p->price,
             'discounted' => (float) $p->getDiscountedPrice(),
             'requiredVendorCategories' => $p->requiredVendorCategories->map(function($vc) {
+                $defaultVendorId = $vc->pivot->default_vendor_id;
+                $defaultVendor = $vc->vendors->firstWhere('id', $defaultVendorId);
+                $defaultPrice = $defaultVendor ? (float) $defaultVendor->price : 0;
+                
                 return [
                     'id' => $vc->id,
                     'name' => $vc->name,
-                    'vendors' => $vc->vendors->map(function($v) {
-                        return ['id' => $v->id, 'name' => $v->name, 'price' => (float) $v->price];
+                    'has_default' => !is_null($defaultVendorId),
+                    'vendors' => $vc->vendors->map(function($v) use ($defaultVendorId, $defaultPrice) {
+                        $isDefault = ($v->id == $defaultVendorId);
+                        $diff = (!is_null($defaultVendorId)) ? ((float) $v->price - $defaultPrice) : (float) $v->price;
+                        return [
+                            'id' => $v->id, 
+                            'name' => $v->name, 
+                            'price' => (float) $v->price,
+                            'is_default' => $isDefault,
+                            'diff' => $diff
+                        ];
                     })->values()
                 ];
             })->values()
@@ -147,9 +160,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 <label class="form-label fw-bold">${cat.name} *</label>
                 <select class="form-select vendor-select" name="vendors[${cat.id}]" data-category-id="${cat.id}" required>
                     <option value="">-- Pilih vendor --</option>
-                    ${cat.vendors.map(v => `
-                        <option value="${v.id}" data-price="${v.price}">${v.name} - Rp ${v.price.toLocaleString('id-ID')}</option>
-                    `).join('')}
+                    ${cat.vendors.map(v => {
+                        let label = `${v.name}`;
+                        if (v.is_default) {
+                            label += ' (Vendor Default - Termasuk Harga Paket)';
+                        } else {
+                            if (cat.has_default) {
+                                if (v.diff > 0) label += ` (+ Rp ${v.diff.toLocaleString('id-ID')})`;
+                                else if (v.diff < 0) label += ` (- Rp ${Math.abs(v.diff).toLocaleString('id-ID')})`;
+                            } else {
+                                label += ` (+ Rp ${v.price.toLocaleString('id-ID')})`;
+                            }
+                        }
+                        return `<option value="${v.id}" data-diff="${v.diff}">${label}</option>`;
+                    }).join('')}
                 </select>
             `;
             vendorContainer.appendChild(div);
@@ -166,14 +190,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const pkg = getSelectedPackage();
         if (!pkg) return;
 
-        let sum = 0;
+        let diffSum = 0;
         document.querySelectorAll('.vendor-select').forEach(sel => {
             const opt = sel.options[sel.selectedIndex];
-            if (opt && opt.value) sum += parseFloat(opt.dataset.price || 0);
+            if (opt && opt.value) diffSum += parseFloat(opt.dataset.diff || 0);
         });
 
-        vendorTotalAmount.textContent = sum.toLocaleString('id-ID');
-        updateTotal(pkg.discounted, sum);
+        if (diffSum >= 0) {
+            vendorTotalAmount.textContent = '+ Rp ' + diffSum.toLocaleString('id-ID');
+            vendorTotalAmount.className = 'text-danger fw-bold';
+        } else {
+            vendorTotalAmount.textContent = '- Rp ' + Math.abs(diffSum).toLocaleString('id-ID');
+            vendorTotalAmount.className = 'text-success fw-bold';
+        }
+
+        updateTotal(pkg.discounted, diffSum);
     }
 
     function updateTotal(base, vendorSum) {

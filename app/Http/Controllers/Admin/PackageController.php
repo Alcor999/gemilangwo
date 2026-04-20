@@ -24,7 +24,9 @@ class PackageController extends Controller
      */
     public function create()
     {
-        $vendorCategories = VendorCategory::where('is_active', true)->orderBy('sort_order')->get();
+        $vendorCategories = VendorCategory::with(['vendors' => function($q) {
+            $q->where('is_active', true);
+        }])->where('is_active', true)->orderBy('sort_order')->get();
 
         return view('admin.packages.create', compact('vendorCategories'));
     }
@@ -58,7 +60,19 @@ class PackageController extends Controller
         }
 
         $package = Package::create($validated);
-        $package->vendorCategories()->sync($request->vendor_category_ids ?? []);
+        
+        $syncData = [];
+        if ($request->has('vendor_category_ids') && is_array($request->vendor_category_ids)) {
+            foreach ($request->vendor_category_ids as $categoryId) {
+                // Determine default vendor if selected
+                $defaultVendorKey = 'default_vendor_ids_' . $categoryId;
+                $defaultVendorId = $request->input($defaultVendorKey);
+                $syncData[$categoryId] = [
+                    'default_vendor_id' => $defaultVendorId ?: null,
+                ];
+            }
+        }
+        $package->vendorCategories()->sync($syncData);
 
         return redirect()->route('admin.packages.index')
             ->with('success', 'Package created successfully');
@@ -70,7 +84,9 @@ class PackageController extends Controller
     public function edit(Package $package)
     {
         $package->load('vendorCategories');
-        $vendorCategories = VendorCategory::where('is_active', true)->orderBy('sort_order')->get();
+        $vendorCategories = VendorCategory::with(['vendors' => function($q) {
+            $q->where('is_active', true);
+        }])->where('is_active', true)->orderBy('sort_order')->get();
 
         return view('admin.packages.edit', ['package' => $package, 'vendorCategories' => $vendorCategories]);
     }
@@ -104,7 +120,18 @@ class PackageController extends Controller
         }
 
         $package->update($validated);
-        $package->vendorCategories()->sync($request->vendor_category_ids ?? []);
+        
+        $syncData = [];
+        if ($request->has('vendor_category_ids') && is_array($request->vendor_category_ids)) {
+            foreach ($request->vendor_category_ids as $categoryId) {
+                $defaultVendorKey = 'default_vendor_ids_' . $categoryId;
+                $defaultVendorId = $request->input($defaultVendorKey);
+                $syncData[$categoryId] = [
+                    'default_vendor_id' => $defaultVendorId ?: null,
+                ];
+            }
+        }
+        $package->vendorCategories()->sync($syncData);
 
         return redirect()->route('admin.packages.index')
             ->with('success', 'Package updated successfully');

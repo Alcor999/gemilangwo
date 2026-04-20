@@ -102,7 +102,20 @@ class OrderController extends Controller
                     ->withInput()
                     ->with('error', 'Vendor tidak valid untuk kategori: '.$category->name);
             }
-            $totalPrice += (float) $vendor->price;
+            
+            // Logika baru untuk kompensasi Vendor Default
+            $defaultVendorId = $category->pivot->default_vendor_id;
+            if ($defaultVendorId) {
+                $defaultVendor = \App\Models\Vendor::find($defaultVendorId);
+                if ($defaultVendor && $vendor->id != $defaultVendor->id) {
+                    $priceDiff = $vendor->price - $defaultVendor->price;
+                    $totalPrice += (float) $priceDiff;
+                }
+            } else {
+                // Jika kategori tersebut tidak punya vendor default, vendor apa pun yang dipilih akan di-charge sepenuhnya
+                $totalPrice += (float) $vendor->price;
+            }
+
             $selectedVendors[] = [
                 'vendor' => $vendor,
                 'category' => $category,

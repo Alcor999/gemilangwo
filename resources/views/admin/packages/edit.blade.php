@@ -99,16 +99,34 @@
                             <p class="text-muted small">Centang kategori vendor yang harus dipilih pelanggan saat memesan paket ini.</p>
                             <div class="border rounded p-3">
                                 @forelse(($vendorCategories ?? []) as $vc)
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="vendor_category_ids[]" value="{{ $vc->id }}" id="vc{{ $vc->id }}"
-                                            {{ in_array($vc->id, $package->vendorCategories->pluck('id')->toArray()) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="vc{{ $vc->id }}">
-                                            {{ $vc->name }}
-                                        </label>
+                                    @php
+                                        $isChecked = in_array($vc->id, $package->vendorCategories->pluck('id')->toArray());
+                                        $pivotDefaultId = $isChecked ? $package->vendorCategories->where('id', $vc->id)->first()->pivot->default_vendor_id : null;
+                                    @endphp
+                                    <div class="mb-3 pb-2 border-bottom last-child-no-border">
+                                        <div class="form-check fw-bold mb-2">
+                                            <input class="form-check-input" type="checkbox" name="vendor_category_ids[]" value="{{ $vc->id }}" id="vc{{ $vc->id }}"
+                                                {{ $isChecked ? 'checked' : '' }} onchange="document.getElementById('default_vendor_container_{{ $vc->id }}').style.display = this.checked ? 'block' : 'none';">
+                                            <label class="form-check-label" for="vc{{ $vc->id }}">
+                                                {{ $vc->name }}
+                                            </label>
+                                        </div>
+                                        <div id="default_vendor_container_{{ $vc->id }}" style="display: {{ $isChecked ? 'block' : 'none' }}; margin-left: 2rem;">
+                                            <label class="form-label text-muted small">Pilih Vendor Default (yang menentukan harga basis 0)</label>
+                                            <select name="default_vendor_ids_{{ $vc->id }}" class="form-select form-select-sm">
+                                                <option value="">-- Tanpa Vendor Default --</option>
+                                                @foreach($vc->vendors as $vendor)
+                                                    <option value="{{ $vendor->id }}" {{ $pivotDefaultId == $vendor->id ? 'selected' : '' }}>
+                                                        {{ $vendor->name }} (Harga: Rp {{ number_format($vendor->price, 0, ',', '.') }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                 @empty
                                     <p class="text-muted mb-0">Belum ada kategori vendor. <a href="{{ route('admin.vendor-categories.index') }}">Kelola kategori vendor</a></p>
                                 @endforelse
+                                <style>.last-child-no-border:last-child { border-bottom: none !important; margin-bottom: 0 !important; padding-bottom: 0 !important; }</style>
                             </div>
                         </div>
 
