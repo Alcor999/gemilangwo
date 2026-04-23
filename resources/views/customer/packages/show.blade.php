@@ -46,7 +46,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Siap Pesan?</h5>
-                    <a href="{{ route('customer.orders.create') }}" class="btn btn-primary w-100 mb-2" data-package="{{ $package->id }}">
+                    <a href="{{ route('customer.orders.create', ['package_id' => $package->id]) }}" class="btn btn-primary w-100 mb-2">
                         <i class="fas fa-calendar"></i> Pesan Paket Ini
                     </a>
                     <a href="{{ route('customer.packages.index') }}" class="btn btn-secondary w-100">

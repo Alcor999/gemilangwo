@@ -179,7 +179,7 @@
 </div>
 
 @section('js')
-<script src="https://app.sandbox.midtrans.com/snap/snap.js"></script>
+<script src="{{ config('midtrans.snap_url') }}" data-client-key="{{ $client_key }}"></script>
 <script>
     // Setel Client Key Midtrans
     window.snap = window.snap || {};

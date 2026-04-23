@@ -164,13 +164,19 @@ class OrderController extends Controller
                 ->with('error', 'This order cannot be paid');
         }
 
-        // Get active banks
-        $banks = Bank::where('active', true)->get();
+        try {
+            $snapToken = $this->midtransService->createSnapToken($order);
+            $clientKey = config('midtrans.client_key');
 
-        return view('customer.orders.payment-manual', [
-            'order' => $order,
-            'banks' => $banks,
-        ]);
+            return view('customer.orders.payment', [
+                'order' => $order,
+                'snap_token' => $snapToken,
+                'client_key' => $clientKey,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->route('customer.orders.show', $order->id)
+                ->with('error', 'Gagal memproses pembayaran: ' . $e->getMessage());
+        }
     }
 
     /**

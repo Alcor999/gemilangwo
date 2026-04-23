@@ -25,64 +25,44 @@ class MidtransService
     public function createSnapToken(Order $order)
     {
         $transaction_details = [
-            'order_id' => $order->order_number,
+            'order_id' => $order->order_number . '-' . time(),
             'gross_amount' => (int) $order->total_price,
         ];
 
         $customer_details = [
             'first_name' => $order->user->name,
             'email' => $order->user->email,
-            'phone' => $order->user->phone ?? '628123456789',  // Default if null
+            'phone' => $order->user->phone ?? '08123456789',
         ];
 
+        // Base Price (After Package Discount)
+        $basePrice = (int) $order->package->getDiscountedPrice();
+        
         $item_details = [
             [
                 'id' => 'pkg-'.$order->package->id,
-                'price' => (int) $order->package->price,
+                'price' => $basePrice,
                 'quantity' => 1,
-                'name' => $order->package->name,
+                'name' => $order->package->name . ' (Base Package)',
             ],
         ];
 
-        if ($order->total_price > $order->package->price) {
-            $additional_cost = $order->total_price - $order->package->price;
+        // Adjustment for Vendor Upgrades/Downgrades
+        $adjustment = (int) $order->total_price - $basePrice;
+
+        if ($adjustment !== 0) {
             $item_details[] = [
-                'id' => 'additional_fee',
-                'price' => (int) $additional_cost,
+                'id' => 'adjustment',
+                'price' => $adjustment,
                 'quantity' => 1,
-                'name' => 'Additional Charges',
+                'name' => $adjustment > 0 ? 'Vendor Upgrades' : 'Package Discount/Adjustments',
             ];
         }
-
-        // Bank transfer configuration with VA
-        $bank_transfer = [
-            'bank' => 'bni',
-            'free_text' => [
-                'inquiry' => [
-                    'en' => 'Thank you for your wedding order',
-                ],
-            ],
-        ];
 
         $payload = [
             'transaction_details' => $transaction_details,
             'customer_details' => $customer_details,
             'item_details' => $item_details,
-            // Enable bank transfer with VA first for better compatibility
-            'bank_transfer' => $bank_transfer,
-            'enabled_payments' => [
-                'bank_transfer',
-                'bank_bni',
-                'bank_bca',
-                'bank_mandiri',
-                'bank_cimb',
-                'bank_bri',
-                'credit_card',
-                'echannel',
-                'permata',
-                'akulaku',
-                'gopay',
-            ],
         ];
 
         try {
@@ -104,11 +84,20 @@ class MidtransService
         $order_id = $notification->order_id ?? null;
         $transaction_id = $notification->transaction_id ?? null;
 
-        // Find payment by order number (order_id in Midtrans = order_number)
-        $order = Order::where('order_number', $order_id)->first();
+        // Extract order_number (WO-XXXXXXXX) from Midtrans order_id (WO-XXXXXXXX-TIMESTAMP)
+        $order_number = $order_id;
+        if (str_contains($order_id, '-')) {
+            $parts = explode('-', $order_id);
+            // Case: WO - XXXXXXXX - TIMESTAMP
+            if (count($parts) >= 3) {
+                $order_number = $parts[0] . '-' . $parts[1];
+            }
+        }
+
+        $order = Order::where('order_number', $order_number)->first();
 
         if (! $order) {
-            throw new \Exception('Order not found for order_id: '.$order_id);
+            throw new \Exception('Order not found for order_id: '.$order_id . ' (Parsed: ' . $order_number . ')');
         }
 
         $payment = $order->payment;

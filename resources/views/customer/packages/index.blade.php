@@ -28,9 +28,14 @@
                                 @endif
                             </div>
                             <div class="mt-auto">
-                                <a href="{{ route('customer.packages.show', $package->id) }}" class="btn btn-primary btn-sm w-100">
-                                    Lihat Detail & Pesan
+                            <div class="mt-auto d-flex gap-2">
+                                <a href="{{ route('customer.packages.show', $package->id) }}" class="btn btn-outline-primary btn-sm flex-grow-1">
+                                    <i class="fas fa-info-circle me-1"></i> Detail
                                 </a>
+                                <a href="{{ route('customer.orders.create', ['package_id' => $package->id]) }}" class="btn btn-primary btn-sm flex-grow-1">
+                                    <i class="fas fa-calendar-check me-1"></i> Pesan
+                                </a>
+                            </div>
                             </div>
                         </div>
                     </div>
