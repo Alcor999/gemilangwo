@@ -1,41 +1,112 @@
 @extends('layouts.app')
 
-@section('title', 'Lihat Paket')
+@section('title', 'Koleksi Paket Eksklusif - Gemilang WO')
 
 @section('content')
-<div class="container-fluid">
-    <h1 class="mb-4" style="font-size: 2rem;">Paket Wedding Organizer Kami</h1>
+<div class="space-y-12 pb-20">
+    <!-- Header Section -->
+    <div class="relative py-16 px-8 rounded-[3rem] overflow-hidden text-center">
+        <div class="absolute inset-0 bg-stone-900">
+            <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
+                 class="w-full h-full object-cover opacity-30 grayscale-[30%]" alt="">
+            <div class="absolute inset-0 bg-gradient-to-b from-choco-900/40 via-transparent to-stone-50"></div>
+        </div>
+        
+        <div class="relative z-10 space-y-6 max-w-3xl mx-auto">
+            <p class="text-gold-400 text-xs font-bold uppercase tracking-[0.5em] animate-fade-in-up">The Curation</p>
+            <h1 class="font-serif text-5xl md:text-6xl text-white italic tracking-tight">Koleksi <span class="not-italic">Pernikahan</span> Impian</h1>
+            <p class="text-white/60 text-lg font-light leading-relaxed px-4">
+                Pilih paket yang mencerminkan esensi cinta Anda. Setiap detil telah dikurasi untuk menciptakan kemewahan yang tak terlupakan.
+            </p>
+            
+            <div class="pt-8 flex flex-wrap justify-center gap-4">
+                <div class="px-6 py-2 bg-white/5 backdrop-blur-md rounded-full border border-white/10 text-white/80 text-[10px] font-bold uppercase tracking-widest">
+                    Semua Paket
+                </div>
+                <div class="px-6 py-2 hover:bg-white/10 transition-colors cursor-pointer rounded-full border border-white/5 text-white/40 text-[10px] font-bold uppercase tracking-widest">
+                    Platinum Series
+                </div>
+                <div class="px-6 py-2 hover:bg-white/10 transition-colors cursor-pointer rounded-full border border-white/5 text-white/40 text-[10px] font-bold uppercase tracking-widest">
+                    Intimate Royal
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Packages Grid -->
     @if($packages->count() > 0)
-        <div class="row">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-4">
             @foreach($packages as $package)
-                <div class="col-12 col-sm-6 col-lg-4 mb-4">
-                    <div class="card h-100">
+                <div class="group relative bg-white rounded-[2.5rem] border border-stone-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+                    <!-- Image Wrapper -->
+                    <div class="relative h-80 overflow-hidden">
                         @if($package->image)
-                            <img src="{{ asset('storage/' . $package->image) }}" class="card-img-top" alt="{{ $package->name }}" style="height: 200px; object-fit: cover;">
+                            <img src="{{ asset('storage/' . $package->image) }}" 
+                                 class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                                 alt="{{ $package->name }}">
                         @else
-                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                                <i class="fas fa-ring fa-3x fa-lg text-muted"></i>
+                            <div class="w-full h-full bg-stone-50 flex items-center justify-center text-stone-200">
+                                <i class="fas fa-ring fa-4x opacity-20"></i>
                             </div>
                         @endif
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title" style="font-size: 1.1rem;">{{ $package->name }}</h5>
-                            <p class="card-text text-muted" style="font-size: 0.9rem;">{{ Str::limit($package->description, 100) }}</p>
-                            <div class="mb-3">
-                                <h3 class="text-primary mb-0" style="font-size: 1.5rem;">Rp {{ number_format($package->price, 0, ',', '.') }}</h3>
-                                @if($package->max_guests)
-                                    <small class="text-muted">Hingga {{ $package->max_guests }} tamu</small>
-                                @endif
+                        
+                        <!-- Top Badges -->
+                        <div class="absolute top-6 left-6 flex flex-col gap-2">
+                            <span class="px-4 py-1.5 bg-black/40 backdrop-blur-md text-[10px] font-bold text-white uppercase tracking-widest rounded-full border border-white/10">
+                                Featured
+                            </span>
+                        </div>
+                        
+                        <!-- Overlay on Hover -->
+                        <div class="absolute inset-0 bg-choco-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="p-10 space-y-8 flex flex-col h-[calc(100%-20rem)]">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-serif text-2xl text-choco-900 font-bold group-hover:text-gold-600 transition-colors">{{ $package->name }}</h3>
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fas fa-star text-gold-400 text-[10px]"></i>
+                                    <span class="text-[11px] font-bold text-choco-900">4.9</span>
+                                </div>
                             </div>
-                            <div class="mt-auto">
-                            <div class="mt-auto d-flex gap-2">
-                                <a href="{{ route('customer.packages.show', $package->id) }}" class="btn btn-outline-primary btn-sm flex-grow-1">
-                                    <i class="fas fa-info-circle me-1"></i> Detail
-                                </a>
-                                <a href="{{ route('customer.orders.create', ['package_id' => $package->id]) }}" class="btn btn-primary btn-sm flex-grow-1">
-                                    <i class="fas fa-calendar-check me-1"></i> Pesan
-                                </a>
+                            
+                            <p class="text-stone-400 text-sm font-light leading-relaxed line-clamp-2 italic">
+                                "{{ Str::limit($package->description, 100) }}"
+                            </p>
+                        </div>
+
+                        <!-- Highlights -->
+                        <div class="flex items-center gap-6 py-4 border-y border-stone-50">
+                            @if($package->max_guests)
+                                <div class="flex flex-col gap-1">
+                                    <span class="text-[9px] font-bold text-stone-300 uppercase tracking-widest">Capacity</span>
+                                    <span class="text-xs font-bold text-choco-800 tracking-wide">{{ $package->max_guests }} Guests</span>
+                                </div>
+                            @endif
+                            <div class="flex flex-col gap-1">
+                                <span class="text-[9px] font-bold text-stone-300 uppercase tracking-widest">Category</span>
+                                <span class="text-xs font-bold text-choco-800 tracking-wide">Signature</span>
                             </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="mt-auto pt-6 flex items-center justify-between">
+                            <div>
+                                <p class="text-stone-300 text-[9px] font-bold uppercase tracking-[0.2em] mb-1">Starting From</p>
+                                <p class="text-2xl font-serif text-choco-900 font-bold tracking-tight">Rp {{ number_format($package->price, 0, ',', '.') }}</p>
+                            </div>
+                            
+                            <div class="flex gap-2">
+                                <a href="{{ route('customer.packages.show', $package->id) }}" 
+                                   class="h-12 w-12 flex items-center justify-center rounded-2xl bg-stone-50 text-stone-400 hover:bg-stone-100 hover:text-choco-900 transition-all border border-transparent hover:border-stone-200">
+                                    <i class="fas fa-arrow-right -rotate-45"></i>
+                                </a>
+                                <a href="{{ route('customer.orders.create', ['package_id' => $package->id]) }}" 
+                                   class="h-12 px-6 flex items-center justify-center rounded-2xl bg-choco-900 text-gold-400 text-[10px] font-bold uppercase tracking-widest hover:bg-stone-800 transition-all shadow-lg shadow-choco-900/20 active:scale-95">
+                                    Book Now
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -43,56 +114,13 @@
             @endforeach
         </div>
     @else
-        <div class="alert alert-info">
-            Belum ada paket tersedia saat ini. Silakan cek kembali nanti.
+        <div class="p-20 text-center space-y-6">
+            <div class="h-20 w-20 mx-auto rounded-full bg-stone-50 flex items-center justify-center text-stone-300 border border-stone-100">
+                <i class="fas fa-search fa-2x opacity-20"></i>
+            </div>
+            <h2 class="font-serif text-2xl text-choco-900">Belum Ada Paket Tersedia</h2>
+            <p class="text-stone-400 font-light italic">Tim kurator kami sedang mempersiapkan koleksi eksklusif untuk Anda.</p>
         </div>
     @endif
 </div>
-
-<style>
-    @media (max-width: 768px) {
-        h1 {
-            font-size: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1rem !important;
-        }
-
-        .card-text {
-            font-size: 0.85rem !important;
-        }
-
-        .btn-sm {
-            font-size: 0.8rem;
-            padding: 0.4rem 0.75rem;
-        }
-    }
-
-    @media (max-width: 576px) {
-        h1 {
-            font-size: 1.25rem;
-        }
-
-        .card {
-            margin-bottom: 0.5rem;
-        }
-
-        .card-img-top {
-            height: 150px !important;
-        }
-
-        .card-body {
-            padding: 0.75rem !important;
-        }
-
-        .card-title {
-            font-size: 0.95rem !important;
-        }
-
-        h3 {
-            font-size: 1.25rem !important;
-        }
-    }
-</style>
 @endsection

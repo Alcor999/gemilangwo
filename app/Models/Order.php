@@ -24,11 +24,18 @@ class Order extends Model
         'guest_count',
         'special_request',
         'total_price',
+        'payment_scheme',
+        'dp_percentage',
+        'total_paid',
+        'remaining_amount',
+        'payment_status',
         'status',
     ];
 
     protected $attributes = [
         'status' => 'pending',
+        'payment_scheme' => 'full_payment',
+        'payment_status' => 'unpaid',
     ];
 
     protected static function booted()
@@ -87,6 +94,9 @@ class Order extends Model
     {
         return [
             'event_date' => 'date',
+            'dp_percentage' => 'float',
+            'total_paid' => 'float',
+            'remaining_amount' => 'float',
         ];
     }
 
@@ -101,9 +111,14 @@ class Order extends Model
         return $this->belongsTo(Package::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     public function payment()
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasOne(Payment::class)->latestOfMany();
     }
 
     public function reviews()
@@ -155,5 +170,54 @@ class Order extends Model
     public function isCancelled(): bool
     {
         return $this->status === 'cancelled';
+    }
+
+    // Payment Scheme Helpers
+    public function getPaymentProgress(): float
+    {
+        if ($this->total_price <= 0) return 0;
+        return min(100, round(($this->total_paid / $this->total_price) * 100, 2));
+    }
+
+    public function isFullyPaid(): bool
+    {
+        return $this->payment_status === 'fully_paid' || $this->total_paid >= $this->total_price;
+    }
+
+    public function getDpAmount(): float
+    {
+        if ($this->payment_scheme === 'full_payment') {
+            return 0;
+        }
+        
+        $percentage = $this->dp_percentage ?? 30; // default 30% if null
+        return round(($percentage / 100) * $this->total_price, 2);
+    }
+
+    public function getRemainingAmount(): float
+    {
+        return max(0, $this->total_price - $this->total_paid);
+    }
+
+    public function getSchemeLabelAttribute(): string
+    {
+        return match($this->payment_scheme) {
+            'full_payment' => 'Bayar Lunas',
+            'dp_30' => 'DP 30% + Pelunasan',
+            'dp_50' => 'DP 50% + Pelunasan',
+            'installment_3x' => 'Cicilan 3x',
+            default => 'Bayar Lunas',
+        };
+    }
+
+    public function getPaymentStatusLabelAttribute(): string
+    {
+        return match($this->payment_status) {
+            'unpaid' => 'Belum Dibayar',
+            'dp_paid' => 'DP Terbayar',
+            'partially_paid' => 'Dibayar Sebagian',
+            'fully_paid' => 'Lunas',
+            default => 'Belum Dibayar',
+        };
     }
 }

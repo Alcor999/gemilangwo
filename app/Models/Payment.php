@@ -25,6 +25,10 @@ class Payment extends Model
         'verified_by',
         'verification_notes',
         'midtrans_response',
+        'payment_type',
+        'installment_number',
+        'due_date',
+        'payment_note',
         'paid_at',
     ];
 
@@ -33,6 +37,7 @@ class Payment extends Model
         return [
             'midtrans_response' => 'array',
             'paid_at' => 'datetime',
+            'due_date' => 'date',
         ];
     }
 
@@ -97,5 +102,54 @@ class Payment extends Model
     public function isFailed()
     {
         return $this->status === 'failed';
+    }
+
+    // Payment Type Helpers
+    public function isDp(): bool
+    {
+        return $this->payment_type === 'dp';
+    }
+
+    public function isInstallment(): bool
+    {
+        return $this->payment_type === 'installment';
+    }
+
+    public function isRemaining(): bool
+    {
+        return $this->payment_type === 'remaining';
+    }
+
+    public function isFull(): bool
+    {
+        return $this->payment_type === 'full';
+    }
+
+    public function scopeOfType($query, string $type)
+    {
+        return $query->where('payment_type', $type);
+    }
+
+    public function scopePendingVerification($query)
+    {
+        return $query->where('verification_status', 'pending');
+    }
+
+    public function scopeOverdue($query)
+    {
+        return $query->where('status', 'pending')
+            ->whereNotNull('due_date')
+            ->where('due_date', '<', now()->toDateString());
+    }
+
+    public function getTypeLabelAttribute(): string
+    {
+        return match($this->payment_type) {
+            'full' => 'Lunas Penuh',
+            'dp' => 'Uang Muka (DP)',
+            'installment' => 'Cicilan',
+            'remaining' => 'Pelunasan Sisa',
+            default => 'Lunas Penuh',
+        };
     }
 }

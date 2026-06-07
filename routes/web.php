@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\AnalyticsController as AdminAnalyticsController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DiscountController as AdminDiscountController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
+use App\Http\Controllers\Admin\PaymentSchemeController as AdminPaymentSchemeController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\SupportController as AdminSupportController;
@@ -89,9 +91,23 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::post('/orders/{order}/cancel', [AdminOrderController::class, 'cancel'])->name('orders.cancel');
 
-    // Payment Verification (integrated in orders)
-    Route::post('/payments/{payment}/approve', [AdminOrderController::class, 'approvePayment'])->name('payments.approve');
-    Route::post('/payments/{payment}/reject', [AdminOrderController::class, 'rejectPayment'])->name('payments.reject');
+    // Payment Management
+    Route::prefix('payments')->name('payments.')->group(function () {
+        Route::get('/pending', [AdminPaymentController::class, 'pendingPayments'])->name('pending');
+        Route::get('/verified', [AdminPaymentController::class, 'verifiedPayments'])->name('verified');
+        Route::get('/overdue', [AdminPaymentController::class, 'overduePayments'])->name('overdue');
+        Route::get('/{payment}/verify', [AdminPaymentController::class, 'verify'])->name('verify');
+        Route::post('/{payment}/approve', [AdminPaymentController::class, 'approve'])->name('approve');
+        Route::post('/{payment}/reject', [AdminPaymentController::class, 'reject'])->name('reject');
+        Route::post('/{payment}/send-reminder', [AdminPaymentController::class, 'sendReminder'])->name('sendReminder');
+    });
+
+    // Payment Scheme Configuration
+    Route::resource('payment-schemes', AdminPaymentSchemeController::class)->except(['show']);
+
+    // Payment Verification from order detail (alias)
+    Route::post('/orders/payments/{payment}/approve', [AdminOrderController::class, 'approvePayment'])->name('orders.payments.approve');
+    Route::post('/orders/payments/{payment}/reject', [AdminOrderController::class, 'rejectPayment'])->name('orders.payments.reject');
 
     // User Management
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
@@ -155,7 +171,10 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
 
     // Payment Routes
     Route::get('/orders/{order}/payment', [CustomerOrderController::class, 'payment'])->name('orders.payment');
+    Route::get('/orders/{order}/pay-remaining', [CustomerOrderController::class, 'payRemaining'])->name('orders.payRemaining');
+    Route::get('/orders/{order}/payment-history', [CustomerOrderController::class, 'paymentHistory'])->name('orders.paymentHistory');
     Route::post('/orders/{order}/select-bank', [CustomerOrderController::class, 'selectBank'])->name('orders.selectBank');
+    Route::post('/orders/{order}/upload-proof', [CustomerOrderController::class, 'uploadPaymentProof'])->name('orders.uploadProof');
     Route::get('/orders/{order}/payment-confirm', [CustomerOrderController::class, 'paymentConfirm'])->name('orders.paymentConfirm');
 
     // Notification (Midtrans backward compatibility)
@@ -230,6 +249,16 @@ Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->grou
     Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
     Route::get('/statistics', [OwnerDashboardController::class, 'statistics'])->name('statistics');
     Route::get('/payments', [OwnerDashboardController::class, 'payments'])->name('payments');
+    Route::resource('payment-schemes', AdminPaymentSchemeController::class)
+        ->except(['show'])
+        ->names([
+            'index' => 'payment-schemes.index',
+            'create' => 'payment-schemes.create',
+            'store' => 'payment-schemes.store',
+            'edit' => 'payment-schemes.edit',
+            'update' => 'payment-schemes.update',
+            'destroy' => 'payment-schemes.destroy',
+        ]);
 
     // Analytics & Reporting
     Route::prefix('analytics')->name('analytics.')->group(function () {

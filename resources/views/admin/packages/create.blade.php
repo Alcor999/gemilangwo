@@ -1,157 +1,182 @@
 @extends('layouts.app')
 
-@section('title', 'Buat Paket')
+@section('title', 'Kurasi Paket Baru - Administrator')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card">
-                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
-                    <h5 class="mb-0 fw-bold" style="font-family: \'Playfair Display\', serif;">Buat Paket Baru</h5>
-                </div>
-                <div class="card-body">
-                    <form action="{{ route('admin.packages.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Nama Paket *</label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
-                            @error('name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Deskripsi *</label>
-                            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4" required>{{ old('description') }}</textarea>
-                            @error('description')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="price" class="form-label">Harga (Rp) *</label>
-                                    <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}" step="0.01" required>
-                                    @error('price')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="max_guests" class="form-label">Maks. Tamu (Opsional)</label>
-                                    <input type="number" class="form-control @error('max_guests') is-invalid @enderror" id="max_guests" name="max_guests" value="{{ old('max_guests') }}" min="1">
-                                    @error('max_guests')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="image" class="form-label">Gambar Paket</label>
-                            <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*">
-                            <small class="text-muted">Maks 2MB, format: JPEG, PNG, JPG, GIF</small>
-                            @error('image')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Fitur Paket *</label>
-                            <div id="features-container">
-                                <div class="input-group mb-2">
-                                    <input type="text" class="form-control feature-input" placeholder="e.g., Dekorasi Mewah" name="features[]">
-                                    <button class="btn btn-outline-danger remove-feature" type="button">Hapus</button>
-                                </div>
-                            </div>
-                            <button class="btn btn-sm btn-success" type="button" id="add-feature">
-                                <i class="fas fa-plus"></i> Tambah Fitur
-                            </button>
-                            @error('features')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Kategori Vendor Wajib Dipilih Pelanggan</label>
-                            <p class="text-muted small">Centang kategori vendor yang harus dipilih pelanggan saat memesan paket ini.</p>
-                            <div class="border rounded p-3">
-                                @forelse(($vendorCategories ?? []) as $vc)
-                                    <div class="mb-3 pb-2 border-bottom last-child-no-border">
-                                        <div class="form-check fw-bold mb-2">
-                                            <input class="form-check-input vendor-category-checkbox" type="checkbox" name="vendor_category_ids[]" value="{{ $vc->id }}" id="vc{{ $vc->id }}" {{ in_array($vc->id, old('vendor_category_ids', [])) ? 'checked' : '' }} onchange="document.getElementById('default_vendor_container_{{ $vc->id }}').style.display = this.checked ? 'block' : 'none';">
-                                            <label class="form-check-label" for="vc{{ $vc->id }}">{{ $vc->name }}</label>
-                                        </div>
-                                        <div id="default_vendor_container_{{ $vc->id }}" style="display: {{ in_array($vc->id, old('vendor_category_ids', [])) ? 'block' : 'none' }}; margin-left: 2rem;">
-                                            <label class="form-label text-muted small">Pilih Vendor Default (yang menentukan harga basis 0)</label>
-                                            <select name="default_vendor_ids_{{ $vc->id }}" class="form-select form-select-sm">
-                                                <option value="">-- Tanpa Vendor Default --</option>
-                                                @foreach($vc->vendors as $vendor)
-                                                    <option value="{{ $vendor->id }}" {{ old('default_vendor_ids_'.$vc->id) == $vendor->id ? 'selected' : '' }}>
-                                                        {{ $vendor->name }} (Harga: Rp {{ number_format($vendor->price, 0, ',', '.') }})
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                @empty
-                                    <p class="text-muted mb-0">Belum ada kategori vendor. <a href="{{ route('admin.vendor-categories.index') }}">Kelola kategori vendor</a></p>
-                                @endforelse
-                                <style>.last-child-no-border:last-child { border-bottom: none !important; margin-bottom: 0 !important; padding-bottom: 0 !important; }</style>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Status *</label>
-                            <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
-                                <option value="active" {{ old('status') === 'active' ? 'selected' : '' }}>Aktif</option>
-                                <option value="inactive" {{ old('status') === 'inactive' ? 'selected' : '' }}>Nonaktif</option>
-                            </select>
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Buat Paket
-                            </button>
-                            <a href="{{ route('admin.packages.index') }}" class="btn btn-secondary">
-                                <i class="fas fa-times"></i> Batal
-                            </a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+<div class="max-w-5xl mx-auto space-y-12 pb-24" x-data="{ 
+    features: [''],
+    addFeature() { this.features.push('') },
+    removeFeature(index) { this.features.splice(index, 1) }
+}">
+    <!-- Header -->
+    <div class="space-y-2">
+        <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.4em]">Administrative Curation</p>
+        <h1 class="font-serif text-4xl text-choco-900 italic">Kurasi <span class="not-italic text-stone-300">Paket Baru</span></h1>
     </div>
+
+    <form action="{{ route('admin.packages.store') }}" method="POST" enctype="multipart/form-data" class="grid lg:grid-cols-12 gap-12">
+        @csrf
+
+        <!-- Main Form Area -->
+        <div class="lg:col-span-8 space-y-8">
+            <x-luxury.card class="p-10 space-y-8 border-stone-100/50 shadow-sm">
+                <div class="space-y-6">
+                    <!-- Name -->
+                    <div class="space-y-2">
+                        <label for="name" class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Identitas Paket</label>
+                        <input type="text" id="name" name="name" value="{{ old('name') }}" required
+                               class="w-full bg-stone-50/50 border border-stone-100 rounded-2xl px-6 py-4 text-sm text-choco-900 placeholder:text-stone-300 focus:ring-2 focus:ring-gold-400/20 focus:border-gold-400 outline-none transition-all"
+                               placeholder="e.g. The Royal Eternal Bloom">
+                        @error('name') <p class="text-[10px] text-rose-500 font-bold uppercase mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <!-- Description -->
+                    <div class="space-y-2">
+                        <label for="description" class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Filosofi & Deskripsi</label>
+                        <textarea id="description" name="description" rows="5" required
+                                  class="w-full bg-stone-50/50 border border-stone-100 rounded-2xl px-6 py-4 text-sm text-choco-900 placeholder:text-stone-300 focus:ring-2 focus:ring-gold-400/20 focus:border-gold-400 outline-none transition-all resize-none"
+                                  placeholder="Gambarkan eksklusivitas paket ini...">{{ old('description') }}</textarea>
+                        @error('description') <p class="text-[10px] text-rose-500 font-bold uppercase mt-1">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 pt-8 border-t border-stone-50">
+                    <!-- Price -->
+                    <div class="space-y-2">
+                        <label for="price" class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Investasi Dasar (Rp)</label>
+                        <div class="relative">
+                            <span class="absolute left-6 top-1/2 -translate-y-1/2 text-stone-300 text-xs font-bold">IDR</span>
+                            <input type="number" id="price" name="price" value="{{ old('price') }}" step="0.01" required
+                                   class="w-full bg-stone-50/50 border border-stone-100 rounded-2xl pl-16 pr-6 py-4 text-sm text-choco-900 font-bold focus:ring-2 focus:ring-gold-400/20 focus:border-gold-400 outline-none transition-all">
+                        </div>
+                        @error('price') <p class="text-[10px] text-rose-500 font-bold uppercase mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <!-- Max Guests -->
+                    <div class="space-y-2">
+                        <label for="max_guests" class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Kapasitas Tamu</label>
+                        <div class="relative">
+                            <span class="absolute right-6 top-1/2 -translate-y-1/2 text-stone-300 text-[10px] font-bold uppercase tracking-widest">Tamu</span>
+                            <input type="number" id="max_guests" name="max_guests" value="{{ old('max_guests') }}" min="1"
+                                   class="w-full bg-stone-50/50 border border-stone-100 rounded-2xl px-6 py-4 text-sm text-choco-900 focus:ring-2 focus:ring-gold-400/20 focus:border-gold-400 outline-none transition-all">
+                        </div>
+                        @error('max_guests') <p class="text-[10px] text-rose-500 font-bold uppercase mt-1">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+            </x-luxury.card>
+
+            <!-- Dynamic Features -->
+            <x-luxury.card class="p-10 space-y-8 border-stone-100/50 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Fitur & Layanan Eksklusif</label>
+                    <button type="button" @click="addFeature()" 
+                            class="text-gold-500 text-[9px] font-bold uppercase tracking-widest hover:text-gold-600 transition-colors flex items-center gap-2">
+                        <i class="fas fa-plus-circle text-[11px]"></i> Tambah Fitur
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <template x-for="(feature, index) in features" :key="index">
+                        <div class="group relative flex items-center gap-4">
+                            <div class="flex-1">
+                                <input type="text" name="features[]" x-model="features[index]"
+                                       class="w-full bg-stone-50/50 border border-stone-100 rounded-xl px-6 py-3 text-xs text-stone-600 focus:ring-2 focus:ring-gold-400/20 focus:border-gold-400 outline-none transition-all"
+                                       placeholder="e.g. Dekorasi Area Pelaminan Exclusive">
+                            </div>
+                            <button type="button" @click="removeFeature(index)" 
+                                    class="h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-stone-50 text-stone-300 hover:bg-rose-50 hover:text-rose-500 transition-all opacity-0 group-hover:opacity-100">
+                                <i class="fas fa-times text-[10px]"></i>
+                            </button>
+                        </div>
+                    </template>
+                </div>
+                @error('features') <p class="text-[10px] text-rose-500 font-bold uppercase">{{ $message }}</p> @enderror
+            </x-luxury.card>
+
+            <!-- Vendor Requirements -->
+            <x-luxury.card class="p-10 space-y-8 border-stone-100/50 shadow-sm">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Persyaratan Kategori Vendor</label>
+                    <p class="text-stone-400 text-[10px] font-light italic">Pilih kategori vendor yang wajib ditentukan oleh pelanggan saat pemesanan.</p>
+                </div>
+
+                <div class="divide-y divide-stone-50">
+                    @forelse(($vendorCategories ?? []) as $vc)
+                        <div class="py-6 first:pt-0 last:pb-0 space-y-4" x-data="{ checked: {{ in_array($vc->id, old('vendor_category_ids', [])) ? 'true' : 'false' }} }">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <input type="checkbox" name="vendor_category_ids[]" value="{{ $vc->id }}" id="vc{{ $vc->id }}" 
+                                           x-model="checked"
+                                           class="h-5 w-5 rounded-lg border-stone-200 text-gold-500 focus:ring-gold-500/20 transition-all cursor-pointer">
+                                    <label for="vc{{ $vc->id }}" class="text-xs font-bold text-choco-900 cursor-pointer select-none">{{ $vc->name }}</label>
+                                </div>
+                                <span class="text-[9px] font-bold uppercase tracking-widest text-stone-300">{{ $vc->vendors->count() }} Terdaftar</span>
+                            </div>
+
+                            <div x-show="checked" x-collapse x-cloak class="pl-9 pt-2">
+                                <div class="space-y-2">
+                                    <p class="text-[9px] font-bold uppercase tracking-widest text-gold-500/60 mb-2">Vendor Basis Harga (Default)</p>
+                                    <select name="default_vendor_ids_{{ $vc->id }}" 
+                                            class="w-full bg-white border border-stone-100 rounded-xl px-4 py-3 text-[11px] text-stone-600 focus:ring-2 focus:ring-gold-400/20 focus:border-gold-400 outline-none transition-all shadow-sm">
+                                        <option value="">-- Tanpa Vendor Default --</option>
+                                        @foreach($vc->vendors as $vendor)
+                                            <option value="{{ $vendor->id }}" {{ old('default_vendor_ids_'.$vc->id) == $vendor->id ? 'selected' : '' }}>
+                                                {{ $vendor->name }} — Rp {{ number_format($vendor->price, 0, ',', '.') }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="py-6 text-center">
+                            <p class="text-[10px] text-stone-300 font-bold uppercase tracking-widest">Belum ada kategori vendor terdefinisi.</p>
+                        </div>
+                    @endforelse
+                </div>
+            </x-luxury.card>
+        </div>
+
+        <!-- Sidebar / Publishing -->
+        <div class="lg:col-span-4 space-y-8">
+            <x-luxury.card class="p-8 space-y-8 border-stone-100/50 shadow-sm sticky top-8">
+                <!-- Status -->
+                <div class="space-y-4">
+                    <label for="status" class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Status Publikasi</label>
+                    <select id="status" name="status" required
+                            class="w-full bg-stone-50/50 border border-stone-100 rounded-2xl px-6 py-4 text-xs text-choco-900 font-bold focus:ring-2 focus:ring-gold-400/20 focus:border-gold-400 outline-none transition-all shadow-sm appearance-none cursor-pointer">
+                        <option value="active" {{ old('status') === 'active' ? 'selected' : '' }}>Aktif & Publish</option>
+                        <option value="inactive" {{ old('status') === 'inactive' ? 'selected' : '' }}>Draft (Private)</option>
+                    </select>
+                </div>
+
+                <!-- Featured Image -->
+                <div class="space-y-4">
+                    <label for="image" class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Media Utama (Cover)</label>
+                    <div class="relative group cursor-pointer border-2 border-dashed border-stone-100 rounded-[2rem] p-6 hover:border-gold-300 transition-all text-center">
+                        <input type="file" id="image" name="image" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
+                        <div class="space-y-3">
+                            <div class="h-12 w-12 bg-stone-50 rounded-2xl mx-auto flex items-center justify-center text-stone-300 group-hover:text-gold-400 transition-colors">
+                                <i class="fas fa-cloud-upload-alt text-xl"></i>
+                            </div>
+                            <p class="text-[9px] font-bold uppercase tracking-widest text-stone-400">Upload Image</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="pt-8 border-t border-stone-50 space-y-3">
+                    <button type="submit" 
+                            class="w-full flex items-center justify-center py-5 rounded-2xl bg-choco-900 text-gold-400 text-[10px] font-bold uppercase tracking-widest hover:bg-stone-800 transition-all shadow-xl shadow-choco-900/10 active:scale-95">
+                        <i class="fas fa-save mr-3"></i> Finalisasi Paket
+                    </button>
+                    <a href="{{ route('admin.packages.index') }}" 
+                       class="w-full flex items-center justify-center py-5 rounded-2xl border border-stone-100 text-stone-400 text-[10px] font-bold uppercase tracking-widest hover:bg-stone-50 transition-all">
+                        Batalkan
+                    </a>
+                </div>
+            </x-luxury.card>
+        </div>
+    </form>
 </div>
-
-<script>
-document.getElementById('add-feature').addEventListener('click', function() {
-    const container = document.getElementById('features-container');
-    const newFeature = document.createElement('div');
-    newFeature.className = 'input-group mb-2';
-    newFeature.innerHTML = `
-        <input type="text" class="form-control feature-input" placeholder="e.g., Catering Berkualitas (3 Menu)" name="features[]">
-        <button class="btn btn-outline-danger remove-feature" type="button">Hapus</button>
-    `;
-    container.appendChild(newFeature);
-    
-    newFeature.querySelector('.remove-feature').addEventListener('click', function() {
-        newFeature.remove();
-    });
-});
-
-// Remove feature functionality
-document.querySelectorAll('.remove-feature').forEach(btn => {
-    btn.addEventListener('click', function() {
-        this.parentElement.remove();
-    });
-});
-</script>
 @endsection

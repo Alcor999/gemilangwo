@@ -1,221 +1,199 @@
 @extends('layouts.app')
 
-@section('title', 'Dasbor Admin - Gemilang WO')
+@section('title', 'Executive Hub - Administrator')
 
 @section('content')
-<div class="container-fluid px-0">
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-light">
+<div class="space-y-12 pb-24">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-            <h1 class="mb-1" style="font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; color: var(--text-dark);">Dasbor Admin</h1>
-            <p class="text-muted mb-0" style="font-size: 0.95rem;">Selamat datang kembali, kelola semua aktivitas Gemilang WO dari sini.</p>
+            <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.4em] mb-2">Management Terminal</p>
+            <h1 class="font-serif text-4xl text-choco-900 italic">Rumah <span class="not-italic text-stone-300">Eksekutif</span></h1>
         </div>
-        <div class="d-none d-md-block text-end">
-            <p class="mb-0 text-muted" style="font-size: 0.85rem;">Tanggal Hari Ini</p>
-            <h6 class="mb-0 fw-bold" style="color: var(--primary-color);">{{ now()->translatedFormat('d F Y') }}</h6>
-        </div>
-    </div>
-
-    <!-- Statistics Cards -->
-    <div class="row g-4 mb-5">
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card stat-card h-100 border-0 overflow-hidden" style="background: linear-gradient(145deg, #ffffff 0%, #fdfbf7 100%);">
-                <div class="card-body p-4 position-relative">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 1px;">Total Pesanan</p>
-                            <h2 class="mb-0 fw-bold" style="font-family: 'Playfair Display', serif; color: var(--text-dark);">{{ $total_orders }}</h2>
-                        </div>
-                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; background: rgba(184, 134, 11, 0.1); color: var(--primary-color);">
-                            <i class="fas fa-receipt fs-4"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card stat-card h-100 border-0 overflow-hidden" style="background: linear-gradient(145deg, #ffffff 0%, #fdfbf7 100%);">
-                <div class="card-body p-4 position-relative">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 1px;">Total Pelanggan</p>
-                            <h2 class="mb-0 fw-bold" style="font-family: 'Playfair Display', serif; color: var(--text-dark);">{{ $total_customers }}</h2>
-                        </div>
-                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; background: rgba(184, 134, 11, 0.1); color: var(--primary-color);">
-                            <i class="fas fa-users fs-4"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card stat-card h-100 border-0 overflow-hidden" style="background: linear-gradient(145deg, #ffffff 0%, #fdfbf7 100%);">
-                <div class="card-body p-4 position-relative">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 1px;">Paket Aktif</p>
-                            <h2 class="mb-0 fw-bold" style="font-family: 'Playfair Display', serif; color: var(--text-dark);">{{ $total_packages }}</h2>
-                        </div>
-                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; background: rgba(184, 134, 11, 0.1); color: var(--primary-color);">
-                            <i class="fas fa-box-open fs-4"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card stat-card h-100 border-0 bg-primary text-white overflow-hidden shadow-lg position-relative" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;">
-                <div class="position-absolute" style="right: -20px; top: -20px; opacity: 0.15; transform: rotate(15deg);">
-                    <i class="fas fa-gem" style="font-size: 8rem;"></i>
-                </div>
-                <div class="card-body p-4 position-relative z-1">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <p class="mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 1px; color: rgba(255,255,255,0.8);">Total Pendapatan</p>
-                            <h3 class="mb-0 fw-bold" style="font-family: 'Playfair Display', serif; letter-spacing: -0.5px;">Rp {{ number_format($total_revenue, 0, ',', '.') }}</h3>
-                        </div>
-                    </div>
-                </div>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 bg-white/50 backdrop-blur-md px-4 py-2 rounded-xl border border-stone-100">
+                <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                <span class="text-[9px] font-bold uppercase tracking-widest text-stone-400">Live Services Active</span>
             </div>
         </div>
     </div>
 
-    <div class="row g-4">
-        <!-- Aksi Cepat -->
-        <div class="col-xl-4 col-lg-5">
-            <div class="card h-100">
-                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
-                    <h5 class="mb-0 fw-bold" style="font-family: 'Playfair Display', serif;">Aksi Cepat</h5>
-                </div>
-                <div class="card-body p-4">
-                    <div class="d-flex flex-column gap-3">
-                        <a href="{{ route('admin.packages.create') }}" class="btn btn-outline-primary text-start px-4 py-3 d-flex align-items-center rounded-3 w-100 action-btn">
-                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                <i class="fas fa-plus"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 fw-bold">Tambah Paket Baru</h6>
-                                <small class="text-muted fw-normal" style="font-size: 0.75rem;">Buat penawaran paket WO</small>
-                            </div>
-                        </a>
-                        
-                        <a href="{{ route('admin.orders.index') }}" class="btn btn-outline-secondary text-start px-4 py-3 d-flex align-items-center rounded-3 w-100 action-btn">
-                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3 text-secondary" style="width: 40px; height: 40px;">
-                                <i class="fas fa-clipboard-list"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 fw-bold text-dark">Kelola Pesanan</h6>
-                                <small class="text-muted fw-normal" style="font-size: 0.75rem;">Lihat dan proses transaksi</small>
-                            </div>
-                        </a>
-
-                        <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary text-start px-4 py-3 d-flex align-items-center rounded-3 w-100 action-btn">
-                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3 text-secondary" style="width: 40px; height: 40px;">
-                                <i class="fas fa-users-cog"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 fw-bold text-dark">Data Pengguna</h6>
-                                <small class="text-muted fw-normal" style="font-size: 0.75rem;">Manajemen akses pelanggan</small>
-                            </div>
-                        </a>
-                    </div>
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Revenue Card (Premium) -->
+        <x-luxury.card class="bg-choco-900 border-none p-8 shadow-2xl relative overflow-hidden group">
+            <div class="absolute -right-10 -top-10 h-40 w-40 bg-gold-400/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
+            <div class="relative z-10 space-y-4">
+                <p class="text-gold-400 text-[10px] font-bold uppercase tracking-[0.2em]">Estimasi Pendapatan</p>
+                <p class="text-3xl font-serif text-white tracking-tighter">Rp {{ number_format($total_revenue, 0, ',', '.') }}</p>
+                <div class="flex items-center gap-2 pt-2">
+                    <span class="text-[9px] font-bold uppercase tracking-widest text-gold-400/40">Update Real-time</span>
                 </div>
             </div>
+        </x-luxury.card>
+
+        <x-luxury.card class="p-8 border-stone-100 shadow-sm hover:shadow-xl transition-all duration-500">
+            <div class="space-y-4">
+                <div class="flex justify-between items-start">
+                    <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest">Total Pesanan</p>
+                    <div class="h-8 w-8 rounded-lg bg-stone-50 flex items-center justify-center text-stone-300">
+                        <i class="fas fa-shopping-bag text-[10px]"></i>
+                    </div>
+                </div>
+                <p class="text-3xl font-serif text-choco-900 tracking-tighter">{{ $total_orders }}</p>
+                <p class="text-[9px] text-emerald-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                    <i class="fas fa-caret-up"></i> +12% Efficiency
+                </p>
+            </div>
+        </x-luxury.card>
+
+        <x-luxury.card class="p-8 border-stone-100 shadow-sm hover:shadow-xl transition-all duration-500">
+            <div class="space-y-4">
+                <div class="flex justify-between items-start">
+                    <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest">Basis Klien</p>
+                    <div class="h-8 w-8 rounded-lg bg-stone-50 flex items-center justify-center text-stone-300">
+                        <i class="fas fa-users text-[10px]"></i>
+                    </div>
+                </div>
+                <p class="text-3xl font-serif text-choco-900 tracking-tighter">{{ $total_customers }}</p>
+                <p class="text-[9px] text-stone-300 font-bold uppercase tracking-widest italic">Verified Prioritas</p>
+            </div>
+        </x-luxury.card>
+
+        <x-luxury.card class="p-8 border-stone-100 shadow-sm hover:shadow-xl transition-all duration-500">
+            <div class="space-y-4">
+                <div class="flex justify-between items-start">
+                    <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest">Katalog Aktif</p>
+                    <div class="h-8 w-8 rounded-lg bg-stone-50 flex items-center justify-center text-stone-300">
+                        <i class="fas fa-gem text-[10px]"></i>
+                    </div>
+                </div>
+                <p class="text-3xl font-serif text-choco-900 tracking-tighter">{{ $total_packages }}</p>
+                <p class="text-[9px] text-gold-500 font-bold uppercase tracking-widest">Market Ready</p>
+            </div>
+        </x-luxury.card>
+    </div>
+
+    {{-- Charts --}}
+    <x-dashboard.charts-section
+        :charts="$charts"
+        :filter-url="route('admin.dashboard')"
+        :filter="$filter"
+        :year="$filterYear"
+        :month="$filterMonth"
+    />
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Main: Recent Activity -->
+        <div class="lg:col-span-2 space-y-8">
+            <div class="flex items-center justify-between px-2">
+                <h2 class="font-serif text-2xl text-choco-900 italic">Pesanan Terbaru</h2>
+                <a href="{{ route('admin.orders.index') }}" class="text-[10px] font-bold uppercase tracking-widest text-gold-500 hover:text-gold-600 transition-colors">Manifest Lengkap</a>
+            </div>
+
+            <x-luxury.card class="overflow-hidden border-stone-100 shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-stone-50/50 border-b border-stone-100">
+                                <th class="px-8 py-4 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400">Order ID</th>
+                                <th class="px-8 py-4 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400">Klien</th>
+                                <th class="px-8 py-4 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400">Nilai Kontrak</th>
+                                <th class="px-8 py-4 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400 text-center">Lifecycle</th>
+                                <th class="px-8 py-4 text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400 text-right">View</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-50">
+                            @foreach($recent_orders as $order)
+                                <tr class="group hover:bg-stone-50/30 transition-colors">
+                                    <td class="px-8 py-5">
+                                        <span class="text-xs font-bold text-gold-600 tracking-widest">#{{ $order->order_number }}</span>
+                                    </td>
+                                    <td class="px-8 py-5">
+                                        <div class="flex flex-col">
+                                            <span class="text-[11px] font-bold text-choco-900">{{ $order->user->name }}</span>
+                                            <span class="text-[9px] text-stone-400 italic">Confirmed Client</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-8 py-5">
+                                        <span class="text-xs font-bold text-choco-900">Rp {{ number_format($order->total_price, 0, ',', '.') }}</span>
+                                    </td>
+                                    <td class="px-8 py-5 text-center">
+                                        @php
+                                            $statusClasses = [
+                                                'pending' => 'bg-amber-50 text-amber-600 border-amber-100',
+                                                'confirmed' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
+                                                'cancelled' => 'bg-rose-50 text-rose-600 border-rose-100',
+                                                'default' => 'bg-stone-50 text-stone-600 border-stone-100'
+                                            ];
+                                            $currentStatus = strtolower($order->status);
+                                            $class = $statusClasses[$currentStatus] ?? $statusClasses['default'];
+                                        @endphp
+                                        <span class="px-2.5 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-widest border {{ $class }}">
+                                            {{ $order->status }}
+                                        </span>
+                                    </td>
+                                    <td class="px-8 py-5 text-right">
+                                        <a href="{{ route('admin.orders.show', $order->id) }}" 
+                                           class="h-8 w-8 inline-flex items-center justify-center rounded-xl border border-stone-100 text-stone-300 hover:bg-choco-900 hover:text-gold-400 transition-all">
+                                            <i class="fas fa-chevron-right text-[10px]"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </x-luxury.card>
         </div>
 
-        <!-- Pesanan Terbaru -->
-        <div class="col-xl-8 col-lg-7">
-            <div class="card h-100">
-                <div class="card-header bg-transparent border-bottom border-light pt-4 pb-3 px-4 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold" style="font-family: 'Playfair Display', serif;">Pesanan Terbaru</h5>
-                    <a href="{{ route('admin.orders.index') }}" class="text-primary text-decoration-none" style="font-size: 0.85rem; font-weight: 600;">Lihat Semua <i class="fas fa-arrow-right ms-1"></i></a>
-                </div>
-                <div class="card-body p-0">
-                    @if($recent_orders->count() > 0)
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead style="background: rgba(0,0,0,0.02);">
-                                    <tr>
-                                        <th class="ps-4 border-0 text-muted" style="font-size: 0.75rem; letter-spacing:0.5px;">No. Pesanan</th>
-                                        <th class="border-0 text-muted" style="font-size: 0.75rem; letter-spacing:0.5px;">Pelanggan</th>
-                                        <th class="border-0 text-muted" style="font-size: 0.75rem; letter-spacing:0.5px;">Paket</th>
-                                        <th class="border-0 text-muted" style="font-size: 0.75rem; letter-spacing:0.5px;">Status</th>
-                                        <th class="border-0 text-muted" style="font-size: 0.75rem; letter-spacing:0.5px;">Total</th>
-                                        <th class="pe-4 border-0 text-end text-muted" style="font-size: 0.75rem; letter-spacing:0.5px;">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($recent_orders as $order)
-                                        <tr>
-                                            <td class="ps-4 py-3">
-                                                <div class="fw-bold" style="color: var(--primary-color);">{{ $order->order_number }}</div>
-                                                <small class="text-muted" style="font-size: 0.75rem;">{{ $order->created_at->format('d M Y') }}</small>
-                                            </td>
-                                            <td class="py-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="rounded-circle d-flex justify-content-center align-items-center me-2 bg-light fw-bold text-secondary" style="width: 32px; height: 32px; font-size: 14px;">
-                                                        {{ substr($order->user->name, 0, 1) }}
-                                                    </div>
-                                                    <span class="fw-medium text-dark">{{ $order->user->name }}</span>
-                                                </div>
-                                            </td>
-                                            <td class="py-3 text-muted">{{ Str::limit($order->package->name, 25) }}</td>
-                                            <td class="py-3">
-                                                <span class="badge rounded-pill bg-{{ $order->status === 'completed' ? 'success' : ($order->status === 'pending' ? 'warning' : ($order->status === 'cancelled' ? 'danger' : 'info')) }} bg-opacity-10 text-{{ $order->status === 'completed' ? 'success' : ($order->status === 'pending' ? 'warning text-dark' : ($order->status === 'cancelled' ? 'danger' : 'info text-dark')) }} px-3 py-2 border border-{{ $order->status === 'completed' ? 'success' : ($order->status === 'pending' ? 'warning' : ($order->status === 'cancelled' ? 'danger' : 'info')) }} border-opacity-25" style="font-weight: 600;">
-                                                    <i class="fas fa-circle me-1" style="font-size: 6px; vertical-align: middle;"></i>
-                                                    {{ ucfirst(str_replace('_', ' ', $order->status)) }}
-                                                </span>
-                                            </td>
-                                            <td class="py-3 fw-bold text-dark">
-                                                Rp {{ number_format($order->total_price, 0, ',', '.') }}
-                                            </td>
-                                            <td class="pe-4 py-3 text-end">
-                                                <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-light btn-sm rounded-circle shadow-sm" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; color: var(--primary-color);">
-                                                    <i class="fas fa-arrow-right"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+        <!-- Sidebar: Shortcuts -->
+        <div class="space-y-8">
+            <h2 class="font-serif text-2xl text-choco-900 italic px-2">Kanal Operasional</h2>
+            
+            <div class="grid grid-cols-1 gap-4">
+                <a href="{{ route('admin.orders.index') }}" class="group p-6 bg-white rounded-3xl border border-stone-100 flex items-center justify-between hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
+                    <div class="flex items-center gap-5">
+                        <div class="h-12 w-12 rounded-2xl bg-stone-50 flex items-center justify-center text-stone-300 group-hover:bg-gold-500 group-hover:text-white transition-all duration-500">
+                            <i class="fas fa-file-invoice text-sm"></i>
                         </div>
-                    @else
-                        <div class="text-center py-5">
-                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                                <i class="fas fa-folder-open text-muted fs-2"></i>
-                            </div>
-                            <h6 class="text-dark fw-bold">Tidak ada pesanan terbaru</h6>
-                            <p class="text-muted" style="font-size: 0.85rem;">Pesanan klien yang baru masuk akan muncul di sini.</p>
+                        <div class="space-y-0.5">
+                            <p class="text-choco-900 font-bold text-xs">Kelola Transaksi</p>
+                            <p class="text-stone-400 text-[9px] uppercase font-bold tracking-[0.2em]">Audit & Logistic</p>
                         </div>
-                    @endif
+                    </div>
+                    <i class="fas fa-arrow-right text-[10px] text-stone-100 group-hover:text-gold-500 transition-colors"></i>
+                </a>
+
+                <a href="{{ route('admin.packages.index') }}" class="group p-6 bg-white rounded-3xl border border-stone-100 flex items-center justify-between hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
+                    <div class="flex items-center gap-5">
+                        <div class="h-12 w-12 rounded-2xl bg-stone-50 flex items-center justify-center text-stone-300 group-hover:bg-choco-900 group-hover:text-white transition-all duration-500">
+                            <i class="fas fa-box-open text-sm"></i>
+                        </div>
+                        <div class="space-y-0.5">
+                            <p class="text-choco-900 font-bold text-xs">Kurasi Katalog</p>
+                            <p class="text-stone-400 text-[9px] uppercase font-bold tracking-[0.2em]">Package Curator</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-arrow-right text-[10px] text-stone-100 group-hover:text-gold-500 transition-colors"></i>
+                </a>
+            </div>
+
+            <!-- Promotion Card -->
+            <div class="bg-gradient-to-br from-stone-900 to-black rounded-[3rem] p-10 text-white relative overflow-hidden group shadow-2xl">
+                <div class="absolute -right-10 -bottom-10 h-32 w-32 bg-gold-400/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
+                <div class="relative z-10 space-y-6">
+                    <div>
+                        <p class="text-gold-400 text-[9px] font-bold uppercase tracking-[0.4em] mb-3">Executive Summary</p>
+                        <h4 class="font-serif text-xl italic leading-tight">Visi Layanan <span class="text-gold-500">Premium</span></h4>
+                    </div>
+                    <p class="text-white/50 text-[11px] font-light italic leading-relaxed">"Tingkatkan performa tim dengan memastikan semua pembayaran diverifikasi dalam kurun waktu kurang dari 24 jam."</p>
+                    <a href="{{ route('admin.analytics.dashboard') }}" class="flex items-center justify-center w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-gold-400 text-[10px] font-bold uppercase tracking-widest hover:bg-gold-500 hover:text-white transition-all">
+                        Performa Lanjutan
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    /* Custom additional styles for dashboard */
-    .action-btn {
-        transition: all 0.3s ease;
-        border: 1px solid rgba(0,0,0,0.05);
-    }
-    .action-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        border-color: var(--primary-color) !important;
-    }
-    .btn-outline-primary.action-btn:hover {
-        background: rgba(184, 134, 11, 0.05);
-    }
-    .btn-outline-primary.action-btn .bg-light {
-        color: var(--primary-color);
-        background: rgba(184, 134, 11, 0.1) !important;
-    }
-    
-    @media (max-width: 576px) {
-        .stat-card-value {
-            font-size: 1.5rem !important;
-        }
-    }
-</style>
 @endsection

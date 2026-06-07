@@ -22,7 +22,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with(['user', 'package', 'payment'])
+        $orders = Order::with(['user', 'package', 'payments'])
             ->latest()
             ->paginate(15);
 
@@ -34,7 +34,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        $order->load(['user', 'package', 'payment', 'reviews', 'orderVendors']);
+        $order->load(['user', 'package', 'payments.bank', 'payments.verifiedBy', 'reviews', 'orderVendors']);
 
         return view('admin.orders.show', ['order' => $order]);
     }
@@ -59,15 +59,22 @@ class OrderController extends Controller
      */
     public function cancel(Order $order)
     {
-        if ($order->status === 'pending') {
+        if ($order->status === 'pending' || $order->status === 'confirmed') {
             $order->update(['status' => 'cancelled']);
 
+            // Cancel any pending payments
+            $order->payments()->where('status', 'pending')->update([
+                'status' => 'cancelled',
+                'verification_status' => 'rejected',
+                'verification_notes' => 'Dibatalkan oleh admin/sistem'
+            ]);
+
             return redirect()->back()
-                ->with('success', 'Order cancelled successfully');
+                ->with('success', 'Pesanan berhasil dibatalkan.');
         }
 
         return redirect()->back()
-            ->with('error', 'Cannot cancel an order that is not pending');
+            ->with('error', 'Tidak dapat membatalkan pesanan yang sudah selesai atau dibatalkan.');
     }
 
     /**

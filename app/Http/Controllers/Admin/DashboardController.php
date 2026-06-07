@@ -6,11 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Package;
 use App\Models\User;
+use App\Services\DashboardChartService;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request, DashboardChartService $chartService)
     {
+        $period = $chartService->resolvePeriod($request);
+        $charts = $chartService->getDashboardCharts($period);
+
         $total_orders = Order::count();
         $total_customers = User::where('role', 'customer')->count();
         $total_packages = Package::count();
@@ -27,6 +32,10 @@ class DashboardController extends Controller
             'total_packages' => $total_packages,
             'total_revenue' => $total_revenue,
             'recent_orders' => $recent_orders,
+            'charts' => $charts,
+            'filter' => $period['filter'],
+            'filterYear' => $period['year'],
+            'filterMonth' => $period['month'],
         ]);
     }
 }

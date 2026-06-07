@@ -7,8 +7,11 @@ use App\Models\Bank;
 use App\Models\Order;
 use App\Models\Package;
 use App\Services\MidtransService;
+use App\Services\PaymentSchemeService;
 use App\Services\PaymentService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
@@ -16,10 +19,16 @@ class OrderController extends Controller
 
     protected $paymentService;
 
-    public function __construct(MidtransService $midtransService, PaymentService $paymentService)
-    {
+    protected $paymentSchemeService;
+
+    public function __construct(
+        MidtransService $midtransService,
+        PaymentService $paymentService,
+        PaymentSchemeService $paymentSchemeService
+    ) {
         $this->midtransService = $midtransService;
         $this->paymentService = $paymentService;
+        $this->paymentSchemeService = $paymentSchemeService;
     }
 
     /**
@@ -28,7 +37,7 @@ class OrderController extends Controller
     public function index()
     {
         $orders = auth()->user()->orders()
-            ->with(['package', 'payment'])
+            ->with(['package', 'payments'])
             ->latest()
             ->paginate(10);
 
@@ -44,9 +53,16 @@ class OrderController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $order->load(['package', 'payment', 'reviews', 'orderVendors']);
+        $order->load(['package', 'payments.bank', 'reviews', 'orderVendors']);
 
-        return view('customer.orders.show', ['order' => $order]);
+        $paymentSummary = $this->paymentService->getPaymentSummary($order);
+        $nextPayment = $this->paymentService->getNextPaymentDetails($order);
+
+        return view('customer.orders.show', [
+            'order' => $order,
+            'paymentSummary' => $paymentSummary,
+            'nextPayment' => $nextPayment,
+        ]);
     }
 
     /**
@@ -74,9 +90,17 @@ class OrderController extends Controller
             'special_request' => 'nullable|string',
             'vendors' => 'nullable|array',
             'vendors.*' => 'exists:vendors,id',
+            'payment_scheme' => 'required|in:full_payment,dp_30,dp_50,installment_3x',
         ]);
 
         $package = Package::with('requiredVendorCategories.vendors')->findOrFail($validated['package_id']);
+
+        $eventDate = Carbon::parse($validated['event_date']);
+        if (! $this->paymentSchemeService->isEligible($validated['payment_scheme'], $eventDate)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Skema pembayaran yang dipilih tidak tersedia untuk tanggal acara ini. Pilih tanggal lebih jauh atau gunakan Bayar Lunas.');
+        }
 
         // Validate guest count
         if ($package->max_guests && $validated['guest_count'] > $package->max_guests) {
@@ -124,6 +148,14 @@ class OrderController extends Controller
 
         $orderNumber = 'WO-'.substr(time(), -8).rand(10, 99);
 
+        $paymentScheme = $validated['payment_scheme'];
+        $dpPercentage = null;
+        if ($paymentScheme === 'dp_30') {
+            $dpPercentage = 30.00;
+        } elseif ($paymentScheme === 'dp_50') {
+            $dpPercentage = 50.00;
+        }
+
         $order = Order::create([
             'user_id' => auth()->id(),
             'package_id' => $validated['package_id'],
@@ -133,6 +165,11 @@ class OrderController extends Controller
             'guest_count' => $validated['guest_count'],
             'special_request' => $validated['special_request'] ?? null,
             'total_price' => $totalPrice,
+            'payment_scheme' => $paymentScheme,
+            'dp_percentage' => $dpPercentage,
+            'total_paid' => 0.00,
+            'remaining_amount' => $totalPrice,
+            'payment_status' => 'unpaid',
             'status' => 'pending',
         ]);
 
@@ -159,19 +196,29 @@ class OrderController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        if (! $order->isPending()) {
+        if ($order->isCancelled() || $order->isCompleted()) {
             return redirect()->route('customer.orders.show', $order->id)
-                ->with('error', 'This order cannot be paid');
+                ->with('error', 'Order ini tidak dapat dibayar karena sudah dibatalkan atau selesai.');
+        }
+
+        if ($order->payment_status === 'fully_paid') {
+            return redirect()->route('customer.orders.show', $order->id)
+                ->with('success', 'Order ini sudah lunas.');
         }
 
         try {
-            $snapToken = $this->midtransService->createSnapToken($order);
-            $clientKey = config('midtrans.client_key');
+            $nextPayment = $this->paymentService->getNextPaymentDetails($order);
+            if (! $nextPayment) {
+                return redirect()->route('customer.orders.show', $order->id)
+                    ->with('error', 'Tidak ada jadwal pembayaran aktif untuk pesanan ini.');
+            }
+
+            $banks = Bank::where('active', true)->get();
 
             return view('customer.orders.payment', [
                 'order' => $order,
-                'snap_token' => $snapToken,
-                'client_key' => $clientKey,
+                'next_payment' => $nextPayment,
+                'banks' => $banks,
             ]);
         } catch (\Exception $e) {
             return redirect()->route('customer.orders.show', $order->id)
@@ -194,11 +241,45 @@ class OrderController extends Controller
 
         $bank = Bank::findOrFail($validated['bank_id']);
 
-        // Create payment record
-        $payment = $this->paymentService->createManualPayment($order, $bank);
+        // Get the next payment details
+        $nextPayment = $this->paymentService->getNextPaymentDetails($order);
+        if (! $nextPayment) {
+            return redirect()->route('customer.orders.show', $order->id)
+                ->with('error', 'Tidak ada pembayaran yang harus dilakukan saat ini.');
+        }
+
+        // Check if there is already a pending payment of the same type and installment number
+        $existingPayment = $order->payments()
+            ->where('status', 'pending')
+            ->where('payment_type', $nextPayment['payment_type'])
+            ->where(function($q) use ($nextPayment) {
+                if ($nextPayment['installment_number']) {
+                    $q->where('installment_number', $nextPayment['installment_number']);
+                } else {
+                    $q->whereNull('installment_number');
+                }
+            })
+            ->first();
+
+        if ($existingPayment) {
+            $existingPayment->update([
+                'bank_id' => $bank->id,
+                'amount' => $nextPayment['amount'],
+            ]);
+            $payment = $existingPayment;
+        } else {
+            $payment = $this->paymentService->createManualPayment(
+                $order,
+                $bank,
+                $nextPayment['amount'],
+                $nextPayment['payment_type'],
+                $nextPayment['installment_number'],
+                $nextPayment['due_date']
+            );
+        }
 
         return redirect()->route('customer.orders.paymentConfirm', ['order' => $order->id])
-            ->with('success', 'Bank dipilih. Silakan transfer sesuai instruksi.');
+            ->with('success', 'Bank berhasil dipilih. Silakan transfer sesuai instruksi.');
     }
 
     /**
@@ -210,23 +291,86 @@ class OrderController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        // Reload order with payment, bank, and package relationship
-        $order = $order->load('payment.bank', 'package');
-        $payment = $order->payment;
+        $payment = $order->payments()->where('status', 'pending')->latest()->first();
 
         if (! $payment || $payment->payment_method !== 'bank_transfer') {
             return redirect()->route('customer.orders.payment', $order->id)
-                ->with('error', 'Invalid payment record');
+                ->with('error', 'Tidak ada transaksi pembayaran tertunda.');
         }
 
         $bank = $payment->bank;
-        $whatsappLink = $this->paymentService->generateWhatsAppLink($order, $bank);
+        $whatsappLink = $this->paymentService->generateWhatsAppLink(
+            $order,
+            $bank,
+            null,
+            $payment->amount,
+            $payment->payment_type
+        );
 
         return view('customer.orders.payment-confirm', [
             'order' => $order,
             'payment' => $payment,
             'bank' => $bank,
             'whatsappLink' => $whatsappLink,
+        ]);
+    }
+
+    /**
+     * Upload bukti transfer
+     */
+    public function uploadPaymentProof(Request $request, Order $order)
+    {
+        if ($order->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        $validated = $request->validate([
+            'payment_id' => 'required|exists:payments,id',
+            'payment_proof' => 'required|image|mimes:jpeg,jpg,png,webp|max:5120',
+        ]);
+
+        $payment = $order->payments()->findOrFail($validated['payment_id']);
+
+        if ($payment->status !== 'pending') {
+            return back()->with('error', 'Bukti transfer hanya dapat diunggah untuk pembayaran yang masih menunggu verifikasi.');
+        }
+
+        if ($payment->payment_proof_path) {
+            Storage::disk('public')->delete($payment->payment_proof_path);
+        }
+
+        $path = $request->file('payment_proof')->store('payment-proofs', 'public');
+
+        $payment->update([
+            'payment_proof_path' => $path,
+            'payment_note' => 'Bukti transfer diunggah pelanggan pada '.now()->format('d M Y H:i'),
+        ]);
+
+        return back()->with('success', 'Bukti transfer berhasil diunggah. Tim kami akan segera memverifikasi.');
+    }
+
+    /**
+     * Bayar sisa / cicilan berikutnya
+     */
+    public function payRemaining(Order $order)
+    {
+        return $this->payment($order);
+    }
+
+    /**
+     * Riwayat pembayaran order
+     */
+    public function paymentHistory(Order $order)
+    {
+        if ($order->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        $order->load(['package', 'payments.bank', 'payments.verifiedBy']);
+
+        return view('customer.orders.payment-history', [
+            'order' => $order,
+            'paymentSummary' => $this->paymentService->getPaymentSummary($order),
         ]);
     }
 
@@ -262,9 +406,9 @@ class OrderController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        if ($order->payment && $order->payment->isSuccess()) {
+        if ($order->payment_status === 'fully_paid' || $order->isFullyPaid()) {
             return redirect()->route('customer.orders.show', $order->id)
-                ->with('success', 'Payment successful! Your order has been confirmed.');
+                ->with('success', 'Pembayaran berhasil! Pesanan Anda telah dikonfirmasi.');
         }
 
         return redirect()->route('customer.orders.show', $order->id)
@@ -280,11 +424,23 @@ class OrderController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        if ($order->isPending()) {
+        if ($order->isPending() || $order->isConfirmed()) {
             $order->update(['status' => 'cancelled']);
 
+            // Cancel any pending payments
+            $order->payments()->where('status', 'pending')->update([
+                'status' => 'cancelled',
+                'verification_status' => 'rejected',
+                'verification_notes' => 'Dibatalkan oleh pelanggan'
+            ]);
+
+            $msg = 'Pesanan Anda berhasil dibatalkan.';
+            if ($order->total_paid > 0) {
+                $msg .= ' Sesuai kebijakan kami, pembayaran/DP sebesar Rp ' . number_format($order->total_paid, 0, ',', '.') . ' yang telah disetor tidak dapat dikembalikan (hangus).';
+            }
+
             return redirect()->route('customer.orders.index')
-                ->with('success', 'Order cancelled successfully');
+                ->with('success', $msg);
         }
 
         return redirect()->back()

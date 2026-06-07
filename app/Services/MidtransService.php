@@ -22,11 +22,13 @@ class MidtransService
     /**
      * Create Snap token for payment
      */
-    public function createSnapToken(Order $order)
+    public function createSnapToken(Order $order, ?float $amount = null, ?array $paymentDetails = null)
     {
+        $amount = $amount ?? (float) $order->total_price;
+
         $transaction_details = [
             'order_id' => $order->order_number . '-' . time(),
-            'gross_amount' => (int) $order->total_price,
+            'gross_amount' => (int) round($amount),
         ];
 
         $customer_details = [
@@ -125,16 +127,26 @@ class MidtransService
         if ($transaction_status == 'capture' || $transaction_status == 'settlement') {
             $payment->status = 'success';
             $payment->paid_at = now();
-            $order->status = 'confirmed';
+            $payment->verification_status = 'verified';
+            if ($order->status === 'pending') {
+                $order->status = 'confirmed';
+            }
         } elseif ($transaction_status == 'pending') {
             $payment->status = 'pending';
         } elseif ($transaction_status == 'deny' || $transaction_status == 'cancel' || $transaction_status == 'expire') {
             $payment->status = 'failed';
-            $order->status = 'cancelled';
+        }
+
+        if (! $payment->amount) {
+            $payment->amount = $notification->gross_amount ?? $order->total_price;
         }
 
         $payment->save();
         $order->save();
+
+        if ($payment->status === 'success') {
+            app(PaymentService::class)->recalculateOrderPaymentStatus($order);
+        }
 
         return $payment;
     }

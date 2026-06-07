@@ -6,6 +6,32 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif: 'Playfair Display', serif;
+
+    --color-gold-50: #fbf8f1;
+    --color-gold-100: #f4ecda;
+    --color-gold-200: #e8d7b3;
+    --color-gold-300: #d6b87d;
+    --color-gold-400: #c5a059;
+    --color-gold-500: #b18a47;
+    --color-gold-600: #976e39;
+    --color-gold-700: #7e5831;
+    --color-gold-800: #6a4a2d;
+    --color-gold-900: #5b3f2a;
+
+    --color-choco-50: #f6f4f3;
+    --color-choco-100: #e9e5e2;
+    --color-choco-200: #d1c8c1;
+    --color-choco-300: #ad9f93;
+    --color-choco-400: #8a7a6c;
+    --color-choco-500: #6d5d51;
+    --color-choco-600: #56493f;
+    --color-choco-700: #463b33;
+    --color-choco-800: #3e2a1f;
+    --color-choco-900: #34241b;
+
+    --color-luxury-bg: #f9f7f2;
+    --color-luxury-cream: #fffdf9;
 }

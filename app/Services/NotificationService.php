@@ -230,6 +230,93 @@ class NotificationService
     }
 
     /**
+     * Notifikasi DP diterima
+     */
+    public function notifyDpReceived($payment): bool
+    {
+        $order = $payment->order;
+        $customer = $order->user;
+
+        if (! $customer->phone) {
+            return false;
+        }
+
+        $phoneNumber = SmsService::formatPhoneNumber($customer->phone);
+        $data = [
+            'order_id' => $order->order_number,
+            'amount' => number_format($payment->amount, 0, ',', '.'),
+            'remaining' => number_format($order->remaining_amount, 0, ',', '.'),
+            'payment_link' => route('customer.orders.show', $order),
+        ];
+
+        return $this->sendTemplate($customer, $phoneNumber, 'dp_received', $data);
+    }
+
+    /**
+     * Notifikasi cicilan / pelunasan jatuh tempo
+     */
+    public function notifyInstallmentDue($order, $payment, bool $isOverdue = false): bool
+    {
+        $customer = $order->user;
+
+        if (! $customer->phone) {
+            return false;
+        }
+
+        $phoneNumber = SmsService::formatPhoneNumber($customer->phone);
+        $data = [
+            'order_id' => $order->order_number,
+            'amount' => number_format($payment->amount, 0, ',', '.'),
+            'due_date' => $payment->due_date?->format('d/m/Y') ?? '-',
+            'payment_type' => $payment->type_label,
+            'payment_link' => route('customer.orders.payment', $order),
+            'is_overdue' => $isOverdue ? 'ya' : 'tidak',
+        ];
+
+        $template = $isOverdue ? 'payment_overdue' : 'installment_due';
+
+        return $this->sendTemplate($customer, $phoneNumber, $template, $data);
+    }
+
+    /**
+     * Notifikasi pembayaran lunas
+     */
+    public function notifyPaymentComplete($order): bool
+    {
+        $customer = $order->user;
+
+        if (! $customer->phone) {
+            return false;
+        }
+
+        $phoneNumber = SmsService::formatPhoneNumber($customer->phone);
+        $data = [
+            'order_id' => $order->order_number,
+            'total_price' => number_format($order->total_price, 0, ',', '.'),
+            'event_date' => $order->event_date->format('d/m/Y'),
+        ];
+
+        return $this->sendTemplate($customer, $phoneNumber, 'payment_complete', $data);
+    }
+
+    private function sendTemplate($customer, string $phoneNumber, string $template, array $data): bool
+    {
+        try {
+            if ($customer->prefer_whatsapp ?? true) {
+                $sent = $this->smsService->sendWhatsAppTemplate($phoneNumber, $template, $data);
+
+                return $sent ?: $this->smsService->sendSmsTemplate($phoneNumber, $template, $data);
+            }
+
+            return $this->smsService->sendSmsTemplate($phoneNumber, $template, $data);
+        } catch (\Exception $e) {
+            \Log::error("Notification [{$template}] error: ".$e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
      * Send review thank you message
      */
     public function notifyReviewThankYou($review)

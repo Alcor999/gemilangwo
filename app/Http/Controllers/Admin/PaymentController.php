@@ -19,13 +19,54 @@ class PaymentController extends Controller
     /**
      * Show pending payments list
      */
-    public function pendingPayments()
+    public function pendingPayments(Request $request)
     {
-        $payments = $this->paymentService->getPendingPayments();
+        $query = \App\Models\Payment::where('verification_status', 'pending')
+            ->where('status', 'pending')
+            ->with('order', 'order.user', 'order.package', 'bank');
+
+        if ($request->filled('type') && $request->type !== 'all') {
+            $query->where('payment_type', $request->type);
+        }
+
+        $payments = $query->orderBy('created_at', 'desc')->get();
+
+        $outstandingByOrder = $payments->groupBy('order_id')->map(function ($group) {
+            $order = $group->first()->order;
+
+            return $order?->remaining_amount ?? 0;
+        });
 
         return view('admin.payments.pending', [
             'payments' => $payments,
+            'filterType' => $request->get('type', 'all'),
+            'outstandingByOrder' => $outstandingByOrder,
         ]);
+    }
+
+    /**
+     * Show overdue payments
+     */
+    public function overduePayments()
+    {
+        $payments = $this->paymentService->getOverduePayments();
+
+        return view('admin.payments.overdue', [
+            'payments' => $payments,
+        ]);
+    }
+
+    /**
+     * Send payment reminder to customer
+     */
+    public function sendReminder(Payment $payment)
+    {
+        $sent = $this->paymentService->sendPaymentReminder($payment);
+
+        return redirect()->back()->with(
+            $sent ? 'success' : 'error',
+            $sent ? 'Reminder berhasil dikirim ke pelanggan.' : 'Gagal mengirim reminder. Pastikan nomor telepon pelanggan tersedia.'
+        );
     }
 
     /**
@@ -55,7 +96,7 @@ class PaymentController extends Controller
             $request->notes
         );
 
-        return redirect()->route('admin.payments.pending')
+        return redirect()->back()
             ->with('success', 'Pembayaran dikonfirmasi');
     }
 
@@ -74,7 +115,7 @@ class PaymentController extends Controller
             $request->reason
         );
 
-        return redirect()->route('admin.payments.pending')
+        return redirect()->back()
             ->with('success', 'Pembayaran ditolak');
     }
 

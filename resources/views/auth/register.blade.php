@@ -1,340 +1,138 @@
 @extends('layouts.auth')
 
-@section('title', 'Daftar - Gemilang WO')
-
-@section('styles')
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-    :root {
-        --primary: #b8860b;
-        --secondary: #8b7355;
-        --dark: #2A1F18;
-        --light: #FCF9F2;
-    }
-
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: var(--light);
-        color: var(--dark);
-    }
-
-    .auth-wrapper {
-        display: flex;
-        min-height: 100vh;
-        width: 100vw;
-    }
-
-    .auth-banner {
-        flex: 1;
-        display: none;
-        background: linear-gradient(rgba(42, 31, 24, 0.4), rgba(42, 31, 24, 0.7)), url('https://images.unsplash.com/photo-1544531586-fde5298cdd40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-        position: relative;
-    }
-
-    @media (min-width: 992px) {
-        .auth-banner {
-            display: block;
-        }
-    }
-
-    .auth-banner-content {
-        position: absolute;
-        bottom: 10%;
-        left: 10%;
-        color: white;
-        max-width: 80%;
-    }
-
-    .auth-banner-content h1 {
-        font-family: 'Playfair Display', serif;
-        font-size: 3.5rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        line-height: 1.2;
-    }
-
-    .auth-banner-content p {
-        font-size: 1.1rem;
-        opacity: 0.9;
-        font-weight: 300;
-    }
-
-    .auth-form-container {
-        width: 100%;
-        max-width: 550px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 4rem;
-        background: white;
-        box-shadow: -10px 0 30px rgba(0,0,0,0.03);
-        z-index: 10;
-        position: relative;
-        overflow-y: auto;
-    }
-
-    @media (max-width: 991px) {
-        .auth-form-container {
-            max-width: 100%;
-            padding: 2rem;
-            align-items: center;
-        }
-        .auth-form-wrapper {
-            width: 100%;
-            max-width: 450px;
-        }
-    }
-
-    .brand-logo {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: var(--dark);
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        margin-bottom: 2rem;
-    }
-
-    .brand-logo i {
-        color: var(--primary);
-        margin-right: 10px;
-    }
-
-    .auth-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 2.2rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        color: var(--dark);
-    }
-
-    .auth-subtitle {
-        color: #6b7280;
-        margin-bottom: 2.5rem;
-        font-size: 0.95rem;
-    }
-
-    .form-group {
-        margin-bottom: 1.25rem;
-    }
-
-    .form-label {
-        font-size: 0.9rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: #374151;
-        display: block;
-    }
-
-    .input-group {
-        display: flex;
-        align-items: center;
-        border-radius: 12px;
-        background-color: #f9fafb;
-        border: 1px solid #e5e7eb;
-        transition: all 0.3s ease;
-        overflow: hidden;
-    }
-
-    .input-group:focus-within {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 4px rgba(184, 134, 11, 0.1);
-        background-color: white;
-    }
-
-    .input-group-text {
-        background: transparent;
-        border: none;
-        padding: 0 1.2rem;
-        color: #9ca3af;
-    }
-
-    .input-group:focus-within .input-group-text {
-        color: var(--primary);
-    }
-
-    .form-control {
-        border: none;
-        background: transparent;
-        padding: 1rem 1rem 1rem 0;
-        font-size: 0.95rem;
-        flex: 1;
-        width: 100%;
-        color: var(--dark);
-        font-family: 'Plus Jakarta Sans', sans-serif;
-    }
-
-    .form-control:focus {
-        outline: none;
-    }
-
-    .btn-login {
-        width: 100%;
-        padding: 1rem;
-        font-size: 1rem;
-        font-weight: 600;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background: var(--primary);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 2rem;
-        margin-top: 1rem;
-    }
-
-    .btn-login:hover {
-        background: var(--secondary);
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(184, 134, 11, 0.2);
-    }
-
-    .auth-footer {
-        text-align: center;
-        font-size: 0.95rem;
-        color: #4b5563;
-    }
-
-    .auth-footer a {
-        color: var(--primary);
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-
-    .auth-footer a:hover {
-        text-decoration: underline;
-    }
-
-    .invalid-feedback {
-        color: #dc2626;
-        font-size: 0.85rem;
-        margin-top: 0.5rem;
-        display: block;
-    }
-
-    .alert-danger {
-        background: #fef2f2;
-        border-left: 4px solid #ef4444;
-        padding: 1rem;
-        color: #b91c1c;
-        border-radius: 8px;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
-        display: flex;
-        align-items: center;
-    }
-</style>
-@endsection
+@section('title', 'Pendaftaran Eksklusif - Gemilang WO')
 
 @section('content')
-<div class="auth-wrapper">
-    <!-- Form Section -->
-    <div class="auth-form-container">
-        <div class="auth-form-wrapper">
-            <a href="{{ route('home') }}" class="brand-logo">
-                <i class="fas fa-ring"></i> Gemilang WO
-            </a>
-
-            <h2 class="auth-title">Daftar Akun Klien</h2>
-            <p class="auth-subtitle">Mari bergabung dan mulai rancang setiap detil perayaan Anda.</p>
-
-            @if ($errors->any())
-                <div class="alert-danger">
-                    <i class="fas fa-exclamation-circle me-2 fs-5"></i>
-                    Silakan periksa kembali isian formulir di bawah ini.
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('register') }}">
-                @csrf
-
-                <!-- Full Name Field -->
-                <div class="form-group">
-                    <label for="name" class="form-label">Nama Lengkap</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        <input id="name" type="text" 
-                               class="form-control" 
-                               name="name" value="{{ old('name') }}" required autocomplete="name" autofocus
-                               placeholder="Contoh: Budi Santoso">
+<div class="flex min-h-full">
+    <!-- Left: Register Form -->
+    <div class="flex flex-1 flex-col justify-center px-8 py-12 sm:px-12 lg:flex-none lg:px-20 xl:px-32 bg-white">
+        <div class="mx-auto w-full max-sm lg:w-96">
+            <div class="mb-12 text-center lg:text-left">
+                <a href="{{ route('home') }}" class="group inline-flex items-center gap-3">
+                    <div class="h-10 w-10 bg-choco-900 rounded-xl flex items-center justify-center text-gold-400 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-ring text-xl"></i>
                     </div>
-                    @error('name')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
-                </div>
+                    <span class="font-serif text-2xl text-choco-900 font-bold tracking-tight">Gemilang</span>
+                </a>
+            </div>
 
-                <!-- Email Field -->
-                <div class="form-group">
-                    <label for="email" class="form-label">Email Aktif</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                        <input id="email" type="email" 
-                               class="form-control" 
-                               name="email" value="{{ old('email') }}" required autocomplete="email"
-                               placeholder="you@example.com">
+            <div class="space-y-2 text-center lg:text-left">
+                <h2 class="text-3xl font-serif text-choco-900 italic font-medium tracking-tight">Buat Profil Klien</h2>
+                <p class="text-stone-400 text-sm font-medium tracking-wide px-4 lg:px-0">Mulai merancang setiap detil perayaan Anda bersama tim profesional kami.</p>
+            </div>
+
+            <div class="mt-10">
+                <form action="{{ route('register') }}" method="POST" class="space-y-5">
+                    @csrf
+
+                    @if ($errors->any())
+                        <div class="p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-start gap-3">
+                            <svg class="h-5 w-5 text-rose-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                            <p class="text-rose-600 text-[11px] font-bold uppercase tracking-widest leading-relaxed">Validation Error: Silakan lengkapi formulir Anda dengan benar.</p>
+                        </div>
+                    @endif
+
+                    <div class="space-y-4">
+                        <!-- Full Name -->
+                        <div class="space-y-1.5">
+                            <label for="name" class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 px-1 text-center block lg:text-left">Full Name</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-stone-300 group-focus-within:text-gold-500 transition-colors">
+                                    <i class="fas fa-user text-sm"></i>
+                                </div>
+                                <input id="name" name="name" type="text" value="{{ old('name') }}" required 
+                                       class="block w-full pl-11 pr-4 py-3.5 bg-stone-50 border border-stone-100 rounded-2xl text-choco-900 text-sm focus:bg-white focus:ring-4 focus:ring-gold-500/10 focus:border-gold-500/50 transition-all placeholder:text-stone-300 outline-none text-center lg:text-left" 
+                                       placeholder="Nama Lengkap Anda">
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="space-y-1.5">
+                            <label for="email" class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 px-1 text-center block lg:text-left">Email Address</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-stone-300 group-focus-within:text-gold-500 transition-colors">
+                                    <i class="fas fa-envelope text-sm"></i>
+                                </div>
+                                <input id="email" name="email" type="email" value="{{ old('email') }}" required 
+                                       class="block w-full pl-11 pr-4 py-3.5 bg-stone-50 border border-stone-100 rounded-2xl text-choco-900 text-sm focus:bg-white focus:ring-4 focus:ring-gold-500/10 focus:border-gold-500/50 transition-all placeholder:text-stone-300 outline-none text-center lg:text-left" 
+                                       placeholder="hello@example.com">
+                            </div>
+                        </div>
+
+                        <!-- Passwords Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1.5">
+                                <label for="password" class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 px-1 block text-center lg:text-left">Password</label>
+                                <div class="relative group">
+                                    <input id="password" name="password" type="password" required 
+                                           class="block w-full px-4 py-3.5 bg-stone-50 border border-stone-100 rounded-2xl text-choco-900 text-sm focus:bg-white focus:ring-4 focus:ring-gold-500/10 focus:border-gold-500/50 transition-all placeholder:text-stone-300 outline-none text-center lg:text-left" 
+                                           placeholder="••••••••">
+                                </div>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label for="password_confirmation" class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 px-1 block text-center lg:text-left">Confirm</label>
+                                <div class="relative group">
+                                    <input id="password_confirmation" name="password_confirmation" type="password" required 
+                                           class="block w-full px-4 py-3.5 bg-stone-50 border border-stone-100 rounded-2xl text-choco-900 text-sm focus:bg-white focus:ring-4 focus:ring-gold-500/10 focus:border-gold-500/50 transition-all placeholder:text-stone-300 outline-none text-center lg:text-left" 
+                                           placeholder="••••••••">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    @error('email')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
-                </div>
 
-                <!-- Password Field -->
-                <div class="form-group">
-                    <label for="password" class="form-label">Kata Sandi Akses</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                        <input id="password" type="password" 
-                               class="form-control" 
-                               name="password" required autocomplete="new-password"
-                               placeholder="Minimal 8 karakter">
+                    <div class="flex items-center py-2 px-1">
+                        <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 rounded border-stone-200 text-choco-900 focus:ring-gold-500">
+                        <label for="terms" class="ml-3 text-[10px] font-bold uppercase tracking-widest text-stone-400 leading-relaxed">
+                            Saya menyetujui <a href="#" class="text-gold-500">Syarat & Ketentuan</a> Platinum Member.
+                        </label>
                     </div>
-                    @error('password')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
-                </div>
 
-                <!-- Confirm Password Field -->
-                <div class="form-group">
-                    <label for="password_confirmation" class="form-label">Konfirmasi Sandi</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-shield-alt"></i></span>
-                        <input id="password_confirmation" type="password" 
-                               class="form-control" 
-                               name="password_confirmation" required autocomplete="new-password"
-                               placeholder="Ulangi kata sandi Anda">
+                    <button type="submit" 
+                            class="w-full flex justify-center py-4 px-4 bg-choco-900 text-gold-400 text-[10px] font-bold uppercase tracking-[0.3em] rounded-2xl shadow-xl shadow-choco-900/10 hover:bg-choco-800 transition-all">
+                        Daftar Sebagai Klien
+                    </button>
+                    
+                    <div class="pt-4 text-center">
+                        <p class="text-stone-400 text-[11px] font-bold uppercase tracking-widest">
+                            Sudah memiliki akun? <a href="{{ route('login') }}" class="text-gold-500 hover:text-gold-600 ml-1">Masuk Sekarang</a>
+                        </p>
                     </div>
-                </div>
-
-                <!-- Register Button -->
-                <button type="submit" class="btn-login">
-                    Buat Akun Klien <i class="fas fa-user-plus ms-2"></i>
-                </button>
-            </form>
-
-            <div class="auth-footer">
-                Sudah memiliki ruang akses? <a href="{{ route('login') }}">Masuk Disini</a>
+                </form>
             </div>
             
-            <div class="mt-4 pt-4 border-top text-center">
-                <a href="{{ route('home') }}" class="text-muted text-decoration-none" style="font-size: 0.85rem;"><i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda Utama</a>
+            <div class="mt-12 text-center lg:text-left">
+                <a href="{{ route('home') }}" class="inline-flex items-center gap-2 text-stone-400 hover:text-choco-900 transition-colors">
+                    <i class="fas fa-arrow-left text-xs"></i>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em]">Batal & Kembali</span>
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Image Banner (Right Side for Register to contrast with Login) -->
-    <div class="auth-banner" style="background: linear-gradient(rgba(42, 31, 24, 0.4), rgba(42, 31, 24, 0.7)), url('https://images.unsplash.com/photo-1544531586-fde5298cdd40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;">
-        <div class="auth-banner-content" style="right: 10%; left: auto; text-align: right;">
-            <h1>Momen Terindah Di Tangan Yang Tepat</h1>
-            <p>Jelajahi paket unggulan kami dan realisasikan konsep magis di hari spesial Anda tanpa stres.</p>
+    <!-- Right: Cinematic Banner -->
+    <div class="relative hidden w-0 flex-1 lg:block">
+        <img class="absolute inset-0 h-full w-full object-cover grayscale-[20%] brightness-75" 
+             src="https://images.unsplash.com/photo-1544531586-fde5298cdd40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
+             alt="Luxury Bridal Suite">
+        <div class="absolute inset-0 bg-choco-900/30 backdrop-blur-[1px]"></div>
+        
+        <div class="absolute inset-0 flex flex-col justify-between p-20 text-white">
+            <div class="flex justify-end">
+                <div class="flex items-center gap-4 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/20">
+                    <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.3em]">Hanya 3 Slot Tersisa di Bulan Ini</span>
+                </div>
+            </div>
+            
+            <div class="max-w-xl text-right ml-auto">
+                <p class="text-gold-400 text-xs font-bold uppercase tracking-[0.4em] mb-6">Platinum Experience</p>
+                <h1 class="font-serif text-6xl leading-tight mb-8 italic">Momen Terindah Di Tangan Yang <span class="text-white not-italic">Tepat.</span></h1>
+                <p class="text-white/70 text-lg font-light leading-relaxed">
+                    Kami tidak hanya merencanakan acara; kami merancang warisan kenangan yang akan Anda bawa selamanya. Bergabunglah dengan keluarga eksklusif kami.
+                </p>
+            </div>
         </div>
     </div>
 </div>

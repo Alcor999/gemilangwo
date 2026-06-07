@@ -1,208 +1,203 @@
 @extends('layouts.app')
 
-@section('title', 'Dasbor Pelanggan - Gemilang WO')
+@section('title', 'Dasbor Saya - Gemilang WO')
 
 @section('content')
-<div class="container-fluid px-0">
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-light">
+<div class="space-y-10">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-            <h1 class="mb-1" style="font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; color: var(--text-dark);">Dasbor Saya</h1>
-            <p class="text-muted mb-0" style="font-size: 0.95rem;">Selamat kembali! Pantau persiapan acara bahagia Anda dari sini.</p>
+            <p class="text-gold-500 text-xs font-bold uppercase tracking-[0.2em] mb-2">Selamat Datang Kembali</p>
+            <h1 class="font-serif text-4xl text-choco-900 leading-tight">Persiapan <span class="italic">Hari Bahagia</span></h1>
         </div>
-        <div class="d-none d-md-block text-end">
-            <h6 class="mb-0 fw-bold" style="color: var(--primary-color);">{{ now()->translatedFormat('d F Y') }}</h6>
-        </div>
-    </div>
-
-    <!-- Statistics Cards -->
-    <div class="row g-4 mb-5">
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card stat-card h-100 border-0 overflow-hidden" style="background: linear-gradient(145deg, #ffffff 0%, #fdfbf7 100%);">
-                <div class="card-body p-4 position-relative">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 1px;">Total Pesanan</p>
-                            <h2 class="mb-0 fw-bold" style="font-family: 'Playfair Display', serif; color: var(--text-dark);">{{ $total_orders }}</h2>
-                        </div>
-                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; background: rgba(184, 134, 11, 0.1); color: var(--primary-color);">
-                            <i class="fas fa-receipt fs-4"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card stat-card h-100 border-0 overflow-hidden" style="background: linear-gradient(145deg, #ffffff 0%, #fdfbf7 100%);">
-                <div class="card-body p-4 position-relative">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 1px;">Acara Selesai</p>
-                            <h2 class="mb-0 fw-bold" style="font-family: 'Playfair Display', serif; color: var(--text-dark);">{{ $completed_orders }}</h2>
-                        </div>
-                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; background: rgba(34, 197, 94, 0.1); color: #22c55e;">
-                            <i class="fas fa-check-circle fs-4"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card stat-card h-100 border-0 overflow-hidden" style="background: linear-gradient(145deg, #ffffff 0%, #fdfbf7 100%);">
-                <div class="card-body p-4 position-relative">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted mb-1 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 1px;">Dalam Proses</p>
-                            <h2 class="mb-0 fw-bold" style="font-family: 'Playfair Display', serif; color: var(--text-dark);">{{ $pending_orders }}</h2>
-                        </div>
-                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
-                            <i class="fas fa-clock fs-4"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card stat-card h-100 border-0 overflow-hidden shadow-sm" style="background: #ffffff;">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <p class="text-muted mb-0 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 1px;">Status Pemesanan</p>
-                        <i class="fas fa-calendar" style="color: var(--primary-color); opacity: 0.5;"></i>
-                    </div>
-                    @if($pending_orders > 0)
-                        <span class="badge rounded-pill bg-warning bg-opacity-10 text-warning px-3 py-2 border border-warning border-opacity-25" style="font-weight: 600;"><i class="fas fa-circle ms-1" style="font-size:6px; vertical-align: middle;"></i> Aktif Berjalan</span>
-                    @else
-                        <span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-2 border border-success border-opacity-25" style="font-weight: 600;"><i class="fas fa-check ms-1" style="font-size:9px;"></i> Siap Melayani</span>
-                    @endif
-                </div>
-            </div>
+        <div class="bg-white/50 backdrop-blur-md px-6 py-3 rounded-2xl border border-stone-100 shadow-sm hidden md:block">
+            <span class="text-stone-400 text-[10px] font-bold uppercase tracking-widest block mb-1">Hari Ini</span>
+            <span class="text-choco-800 font-bold text-sm">{{ now()->translatedFormat('d F Y') }}</span>
         </div>
     </div>
 
-    <div class="row g-4">
-        <!-- Aksi Cepat -->
-        <div class="col-xl-4 col-lg-5">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
-                    <h5 class="mb-0 fw-bold" style="font-family: 'Playfair Display', serif;">Eksplorasi Hari Ini</h5>
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <x-luxury.card class="bg-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest mb-1">Semua Pesanan</p>
+                    <p class="text-3xl font-serif text-choco-900">{{ $total_orders }}</p>
                 </div>
-                <div class="card-body p-4">
-                    <div class="d-flex flex-column gap-3">
-                        <a href="{{ route('customer.packages.index') }}" class="btn btn-outline-primary text-start px-4 py-3 d-flex align-items-center rounded-3 w-100 action-btn">
-                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                <i class="fas fa-search"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 fw-bold">Eksplor Paket Pernikahan</h6>
-                                <small class="text-muted fw-normal" style="font-size: 0.75rem;">Temukan penawaran eksklusif kami</small>
-                            </div>
-                        </a>
-                        
-                        <a href="{{ route('customer.orders.create') }}" class="btn btn-outline-secondary text-start px-4 py-3 d-flex align-items-center rounded-3 w-100 action-btn">
-                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3 text-secondary" style="width: 40px; height: 40px;">
-                                <i class="fas fa-cart-plus"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 fw-bold text-dark">Buat Pemesanan Baru</h6>
-                                <small class="text-muted fw-normal" style="font-size: 0.75rem;">Mulai rencanakan momen Anda</small>
-                            </div>
-                        </a>
-
-                        <a href="{{ route('customer.orders.index') }}" class="btn btn-outline-secondary text-start px-4 py-3 d-flex align-items-center rounded-3 w-100 action-btn">
-                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3 text-secondary" style="width: 40px; height: 40px;">
-                                <i class="fas fa-list"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 fw-bold text-dark">Riwayat Transaksi</h6>
-                                <small class="text-muted fw-normal" style="font-size: 0.75rem;">Pantau seluruh pesanan Anda</small>
-                            </div>
-                        </a>
-                    </div>
+                <div class="h-12 w-12 rounded-xl bg-gold-50 flex items-center justify-center text-gold-500">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                    </svg>
                 </div>
             </div>
-        </div>
+        </x-luxury.card>
 
-        <!-- Recent Orders -->
-        <div class="col-xl-8 col-lg-7">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-header bg-transparent border-bottom border-light pt-4 pb-3 px-4 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold" style="font-family: 'Playfair Display', serif;">Pemesanan Terbaru Anda</h5>
-                    @if($recent_orders->count() > 0)
-                    <a href="{{ route('customer.orders.index') }}" class="text-primary text-decoration-none" style="font-size: 0.85rem; font-weight: 600;">Lihat Semua <i class="fas fa-arrow-right ms-1"></i></a>
-                    @endif
+        <x-luxury.card class="bg-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest mb-1">Acara Selesai</p>
+                    <p class="text-3xl font-serif text-choco-900">{{ $completed_orders }}</p>
                 </div>
-                <div class="card-body p-0">
-                    @if($recent_orders->count() > 0)
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead style="background: rgba(0,0,0,0.02);">
-                                    <tr>
-                                        <th class="ps-4 border-0 text-muted" style="font-size: 0.75rem; letter-spacing:0.5px;">No. Pesanan</th>
-                                        <th class="border-0 text-muted" style="font-size: 0.75rem; letter-spacing:0.5px;">Paket</th>
-                                        <th class="border-0 text-muted" style="font-size: 0.75rem; letter-spacing:0.5px;">Tanggal Acara</th>
-                                        <th class="border-0 text-muted" style="font-size: 0.75rem; letter-spacing:0.5px;">Total</th>
-                                        <th class="border-0 text-muted" style="font-size: 0.75rem; letter-spacing:0.5px;">Status</th>
-                                        <th class="pe-4 border-0 text-end text-muted" style="font-size: 0.75rem; letter-spacing:0.5px;">Aksi</th>
+                <div class="h-12 w-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </x-luxury.card>
+
+        <x-luxury.card class="bg-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest mb-1">Dalam Proses</p>
+                    <p class="text-3xl font-serif text-choco-900">{{ $pending_orders }}</p>
+                </div>
+                <div class="h-12 w-12 rounded-xl bg-gold-400 flex items-center justify-center text-white shadow-lg shadow-gold-400/20">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </x-luxury.card>
+
+        <x-luxury.card class="bg-choco-800 border-none">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gold-400/60 text-[10px] font-bold uppercase tracking-widest mb-1">Status Akun</p>
+                    <p class="text-xl font-bold text-white">Platinum Member</p>
+                </div>
+                <div class="h-12 w-12 rounded-xl bg-white/10 flex items-center justify-center text-gold-400">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                    </svg>
+                </div>
+            </div>
+        </x-luxury.card>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Content: Recent Orders -->
+        <div class="lg:col-span-2 space-y-6">
+            <div class="flex items-center justify-between px-2">
+                <h2 class="font-serif text-2xl text-choco-900 italic">Pesanan Terbaru</h2>
+                <a href="{{ route('customer.orders.index') }}" class="text-[10px] font-bold uppercase tracking-widest text-gold-500 hover:text-gold-600 transition-colors">Lihat Semua</a>
+            </div>
+
+            @if($recent_orders->count() > 0)
+                <div class="bg-white rounded-3xl border border-stone-100 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="bg-stone-50/50">
+                                    <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-stone-400">Order ID</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-stone-400">Paket</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-stone-400">Tanggal Acara</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-stone-400">Status</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-stone-400 text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-50">
+                                @foreach($recent_orders as $order)
+                                    <tr class="group hover:bg-stone-50/30 transition-colors">
+                                        <td class="px-6 py-4">
+                                            <span class="font-bold text-choco-800 text-sm">#{{ $order->order_number }}</span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <span class="text-stone-600 text-sm font-medium">{{ Str::limit($order->package->name, 20) }}</span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <span class="text-stone-500 text-sm">{{ $order->event_date->format('d M Y') }}</span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @php
+                                                $statusColors = [
+                                                    'pending' => 'bg-gold-50 text-gold-600 border-gold-100',
+                                                    'processing' => 'bg-blue-50 text-blue-600 border-blue-100',
+                                                    'completed' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
+                                                    'cancelled' => 'bg-stone-50 text-stone-500 border-stone-100',
+                                                ];
+                                                $color = $statusColors[$order->status] ?? 'bg-stone-50 text-stone-500';
+                                            @endphp
+                                            <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border {{ $color }}">
+                                                {{ $order->status }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            <a href="{{ route('customer.orders.show', $order->id) }}" 
+                                               class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-stone-100 text-choco-800 hover:bg-gold-400 hover:text-white transition-all group-hover:scale-110">
+                                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                                </svg>
+                                            </a>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($recent_orders as $order)
-                                        <tr>
-                                            <td class="ps-4 py-3">
-                                                <div class="fw-bold" style="color: var(--primary-color);">{{ $order->order_number }}</div>
-                                            </td>
-                                            <td class="py-3 text-dark fw-medium">{{ Str::limit($order->package->name, 25) }}</td>
-                                            <td class="py-3 text-muted" style="font-size:0.9rem;">{{ $order->event_date->format('d M Y') }}</td>
-                                            <td class="py-3 fw-bold text-dark">
-                                                Rp {{ number_format($order->total_price, 0, ',', '.') }}
-                                            </td>
-                                            <td class="py-3">
-                                                <span class="badge rounded-pill bg-{{ $order->status === 'completed' ? 'success' : ($order->status === 'pending' ? 'warning' : ($order->status === 'cancelled' ? 'danger' : 'info')) }} bg-opacity-10 text-{{ $order->status === 'completed' ? 'success' : ($order->status === 'pending' ? 'warning text-dark' : ($order->status === 'cancelled' ? 'danger' : 'info text-dark')) }} px-3 py-2 border border-{{ $order->status === 'completed' ? 'success' : ($order->status === 'pending' ? 'warning' : ($order->status === 'cancelled' ? 'danger' : 'info')) }} border-opacity-25" style="font-weight: 600;">
-                                                    {{ ucfirst(str_replace('_', ' ', $order->status)) }}
-                                                </span>
-                                            </td>
-                                            <td class="pe-4 py-3 text-end">
-                                                <a href="{{ route('customer.orders.show', $order->id) }}" class="btn btn-light btn-sm rounded-circle shadow-sm" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; color: var(--primary-color);">
-                                                    <i class="fas fa-arrow-right"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    @else
-                        <div class="text-center py-5">
-                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                                <i class="fas fa-shopping-bag text-muted fs-2"></i>
-                            </div>
-                            <h6 class="text-dark fw-bold" style="font-family: 'Playfair Display', serif; font-size:1.25rem;">Belum Ada Pemesanan</h6>
-                            <p class="text-muted" style="font-size: 0.95rem; max-width:400px; margin: 0 auto 20px;">Anda belum melakukan pemesanan apapun. Mari melangkah mulai dari mencari paket impian Anda.</p>
-                            <a href="{{ route('customer.packages.index') }}" class="btn btn-primary px-4 py-2 rounded-3">Lihat Paket</a>
-                        </div>
-                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+            @else
+                <x-luxury.card class="bg-white py-20 text-center">
+                    <div class="h-20 w-20 rounded-full bg-stone-50 flex items-center justify-center mx-auto mb-6">
+                        <svg class="h-10 w-10 text-stone-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-xl text-choco-900 mb-2">Belum ada Pemesanan</h3>
+                    <p class="text-stone-400 text-sm max-w-xs mx-auto mb-8">Mulailah mewujudkan impian Anda dengan memilih salah satu paket eksklusif kami.</p>
+                    <x-luxury.button href="{{ route('customer.packages.index') }}" class="w-full sm:w-auto">Eksplor Paket</x-luxury.button>
+                </x-luxury.card>
+            @endif
+        </div>
+
+        <!-- Sidebar: Quick Actions -->
+        <div class="space-y-8">
+            <h2 class="font-serif text-2xl text-choco-900 italic px-2">Aksi Cepat</h2>
+            
+            <div class="space-y-4">
+                <a href="{{ route('customer.packages.index') }}" class="group block p-6 bg-white rounded-3xl border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="flex items-center gap-6">
+                        <div class="h-14 w-14 rounded-2xl bg-gold-50 flex items-center justify-center text-gold-500 group-hover:bg-gold-400 group-hover:text-white transition-colors duration-300">
+                            <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 16v2m3-6v6m3-3v3M9 9h.01M12 12h.01M15 9h.01M21 12c0 1.657-1.007 3-2.25 3S16.5 13.657 16.5 12s1.007-3 2.25-3S21 10.343 21 12zm-9 3c1.243 0 2.25-1.343 2.25-3s-1.007-3-2.25-3-2.25 1.343-2.25 3 1.007 3 2.25 3zm-9 0c1.243 0 2.25-1.343 2.25-3s-1.007-3-2.25-3-2.25 1.343-2.25 3 1.007 3 2.25 3z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-choco-900 font-bold">Cari Paket</p>
+                            <p class="text-stone-400 text-xs mt-1">Temukan konsep impian Anda</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{{ route('customer.wishlist.index') }}" class="group block p-6 bg-white rounded-3xl border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="flex items-center gap-6">
+                        <div class="h-14 w-14 rounded-2xl bg-stone-50 flex items-center justify-center text-stone-400 group-hover:bg-rose-400 group-hover:text-white transition-colors duration-300">
+                            <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-choco-900 font-bold">Wishlist</p>
+                            <p class="text-stone-400 text-xs mt-1">Paket yang Anda sukai</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{{ route('customer.support.tickets.create') }}" class="group block p-6 bg-choco-900 rounded-3xl border-none shadow-xl hover:shadow-choco-900/20 hover:-translate-y-1 transition-all duration-300">
+                    <div class="flex items-center gap-6">
+                        <div class="h-14 w-14 rounded-2xl bg-white/10 flex items-center justify-center text-gold-400 group-hover:bg-gold-400 group-hover:text-white transition-colors duration-300">
+                            <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold">Butuh Bantuan?</p>
+                            <p class="text-stone-400 text-xs mt-1 text-gold-400/60 font-medium italic">Chat de Concierge</p>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    /* Custom styles for action buttons */
-    .action-btn {
-        transition: all 0.3s ease;
-        border: 1px solid rgba(0,0,0,0.05);
-    }
-    .action-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        border-color: var(--primary-color) !important;
-    }
-    .btn-outline-primary.action-btn:hover {
-        background: rgba(184, 134, 11, 0.05);
-    }
-    .btn-outline-primary.action-btn .bg-light {
-        color: var(--primary-color);
-        background: rgba(184, 134, 11, 0.1) !important;
-    }
-</style>
 @endsection

@@ -1,0 +1,50 @@
+/* Custom Filament Styles for Gemilang WO Premium Theme */
+:root {
+    --filament-primary-color: #d4af37;
+    --filament-bg-color: #fcf9f2;
+}
+
+.fi-sidebar {
+    background-color: #1a1410 !important; /* Dark Brown */
+}
+
+.fi-sidebar-active {
+    background-color: #d4af37 !important;
+    color: black !important;
+    font-weight: bold !important;
+}
+
+.fi-sidebar-item-label {
+    font-family: 'Inter', sans-serif;
+}
+
+.fi-logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: bold;
+    font-style: italic;
+    color: white !important;
+}
+
+.fi-topbar {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(10px);
+}
+
+.fi-header-heading {
+    font-family: 'Playfair Display', serif;
+    font-weight: bold;
+    color: #1a1410 !important;
+}
+
+.fi-card {
+    border-radius: 20px !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05) !important;
+}
+
+.fi-btn-primary {
+    border-radius: 12px !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold !important;
+}

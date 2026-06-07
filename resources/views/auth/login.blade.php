@@ -1,388 +1,135 @@
 @extends('layouts.auth')
 
-@section('title', 'Masuk - Gemilang WO')
-
-@section('styles')
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-    :root {
-        --primary: #b8860b;
-        --secondary: #8b7355;
-        --dark: #2A1F18;
-        --light: #FCF9F2;
-    }
-
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: var(--light);
-        color: var(--dark);
-    }
-
-    .auth-wrapper {
-        display: flex;
-        min-height: 100vh;
-        width: 100vw;
-    }
-
-    .auth-banner {
-        flex: 1;
-        display: none;
-        background: linear-gradient(rgba(42, 31, 24, 0.4), rgba(42, 31, 24, 0.7)), url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-        position: relative;
-    }
-
-    @media (min-width: 992px) {
-        .auth-banner {
-            display: block;
-        }
-    }
-
-    .auth-banner-content {
-        position: absolute;
-        bottom: 10%;
-        left: 10%;
-        color: white;
-        max-width: 80%;
-    }
-
-    .auth-banner-content h1 {
-        font-family: 'Playfair Display', serif;
-        font-size: 3.5rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        line-height: 1.2;
-    }
-
-    .auth-banner-content p {
-        font-size: 1.1rem;
-        opacity: 0.9;
-        font-weight: 300;
-    }
-
-    .auth-form-container {
-        width: 100%;
-        max-width: 550px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 4rem;
-        background: white;
-        box-shadow: -10px 0 30px rgba(0,0,0,0.03);
-        z-index: 10;
-        position: relative;
-    }
-
-    @media (max-width: 991px) {
-        .auth-form-container {
-            max-width: 100%;
-            padding: 2rem;
-            align-items: center;
-        }
-        .auth-form-wrapper {
-            width: 100%;
-            max-width: 450px;
-        }
-    }
-
-    .brand-logo {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: var(--dark);
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        margin-bottom: 3rem;
-    }
-
-    .brand-logo i {
-        color: var(--primary);
-        margin-right: 10px;
-    }
-
-    .auth-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 2.2rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        color: var(--dark);
-    }
-
-    .auth-subtitle {
-        color: #6b7280;
-        margin-bottom: 2.5rem;
-        font-size: 0.95rem;
-    }
-
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-    .form-label {
-        font-size: 0.9rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: #374151;
-        display: block;
-    }
-
-    .input-group {
-        display: flex;
-        align-items: center;
-        border-radius: 12px;
-        background-color: #f9fafb;
-        border: 1px solid #e5e7eb;
-        transition: all 0.3s ease;
-        overflow: hidden;
-    }
-
-    .input-group:focus-within {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 4px rgba(184, 134, 11, 0.1);
-        background-color: white;
-    }
-
-    .input-group-text {
-        background: transparent;
-        border: none;
-        padding: 0 1.2rem;
-        color: #9ca3af;
-    }
-
-    .input-group:focus-within .input-group-text {
-        color: var(--primary);
-    }
-
-    .form-control {
-        border: none;
-        background: transparent;
-        padding: 1rem 1rem 1rem 0;
-        font-size: 0.95rem;
-        flex: 1;
-        width: 100%;
-        color: var(--dark);
-        font-family: 'Plus Jakarta Sans', sans-serif;
-    }
-
-    .form-control:focus {
-        outline: none;
-    }
-
-    .form-check {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1.5rem;
-    }
-
-    .form-check-input {
-        width: 1.2rem;
-        height: 1.2rem;
-        border: 2px solid #d1d5db;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        accent-color: var(--primary);
-    }
-
-    .form-check-label {
-        font-size: 0.9rem;
-        color: #4b5563;
-        cursor: pointer;
-        margin-left: 0.5rem;
-    }
-
-    .btn-login {
-        width: 100%;
-        padding: 1rem;
-        font-size: 1rem;
-        font-weight: 600;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background: var(--primary);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 2rem;
-    }
-
-    .btn-login:hover {
-        background: var(--secondary);
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(184, 134, 11, 0.2);
-    }
-
-    .auth-footer {
-        text-align: center;
-        font-size: 0.95rem;
-        color: #4b5563;
-    }
-
-    .auth-footer a {
-        color: var(--primary);
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-
-    .auth-footer a:hover {
-        text-decoration: underline;
-    }
-
-    .login-info {
-        background-color: #fdfbf7;
-        border: 1px dashed rgba(184, 134, 11, 0.3);
-        border-radius: 12px;
-        padding: 1.2rem;
-        margin-top: 2rem;
-    }
-
-    .login-info-title {
-        color: var(--primary);
-        font-size: 0.85rem;
-        font-weight: 700;
-        margin-bottom: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .info-item {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 0.5rem;
-        font-size: 0.85rem;
-    }
-
-    .info-label {
-        font-weight: 600;
-        color: #4b5563;
-    }
-
-    .info-value {
-        color: #6b7280;
-        font-family: 'Courier New', monospace;
-    }
-
-    .invalid-feedback {
-        color: #dc2626;
-        font-size: 0.85rem;
-        margin-top: 0.5rem;
-        display: block;
-    }
-
-    .alert-danger {
-        background: #fef2f2;
-        border-left: 4px solid #ef4444;
-        padding: 1rem;
-        color: #b91c1c;
-        border-radius: 8px;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
-        display: flex;
-        align-items: center;
-    }
-</style>
-@endsection
+@section('title', 'Akses Eksklusif - Gemilang WO')
 
 @section('content')
-<div class="auth-wrapper">
-    <!-- Image Banner -->
-    <div class="auth-banner">
-        <div class="auth-banner-content">
-            <h1>Ciptakan Hari Sempurna Anda Bersama Kami</h1>
-            <p>Akses dasbor personal Anda dan mulai rencanakan momen menakjubkan yang akan dikenang seumur hidup.</p>
+<div class="flex min-h-full">
+    <!-- Left: Cinematic Banner -->
+    <div class="relative hidden w-0 flex-1 lg:block">
+        <img class="absolute inset-0 h-full w-full object-cover grayscale-[20%] brightness-75" 
+             src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
+             alt="Luxury Wedding Event">
+        <div class="absolute inset-0 bg-choco-900/40 backdrop-blur-[2px]"></div>
+        
+        <div class="absolute inset-0 flex flex-col justify-end p-20 text-white">
+            <div class="max-w-xl">
+                <p class="text-gold-400 text-xs font-bold uppercase tracking-[0.4em] mb-6">Reserved For Perfectionists</p>
+                <h1 class="font-serif text-6xl leading-tight mb-8 italic">Mewujudkan <span class="text-white not-italic">Impian</span> Terindah Anda.</h1>
+                <p class="text-white/70 text-lg font-light leading-relaxed">
+                    Masuk ke dalam ekosistem perencanaan pernikahan paling eksklusif dan mulailah perjalanan menuju hari yang sempurna.
+                </p>
+            </div>
+            
+            <div class="mt-20 flex items-center gap-6">
+                <div class="h-[1px] flex-1 bg-white/20"></div>
+                <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">Gemilang Wedding Organizer</p>
+            </div>
         </div>
     </div>
 
-    <!-- Form Section -->
-    <div class="auth-form-container">
-        <div class="auth-form-wrapper">
-            <a href="{{ route('home') }}" class="brand-logo">
-                <i class="fas fa-ring"></i> Gemilang WO
-            </a>
-
-            <h2 class="auth-title">Selamat Datang</h2>
-            <p class="auth-subtitle">Masukkan kredensial Anda untuk melanjutkan ke dasbor.</p>
-
-            @if ($errors->any())
-                <div class="alert-danger">
-                    <i class="fas fa-exclamation-circle me-2 fs-5"></i>
-                    Gagal masuk. Silakan periksa kembali email dan sandi Anda.
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-
-                <!-- Email Field -->
-                <div class="form-group">
-                    <label for="email" class="form-label">Alamat Email</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                        <input id="email" type="email" 
-                               class="form-control" 
-                               name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
-                               placeholder="you@example.com">
+    <!-- Right: Login Form -->
+    <div class="flex flex-1 flex-col justify-center px-8 py-12 sm:px-12 lg:flex-none lg:px-20 xl:px-32 bg-white">
+        <div class="mx-auto w-full max-w-sm lg:w-96">
+            <div class="mb-12">
+                <a href="{{ route('home') }}" class="group inline-flex items-center gap-3">
+                    <div class="h-10 w-10 bg-choco-900 rounded-xl flex items-center justify-center text-gold-400 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-ring text-xl"></i>
                     </div>
-                </div>
-
-                <!-- Password Field -->
-                <div class="form-group">
-                    <label for="password" class="form-label">Kata Sandi</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                        <input id="password" type="password" 
-                               class="form-control" 
-                               name="password" required autocomplete="current-password"
-                               placeholder="Masukkan kata sandi">
-                    </div>
-                </div>
-
-                <!-- Remember Me -->
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                    <label class="form-check-label" for="remember">Ingat saya untuk login berikutnya</label>
-                </div>
-
-                <!-- Login Button -->
-                <button type="submit" class="btn-login">
-                    Masuk Sekarang <i class="fas fa-arrow-right ms-2"></i>
-                </button>
-            </form>
-
-            <div class="auth-footer">
-                Belum memiliki akun pelanggan? <a href="{{ route('register') }}">Buat Profil Baru</a>
+                    <span class="font-serif text-2xl text-choco-900 font-bold tracking-tight">Gemilang</span>
+                </a>
             </div>
 
-            <!-- Test Accounts Info -->
-            <div class="login-info">
-                <p class="login-info-title"><i class="fas fa-key me-2"></i>Akses Uji Coba</p>
-                <div class="info-item">
-                    <span class="info-label">Admin:</span>
-                    <span class="info-value">admin@gemilangwo.test</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Owner:</span>
-                    <span class="info-value">owner@gemilangwo.test</span>
-                </div>
-                <div class="info-item border-bottom pb-2 mb-2">
-                    <span class="info-label">Pelanggan:</span>
-                    <span class="info-value">budi@gemilangwo.test</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Kata Sandi:</span>
-                    <span class="info-value">password123</span>
+            <div class="space-y-2">
+                <h2 class="text-3xl font-serif text-choco-900 italic font-medium tracking-tight">Selamat Datang</h2>
+                <p class="text-stone-400 text-sm font-medium tracking-wide">Silakan masuk untuk mengakses dasbor Anda.</p>
+            </div>
+
+            <div class="mt-10">
+                <form action="{{ route('login') }}" method="POST" class="space-y-6">
+                    @csrf
+
+                    @if ($errors->any())
+                        <div class="p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-start gap-3">
+                            <svg class="h-5 w-5 text-rose-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                            <p class="text-rose-600 text-[11px] font-bold uppercase tracking-widest leading-relaxed">Credential Error: Silakan periksa kembali email & sandi Anda.</p>
+                        </div>
+                    @endif
+
+                    <div class="space-y-5">
+                        <div class="space-y-2">
+                            <label for="email" class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 px-1">Email Address</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-stone-300 group-focus-within:text-gold-500 transition-colors">
+                                    <i class="fas fa-envelope text-sm"></i>
+                                </div>
+                                <input id="email" name="email" type="email" value="{{ old('email') }}" required 
+                                       class="block w-full pl-11 pr-4 py-3.5 bg-stone-50 border border-stone-100 rounded-2xl text-choco-900 text-sm focus:bg-white focus:ring-4 focus:ring-gold-500/10 focus:border-gold-500/50 transition-all placeholder:text-stone-300 outline-none" 
+                                       placeholder="example@email.com">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 text-right">
+                            <label for="password" class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 px-1 float-left">Password</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-stone-300 group-focus-within:text-gold-500 transition-colors">
+                                    <i class="fas fa-lock text-sm"></i>
+                                </div>
+                                <input id="password" name="password" type="password" required 
+                                       class="block w-full pl-11 pr-4 py-3.5 bg-stone-50 border border-stone-100 rounded-2xl text-choco-900 text-sm focus:bg-white focus:ring-4 focus:ring-gold-500/10 focus:border-gold-500/50 transition-all placeholder:text-stone-300 outline-none" 
+                                       placeholder="••••••••">
+                            </div>
+                            <a href="#" class="text-[10px] font-bold uppercase tracking-widest text-gold-500 hover:text-gold-600 transition-colors inline-block mt-2">Lupa Kata Sandi?</a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input id="remember" name="remember" type="checkbox" class="h-4 w-4 rounded border-stone-200 text-choco-900 focus:ring-gold-500">
+                        <label for="remember" class="ml-3 text-[11px] font-bold uppercase tracking-widest text-stone-400">Ingat Saya</label>
+                    </div>
+
+                    <button type="submit" 
+                            class="w-full flex justify-center py-4 px-4 bg-choco-900 text-gold-400 text-[10px] font-bold uppercase tracking-[0.3em] rounded-2xl shadow-xl shadow-choco-900/10 hover:bg-choco-800 focus:ring-4 focus:ring-gold-500/20 transition-all">
+                        Masuk Ke Dasbor
+                    </button>
+                    
+                    <div class="pt-4 text-center">
+                        <p class="text-stone-400 text-[11px] font-bold uppercase tracking-widest">
+                            Baru di Gemilang? <a href="{{ route('register') }}" class="text-gold-500 hover:text-gold-600 ml-1">Buat Akun Sekarang</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Test Accounts Information -->
+            <div class="mt-16 p-6 bg-stone-50 rounded-3xl border border-stone-100 relative overflow-hidden group">
+                <div class="absolute -right-6 -bottom-6 h-20 w-20 bg-gold-400/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700"></div>
+                <h4 class="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-500 mb-4 px-1 flex items-center gap-2">
+                    <span class="h-1 w-1 rounded-full bg-gold-500"></span>
+                    Test Credentials
+                </h4>
+                <div class="space-y-2 px-1">
+                    <div class="flex justify-between items-center text-[10px]">
+                        <span class="font-bold text-stone-400 uppercase tracking-tighter">Admin Account</span>
+                        <code class="text-choco-900 font-bold bg-white px-2 py-0.5 rounded shadow-sm">admin@gemilangwo.test</code>
+                    </div>
+                    <div class="flex justify-between items-center text-[10px]">
+                        <span class="font-bold text-stone-400 uppercase tracking-tighter">Owner Account</span>
+                        <code class="text-choco-900 font-bold bg-white px-2 py-0.5 rounded shadow-sm">owner@gemilangwo.test</code>
+                    </div>
+                    <div class="flex justify-between items-center text-[10px]">
+                        <span class="font-bold text-stone-400 uppercase tracking-tighter">Default Password</span>
+                        <code class="text-choco-900 font-bold bg-white px-2 py-0.5 rounded shadow-sm">password123</code>
+                    </div>
                 </div>
             </div>
             
-            <div class="mt-4 text-center">
-                <a href="{{ route('home') }}" class="text-muted text-decoration-none" style="font-size: 0.85rem;"><i class="fas fa-arrow-left me-1"></i> Kembali ke Halaman Utama</a>
+            <div class="mt-10 text-center">
+                <a href="{{ route('home') }}" class="inline-flex items-center gap-2 text-stone-400 hover:text-choco-900 transition-colors">
+                    <i class="fas fa-arrow-left text-xs"></i>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em]">Halaman Utama</span>
+                </a>
             </div>
         </div>
     </div>
