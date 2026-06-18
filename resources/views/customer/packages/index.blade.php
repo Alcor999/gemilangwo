@@ -16,7 +16,7 @@
             <p class="text-gold-400 text-xs font-bold uppercase tracking-[0.5em] animate-fade-in-up">The Curation</p>
             <h1 class="font-serif text-5xl md:text-6xl text-white italic tracking-tight">Koleksi <span class="not-italic">Pernikahan</span> Impian</h1>
             <p class="text-white/60 text-lg font-light leading-relaxed px-4">
-                Pilih paket yang mencerminkan esensi cinta Anda. Setiap detil telah dikurasi untuk menciptakan kemewahan yang tak terlupakan.
+                Pilih paket yang mencerminkan esensi cinta Anda. Setiap detil telah dirancang untuk menciptakan kemewahan yang tak terlupakan.
             </p>
             
             <div class="pt-8 flex flex-wrap justify-center gap-4">
@@ -46,7 +46,7 @@
                                  alt="{{ $package->name }}">
                         @else
                             <div class="w-full h-full bg-stone-50 flex items-center justify-center text-stone-200">
-                                <i class="fas fa-ring fa-4x opacity-20"></i>
+                                <img src="{{ asset('images/logo.png') }}" class="h-16 w-16 object-contain opacity-20" alt="">
                             </div>
                         @endif
                         

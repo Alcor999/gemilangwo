@@ -119,7 +119,7 @@ class BookingForm extends Component
             // Vendors are optional or pre-selected
         } elseif ($this->step === 4) {
             $this->validate([
-                'payment_scheme' => 'required|in:full_payment,dp_30,dp_50,installment_3x',
+                'payment_scheme' => 'required|in:full_payment,dp_20,dp_30,dp_40,dp_50,installment_3x,installment_5x',
             ]);
 
             $eventDate = \Carbon\Carbon::parse($this->event_date);
@@ -139,7 +139,9 @@ class BookingForm extends Component
         $orderNumber = 'WO-'.substr(time(), -8).rand(10, 99);
         
         $dpPercentage = match ($this->payment_scheme) {
+            'dp_20' => 20.00,
             'dp_30' => 30.00,
+            'dp_40' => 40.00,
             'dp_50' => 50.00,
             default => null,
         };

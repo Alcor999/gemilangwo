@@ -112,7 +112,7 @@
                     </li>
                     <li class="flex items-center gap-4">
                         <div class="h-1.5 w-1.5 rounded-full bg-gold-400"></div>
-                        <span class="text-choco-800 font-medium italic">Kurasi Vendor Premium Kelas Dunia</span>
+                        <span class="text-choco-800 font-medium italic">Kelola Vendor Premium Kelas Dunia</span>
                     </li>
                     <li class="flex items-center gap-4">
                         <div class="h-1.5 w-1.5 rounded-full bg-gold-400"></div>
@@ -128,7 +128,7 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-20">
                 <p class="text-gold-500 uppercase tracking-[0.3em] text-xs font-bold mb-6">Investasi Kebahagiaan</p>
-                <h2 class="font-serif text-4xl md:text-6xl text-choco-900 mb-8">Kurasi Paket Eksklusif</h2>
+                <h2 class="font-serif text-4xl md:text-6xl text-choco-900 mb-8">Kelola Paket Eksklusif</h2>
                 <div class="w-24 h-0.5 bg-gold-200 mx-auto"></div>
             </div>
 

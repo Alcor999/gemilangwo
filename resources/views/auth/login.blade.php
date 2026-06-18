@@ -32,9 +32,7 @@
         <div class="mx-auto w-full max-w-sm lg:w-96">
             <div class="mb-12">
                 <a href="{{ route('home') }}" class="group inline-flex items-center gap-3">
-                    <div class="h-10 w-10 bg-choco-900 rounded-xl flex items-center justify-center text-gold-400 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-ring text-xl"></i>
-                    </div>
+                    <img src="{{ asset('images/logo.png') }}" alt="Gemilang" class="h-10 w-auto object-contain">
                     <span class="font-serif text-2xl text-choco-900 font-bold tracking-tight">Gemilang</span>
                 </a>
             </div>

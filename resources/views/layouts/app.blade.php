@@ -49,11 +49,7 @@
             
             <div class="flex h-16 shrink-0 items-center px-6 border-b border-choco-700/50">
                 <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-400 group-hover:bg-gold-300 transition-colors">
-                        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 00-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-.856.12-1.683.342-2.468"></path>
-                        </svg>
-                    </div>
+                    <img src="{{ asset('images/logo.png') }}" alt="Gemilang" class="h-10 w-auto object-contain">
                     <span class="font-serif text-xl tracking-wide text-gold-100 group-hover:text-white transition-colors">Gemilang <span class="font-light">WO</span></span>
                 </a>
             </div>
@@ -63,8 +59,8 @@
                     @auth
                         <div class="flex items-center gap-3 p-3 rounded-2xl bg-choco-900/50 border border-choco-700">
                             <div class="h-10 w-10 rounded-full border-2 border-gold-400 overflow-hidden bg-choco-700 flex items-center justify-center">
-                                @if(auth()->user()->avatar)
-                                    <img src="{{ Storage::url(auth()->user()->avatar) }}" alt="" class="h-full w-full object-cover">
+                                @if(auth()->user()->profile_image)
+                                    <img src="{{ Storage::url(auth()->user()->profile_image) }}" alt="" class="h-full w-full object-cover">
                                 @else
                                     <span class="text-gold-400 font-bold uppercase">{{ substr(auth()->user()->name, 0, 1) }}</span>
                                 @endif

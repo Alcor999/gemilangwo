@@ -22,7 +22,7 @@
                          alt="{{ $package->name }}">
                 @else
                     <div class="w-full h-[500px] bg-stone-50 flex items-center justify-center text-stone-200">
-                        <i class="fas fa-ring fa-8x opacity-10"></i>
+                        <img src="{{ asset('images/logo.png') }}" class="h-24 w-24 object-contain opacity-10" alt="">
                     </div>
                 @endif
                 

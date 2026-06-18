@@ -90,7 +90,7 @@ class OrderController extends Controller
             'special_request' => 'nullable|string',
             'vendors' => 'nullable|array',
             'vendors.*' => 'exists:vendors,id',
-            'payment_scheme' => 'required|in:full_payment,dp_30,dp_50,installment_3x',
+            'payment_scheme' => 'required|in:full_payment,dp_20,dp_30,dp_40,dp_50,installment_3x,installment_5x',
         ]);
 
         $package = Package::with('requiredVendorCategories.vendors')->findOrFail($validated['package_id']);
@@ -150,8 +150,12 @@ class OrderController extends Controller
 
         $paymentScheme = $validated['payment_scheme'];
         $dpPercentage = null;
-        if ($paymentScheme === 'dp_30') {
+        if ($paymentScheme === 'dp_20') {
+            $dpPercentage = 20.00;
+        } elseif ($paymentScheme === 'dp_30') {
             $dpPercentage = 30.00;
+        } elseif ($paymentScheme === 'dp_40') {
+            $dpPercentage = 40.00;
         } elseif ($paymentScheme === 'dp_50') {
             $dpPercentage = 50.00;
         }

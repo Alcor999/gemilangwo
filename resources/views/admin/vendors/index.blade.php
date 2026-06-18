@@ -112,7 +112,7 @@
                                     <div class="h-16 w-16 bg-stone-50 rounded-3xl mx-auto flex items-center justify-center text-stone-200">
                                         <i class="fas fa-store-slash text-2xl"></i>
                                     </div>
-                                    <p class="text-stone-400 font-serif italic text-sm">Portfolio vendor masih kosong. Mulai kurasi rekanan baru.</p>
+                                    <p class="text-stone-400 font-serif italic text-sm">Portfolio vendor masih kosong. Mulai kelola rekanan baru.</p>
                                 </div>
                             </td>
                         </tr>

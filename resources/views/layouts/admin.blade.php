@@ -33,9 +33,7 @@
                 {{-- Logo Section --}}
                 <div class="flex items-center justify-between h-20 px-6 bg-black/20">
                     <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-gold-500 rounded-xl flex items-center justify-center shadow-lg">
-                            <i class="fas fa-ring text-black text-xl"></i>
-                        </div>
+                        <img src="{{ asset('images/logo.png') }}" alt="Gemilang" class="h-10 w-auto object-contain">
                         <span class="text-xl font-serif font-bold tracking-tight text-white italic">Gemilang <span class="text-gold-500">WO</span></span>
                     </a>
                     <button @click="sidebarOpen = false" class="lg:hidden text-white hover:text-gold-500 transition-colors">

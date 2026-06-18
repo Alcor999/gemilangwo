@@ -171,8 +171,8 @@
                             <i class="fas fa-box-open text-sm"></i>
                         </div>
                         <div class="space-y-0.5">
-                            <p class="text-choco-900 font-bold text-xs">Kurasi Katalog</p>
-                            <p class="text-stone-400 text-[9px] uppercase font-bold tracking-[0.2em]">Package Curator</p>
+                            <p class="text-choco-900 font-bold text-xs">Kelola Katalog</p>
+                            <p class="text-stone-400 text-[9px] uppercase font-bold tracking-[0.2em]">Package Organizer</p>
                         </div>
                     </div>
                     <i class="fas fa-arrow-right text-[10px] text-stone-100 group-hover:text-gold-500 transition-colors"></i>

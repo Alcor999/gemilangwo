@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Kurasi Paket Baru - Administrator')
+@section('title', 'Kelola Paket Baru - Administrator')
 
 @section('content')
 <div class="max-w-5xl mx-auto space-y-12 pb-24" x-data="{ 
@@ -10,8 +10,8 @@
 }">
     <!-- Header -->
     <div class="space-y-2">
-        <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.4em]">Administrative Curation</p>
-        <h1 class="font-serif text-4xl text-choco-900 italic">Kurasi <span class="not-italic text-stone-300">Paket Baru</span></h1>
+        <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.4em]">Administrative Package</p>
+        <h1 class="font-serif text-4xl text-choco-900 italic">Kelola <span class="not-italic text-stone-300">Paket Baru</span></h1>
     </div>
 
     <form action="{{ route('admin.packages.store') }}" method="POST" enctype="multipart/form-data" class="grid lg:grid-cols-12 gap-12">

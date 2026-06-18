@@ -96,9 +96,12 @@
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
                     @foreach([
                         'full_payment' => ['icon' => 'fa-coins', 'title' => 'Bayar Lunas', 'desc' => '100% lunas di awal'],
+                        'dp_20' => ['icon' => 'fa-hourglass-start', 'title' => 'DP 20%', 'desc' => 'DP 20%, sisa H-14'],
                         'dp_30' => ['icon' => 'fa-hourglass-start', 'title' => 'DP 30%', 'desc' => 'DP 30%, sisa H-14'],
+                        'dp_40' => ['icon' => 'fa-hourglass-half', 'title' => 'DP 40%', 'desc' => 'DP 40%, sisa H-14'],
                         'dp_50' => ['icon' => 'fa-hourglass-half', 'title' => 'DP 50%', 'desc' => 'DP 50%, sisa H-14'],
                         'installment_3x' => ['icon' => 'fa-calendar-alt', 'title' => 'Cicilan 3x', 'desc' => '40% + 30% + 30%'],
+                        'installment_5x' => ['icon' => 'fa-calendar-check', 'title' => 'Cicilan 5x', 'desc' => '30%+20%+20%+15%+15%'],
                     ] as $code => $scheme)
                         <div class="payment-scheme-card cursor-pointer rounded-2xl border-2 border-stone-200 p-4 text-center transition-all hover:border-gold-400 hover:shadow-md {{ $code === 'full_payment' ? 'active border-gold-400 bg-gold-50/50 shadow-sm' : '' }}"
                             data-scheme="{{ $code }}">
@@ -254,9 +257,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (scheme === 'full_payment') {
             items.push({ label: 'Lunas Penuh (100%)', amount: total, date: 'Saat checkout' });
+        } else if (scheme === 'dp_20') {
+            items.push({ label: 'DP 1 (20%)', amount: total * 0.2, date: 'Saat checkout' });
+            items.push({ label: 'Pelunasan (80%)', amount: total * 0.8, date: fmtDate(eventDate, 14) });
         } else if (scheme === 'dp_30') {
             items.push({ label: 'DP 1 (30%)', amount: total * 0.3, date: 'Saat checkout' });
             items.push({ label: 'Pelunasan (70%)', amount: total * 0.7, date: fmtDate(eventDate, 14) });
+        } else if (scheme === 'dp_40') {
+            items.push({ label: 'DP 1 (40%)', amount: total * 0.4, date: 'Saat checkout' });
+            items.push({ label: 'Pelunasan (60%)', amount: total * 0.6, date: fmtDate(eventDate, 14) });
         } else if (scheme === 'dp_50') {
             items.push({ label: 'DP 1 (50%)', amount: total * 0.5, date: 'Saat checkout' });
             items.push({ label: 'Pelunasan (50%)', amount: total * 0.5, date: fmtDate(eventDate, 14) });
@@ -264,6 +273,12 @@ document.addEventListener('DOMContentLoaded', function() {
             items.push({ label: 'Cicilan 1 (40%)', amount: total * 0.4, date: 'Saat checkout' });
             items.push({ label: 'Cicilan 2 (30%)', amount: total * 0.3, date: fmtDate(eventDate, 30) });
             items.push({ label: 'Cicilan 3 (30%)', amount: total * 0.3, date: fmtDate(eventDate, 14) });
+        } else if (scheme === 'installment_5x') {
+            items.push({ label: 'Cicilan 1 (30%)', amount: total * 0.30, date: 'Saat checkout' });
+            items.push({ label: 'Cicilan 2 (20%)', amount: total * 0.20, date: fmtDate(eventDate, 60) });
+            items.push({ label: 'Cicilan 3 (20%)', amount: total * 0.20, date: fmtDate(eventDate, 45) });
+            items.push({ label: 'Cicilan 4 (15%)', amount: total * 0.15, date: fmtDate(eventDate, 30) });
+            items.push({ label: 'Cicilan 5 (15%)', amount: total * 0.15, date: fmtDate(eventDate, 14) });
         }
 
         breakdownList.innerHTML = items.map((item, i) => `

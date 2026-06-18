@@ -27,9 +27,7 @@
          class="fixed w-full z-50 transition-all duration-500">
         <div class="container mx-auto px-6 flex justify-between items-center">
             <a href="{{ route('home') }}" class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gold-500 rounded-xl flex items-center justify-center shadow-lg">
-                    <i class="fas fa-ring text-black text-xl"></i>
-                </div>
+                <img src="{{ asset('images/logo.png') }}" alt="Gemilang" class="h-10 w-auto object-contain">
                 <span :class="scrolled ? 'text-brown-950' : 'text-gold-500'" class="text-2xl font-serif font-bold tracking-tight transition-colors">Gemilang WO</span>
             </a>
 
@@ -81,9 +79,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 <div class="md:col-span-2">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-12 h-12 bg-gold-500 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-ring text-black text-2xl"></i>
-                        </div>
+                        <img src="{{ asset('images/logo.png') }}" alt="Gemilang" class="h-12 w-auto object-contain brightness-0 invert">
                         <span class="text-3xl font-serif font-bold text-gold-500">Gemilang WO</span>
                     </div>
                     <p class="text-gold-100/50 max-w-sm leading-relaxed">Mewujudkan pernikahan impian Anda dengan sentuhan kemewahan, profesionalisme, dan detail yang sempurna sejak tahun 2010.</p>

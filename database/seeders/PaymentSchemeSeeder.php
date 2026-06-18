@@ -18,6 +18,16 @@ class PaymentSchemeSeeder extends Seeder
                 'description' => 'Bayar 100% sekaligus saat checkout.',
             ],
             [
+                'name' => 'DP 20% + Pelunasan',
+                'code' => 'dp_20',
+                'breakdown' => [
+                    ['percentage' => 20, 'label' => 'Uang Muka (DP)', 'days_before_event' => null],
+                    ['percentage' => 80, 'label' => 'Pelunasan', 'days_before_event' => 14],
+                ],
+                'min_days_before_event' => 30,
+                'description' => 'DP 20% di awal, pelunasan sebelum H-14 acara.',
+            ],
+            [
                 'name' => 'DP 30% + Pelunasan',
                 'code' => 'dp_30',
                 'breakdown' => [
@@ -26,6 +36,16 @@ class PaymentSchemeSeeder extends Seeder
                 ],
                 'min_days_before_event' => 30,
                 'description' => 'DP 30% di awal, pelunasan sebelum H-14 acara.',
+            ],
+            [
+                'name' => 'DP 40% + Pelunasan',
+                'code' => 'dp_40',
+                'breakdown' => [
+                    ['percentage' => 40, 'label' => 'Uang Muka (DP)', 'days_before_event' => null],
+                    ['percentage' => 60, 'label' => 'Pelunasan', 'days_before_event' => 14],
+                ],
+                'min_days_before_event' => 30,
+                'description' => 'DP 40% di awal, pelunasan sebelum H-14 acara.',
             ],
             [
                 'name' => 'DP 50% + Pelunasan',
@@ -47,6 +67,19 @@ class PaymentSchemeSeeder extends Seeder
                 ],
                 'min_days_before_event' => 60,
                 'description' => 'Pembayaran bertahap 40% + 30% + 30%.',
+            ],
+            [
+                'name' => 'Cicilan 5x',
+                'code' => 'installment_5x',
+                'breakdown' => [
+                    ['percentage' => 30, 'label' => 'Cicilan ke-1', 'days_before_event' => null],
+                    ['percentage' => 20, 'label' => 'Cicilan ke-2', 'days_before_event' => 60],
+                    ['percentage' => 20, 'label' => 'Cicilan ke-3', 'days_before_event' => 45],
+                    ['percentage' => 15, 'label' => 'Cicilan ke-4', 'days_before_event' => 30],
+                    ['percentage' => 15, 'label' => 'Cicilan ke-5', 'days_before_event' => 14],
+                ],
+                'min_days_before_event' => 90,
+                'description' => 'Pembayaran bertahap 30% + 20% + 20% + 15% + 15%.',
             ],
         ];
 

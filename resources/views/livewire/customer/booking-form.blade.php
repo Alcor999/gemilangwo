@@ -170,9 +170,12 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                         @foreach([
                             'full_payment' => ['icon' => 'fa-coins', 'title' => 'Bayar Lunas', 'desc' => '100% lunas di awal'],
+                            'dp_20' => ['icon' => 'fa-hourglass-start', 'title' => 'DP 20%', 'desc' => 'DP 20%, sisa H-14 acara'],
                             'dp_30' => ['icon' => 'fa-hourglass-start', 'title' => 'DP 30%', 'desc' => 'DP 30%, sisa H-14 acara'],
+                            'dp_40' => ['icon' => 'fa-hourglass-half', 'title' => 'DP 40%', 'desc' => 'DP 40%, sisa H-14 acara'],
                             'dp_50' => ['icon' => 'fa-hourglass-half', 'title' => 'DP 50%', 'desc' => 'DP 50%, sisa H-14 acara'],
                             'installment_3x' => ['icon' => 'fa-calendar-alt', 'title' => 'Cicilan 3x', 'desc' => '40% + 30% + 30%'],
+                            'installment_5x' => ['icon' => 'fa-calendar-check', 'title' => 'Cicilan 5x', 'desc' => '30%+20%+20%+15%+15%'],
                         ] as $code => $scheme)
                             <label class="relative cursor-pointer group">
                                 <input type="radio" wire:model.live="payment_scheme" value="{{ $code }}" class="peer sr-only">
@@ -259,9 +262,12 @@
                                 <span class="text-brown-600">Skema Pembayaran</span>
                                 <span class="text-brown-900 fw-medium">
                                     @switch($payment_scheme)
+                                        @case('dp_20') DP 20% + Pelunasan @break
                                         @case('dp_30') DP 30% + Pelunasan @break
+                                        @case('dp_40') DP 40% + Pelunasan @break
                                         @case('dp_50') DP 50% + Pelunasan @break
                                         @case('installment_3x') Cicilan 3x @break
+                                        @case('installment_5x') Cicilan 5x @break
                                         @default Bayar Lunas @break
                                     @endswitch
                                 </span>

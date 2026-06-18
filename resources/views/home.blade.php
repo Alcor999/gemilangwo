@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Gemilang WO | Luxury Wedding Curator</title>
+    <title>Gemilang WO | Luxury Wedding Organizer</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,12 +30,10 @@
          :class="scrolled ? 'nav-blur py-3 shadow-xl shadow-stone-900/5 border-b border-stone-100' : 'bg-transparent py-8'">
         <div class="max-w-7xl mx-auto px-8 flex items-center justify-between">
             <a href="/" class="flex items-center gap-4 group">
-                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-choco-900 group-hover:rotate-12 transition-transform duration-500 shadow-xl shadow-choco-900/20">
-                    <i class="fas fa-ring text-gold-400 text-xl"></i>
-                </div>
+                <img src="{{ asset('images/logo.png') }}" alt="Gemilang WO" class="h-11 w-auto object-contain">
                 <div class="flex flex-col">
                     <span class="font-serif text-2xl font-bold tracking-tight transition-colors" :class="scrolled ? 'text-choco-900' : 'text-white lux-text-shadow'">Gemilang</span>
-                    <span class="text-[9px] font-bold uppercase tracking-[0.4em] transition-colors" :class="scrolled ? 'text-gold-500' : 'text-gold-400'">Wedding Curator</span>
+                    <span class="text-[9px] font-bold uppercase tracking-[0.4em] transition-colors" :class="scrolled ? 'text-gold-500' : 'text-gold-400'">Wedding Organizer</span>
                 </div>
             </a>
 
@@ -220,9 +218,7 @@
         <div class="max-w-7xl mx-auto px-8 grid lg:grid-cols-4 gap-20">
             <div class="lg:col-span-2 space-y-10">
                 <a href="/" class="flex items-center gap-4 group">
-                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 group-hover:bg-gold-400 transition-colors">
-                        <i class="fas fa-ring text-gold-400 group-hover:text-white text-2xl transition-colors"></i>
-                    </div>
+                    <img src="{{ asset('images/logo.png') }}" alt="Gemilang WO" class="h-12 w-auto object-contain brightness-0 invert">
                     <span class="font-serif text-3xl font-bold tracking-tight">Gemilang</span>
                 </a>
                 <p class="text-white/40 text-sm font-light leading-relaxed max-w-sm italic">
@@ -260,7 +256,7 @@
         </div>
 
         <div class="max-w-7xl mx-auto px-8 mt-24 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-            <p class="text-white/20 text-[10px] font-bold uppercase tracking-[0.3em]">&copy; {{ date('Y') }} Gemilang Wedding Curator. Excellence in Detail.</p>
+            <p class="text-white/20 text-[10px] font-bold uppercase tracking-[0.3em]">&copy; {{ date('Y') }} Gemilang Wedding Organizer. Excellence in Detail.</p>
             <div class="flex gap-12 text-white/20 text-[10px] font-bold uppercase tracking-[0.3em]">
                 <a href="#" class="hover:text-white transition-colors">Privacy</a>
                 <a href="#" class="hover:text-white transition-colors">Terms</a>
@@ -268,17 +264,5 @@
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const navbar = document.getElementById('mainNav');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
-        });
-    </script>
 </body>
 </html>

@@ -35,7 +35,7 @@
                         <i class="fas fa-gem text-gold-600 group-hover:text-white text-2xl"></i>
                     </div>
                     <h3 class="text-2xl font-bold text-brown-900 mb-4">Kualitas Premium</h3>
-                    <p class="text-brown-700 font-light leading-relaxed">Setiap detail dikurasi secara profesional untuk memastikan kemewahan pada hari spesial Anda.</p>
+                    <p class="text-brown-700 font-light leading-relaxed">Setiap detail dirancang secara profesional untuk memastikan kemewahan pada hari spesial Anda.</p>
                 </div>
                 <div class="p-10 bg-white rounded-2xl shadow-lg border-t-4 border-gold-500 group hover:-translate-y-2 transition-all">
                     <div class="w-16 h-16 bg-gold-50 rounded-full flex items-center justify-center mb-6 group-hover:bg-gold-500 transition-colors">
@@ -74,7 +74,7 @@
                                 <img src="{{ asset('storage/' . $package->image) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="{{ $package->name }}">
                             @else
                                 <div class="w-full h-full bg-brown-900 flex items-center justify-center">
-                                    <i class="fas fa-ring text-4xl text-gold-500 opacity-30"></i>
+                                    <img src="{{ asset('images/logo.png') }}" class="h-16 w-16 object-contain opacity-30" alt="">
                                 </div>
                             @endif
                             <div class="absolute top-4 right-4 bg-gold-500 text-black px-4 py-1 rounded-full font-bold text-sm shadow-lg">

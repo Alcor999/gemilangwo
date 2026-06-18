@@ -54,7 +54,7 @@
                                         @if($package->image)
                                             <img src="{{ asset('storage/' . $package->image) }}" class="h-full w-full object-cover rounded-xl" alt="">
                                         @else
-                                            <i class="fas fa-ring text-lg"></i>
+                                            <img src="{{ asset('images/logo.png') }}" class="h-8 w-8 object-contain opacity-40" alt="">
                                         @endif
                                     </div>
                                     <div>

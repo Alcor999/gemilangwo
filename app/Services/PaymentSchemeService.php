@@ -54,7 +54,7 @@ class PaymentSchemeService
             ];
         }
 
-        if ($schemeCode === 'installment_3x') {
+        if ($schemeCode === 'installment_3x' || $schemeCode === 'installment_5x') {
             foreach ($items as $i => &$item) {
                 $item['installment_number'] = $i + 1;
                 $item['payment_type'] = 'installment';
@@ -95,9 +95,17 @@ class PaymentSchemeService
     private function defaultBreakdown(string $schemeCode): array
     {
         return match ($schemeCode) {
+            'dp_20' => [
+                ['percentage' => 20, 'label' => 'Uang Muka (DP)', 'days_before_event' => null],
+                ['percentage' => 80, 'label' => 'Pelunasan', 'days_before_event' => 14],
+            ],
             'dp_30' => [
                 ['percentage' => 30, 'label' => 'Uang Muka (DP)', 'days_before_event' => null],
                 ['percentage' => 70, 'label' => 'Pelunasan', 'days_before_event' => 14],
+            ],
+            'dp_40' => [
+                ['percentage' => 40, 'label' => 'Uang Muka (DP)', 'days_before_event' => null],
+                ['percentage' => 60, 'label' => 'Pelunasan', 'days_before_event' => 14],
             ],
             'dp_50' => [
                 ['percentage' => 50, 'label' => 'Uang Muka (DP)', 'days_before_event' => null],
@@ -107,6 +115,13 @@ class PaymentSchemeService
                 ['percentage' => 40, 'label' => 'Cicilan ke-1', 'days_before_event' => null],
                 ['percentage' => 30, 'label' => 'Cicilan ke-2', 'days_before_event' => 30],
                 ['percentage' => 30, 'label' => 'Cicilan ke-3', 'days_before_event' => 14],
+            ],
+            'installment_5x' => [
+                ['percentage' => 30, 'label' => 'Cicilan ke-1', 'days_before_event' => null],
+                ['percentage' => 20, 'label' => 'Cicilan ke-2', 'days_before_event' => 60],
+                ['percentage' => 20, 'label' => 'Cicilan ke-3', 'days_before_event' => 45],
+                ['percentage' => 15, 'label' => 'Cicilan ke-4', 'days_before_event' => 30],
+                ['percentage' => 15, 'label' => 'Cicilan ke-5', 'days_before_event' => 14],
             ],
             default => [
                 ['percentage' => 100, 'label' => 'Lunas Penuh', 'days_before_event' => null],

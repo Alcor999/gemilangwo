@@ -203,9 +203,12 @@ class Order extends Model
     {
         return match($this->payment_scheme) {
             'full_payment' => 'Bayar Lunas',
+            'dp_20' => 'DP 20% + Pelunasan',
             'dp_30' => 'DP 30% + Pelunasan',
+            'dp_40' => 'DP 40% + Pelunasan',
             'dp_50' => 'DP 50% + Pelunasan',
             'installment_3x' => 'Cicilan 3x',
+            'installment_5x' => 'Cicilan 5x',
             default => 'Bayar Lunas',
         };
     }
