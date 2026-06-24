@@ -1,205 +1,171 @@
 @extends('layouts.app')
 
+@section('title', 'Manajemen Ulasan - Administrator')
+
 @section('content')
-<div class="container-fluid py-4">
-    <div class="row mb-4">
-        <div class="col">
-            <h2 class="h3 fw-bold">
-                <i class="fas fa-star text-warning"></i> Manajemen Ulasan
-            </h2>
+<div class="space-y-8 pb-12">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div class="space-y-1">
+            <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.3em]">Moderasi & Ulasan</p>
+            <h1 class="font-serif text-4xl text-choco-900 italic">Manajemen <span class="not-italic text-stone-300">Ulasan</span></h1>
         </div>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-muted small mb-1">Total Ulasan</h6>
-                            <h3 class="mb-0">{{ $reviews->total() }}</h3>
-                        </div>
-                        <i class="fas fa-comments fa-2x text-primary opacity-50"></i>
-                    </div>
-                </div>
-            </div>
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="bg-white/50 backdrop-blur-md p-6 rounded-[2rem] border border-stone-100/50 shadow-sm">
+            <p class="text-stone-400 text-[9px] font-bold uppercase tracking-widest mb-2">Total Ulasan</p>
+            <p class="text-2xl font-serif text-choco-900">{{ $reviews->total() }}</p>
         </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-muted small mb-1">Menunggu Persetujuan</h6>
-                            <h3 class="mb-0 text-warning">{{ \App\Models\Review::where('is_approved', false)->count() }}</h3>
-                        </div>
-                        <i class="fas fa-hourglass-half fa-2x text-warning opacity-50"></i>
-                    </div>
-                </div>
-            </div>
+        <div class="bg-white/50 backdrop-blur-md p-6 rounded-[2rem] border border-stone-100/50 shadow-sm">
+            <p class="text-stone-400 text-[9px] font-bold uppercase tracking-widest mb-2">Menunggu Persetujuan</p>
+            <p class="text-2xl font-serif text-amber-600">{{ \App\Models\Review::where('is_approved', false)->count() }}</p>
         </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-muted small mb-1">Disetujui</h6>
-                            <h3 class="mb-0 text-success">{{ \App\Models\Review::where('is_approved', true)->count() }}</h3>
-                        </div>
-                        <i class="fas fa-check-circle fa-2x text-success opacity-50"></i>
-                    </div>
-                </div>
-            </div>
+        <div class="bg-white/50 backdrop-blur-md p-6 rounded-[2rem] border border-stone-100/50 shadow-sm">
+            <p class="text-stone-400 text-[9px] font-bold uppercase tracking-widest mb-2">Disetujui</p>
+            <p class="text-2xl font-serif text-emerald-600">{{ \App\Models\Review::where('is_approved', true)->count() }}</p>
         </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-muted small mb-1">Unggulan</h6>
-                            <h3 class="mb-0 text-info">{{ \App\Models\Review::where('is_featured', true)->count() }}</h3>
-                        </div>
-                        <i class="fas fa-star fa-2x text-info opacity-50"></i>
-                    </div>
-                </div>
-            </div>
+        <div class="bg-white/50 backdrop-blur-md p-6 rounded-[2rem] border border-stone-100/50 shadow-sm">
+            <p class="text-stone-400 text-[9px] font-bold uppercase tracking-widest mb-2">Unggulan</p>
+            <p class="text-2xl font-serif text-gold-500">{{ \App\Models\Review::where('is_featured', true)->count() }}</p>
         </div>
     </div>
 
-    <!-- Tab Penyaringan -->
-    <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body">
-            <ul class="nav nav-pills gap-2" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('admin.reviews.index') }}">
-                        Semua
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.reviews.index') }}?filter=pending">
-                        <span class="badge bg-warning">Menunggu</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.reviews.index') }}?filter=approved">
-                        <span class="badge bg-success">Disetujui</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.reviews.index') }}?filter=featured">
-                        <span class="badge bg-info">Unggulan</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+    <!-- Filter Tab -->
+    @php
+        $currentFilter = request('filter');
+    @endphp
+    <div class="flex flex-wrap gap-2">
+        <a class="px-4 py-2 rounded-full text-xs font-bold transition-all {{ empty($currentFilter) ? 'bg-choco-900 text-gold-400 shadow-md' : 'bg-white text-stone-500 border border-stone-100 hover:bg-stone-50' }}" 
+           href="{{ route('admin.reviews.index') }}">
+            Semua
+        </a>
+        <a class="px-4 py-2 rounded-full text-xs font-bold transition-all {{ $currentFilter === 'pending' ? 'bg-choco-900 text-gold-400 shadow-md' : 'bg-white text-stone-500 border border-stone-100 hover:bg-stone-50' }}" 
+           href="{{ route('admin.reviews.index') }}?filter=pending">
+            Menunggu ({{ \App\Models\Review::where('is_approved', false)->count() }})
+        </a>
+        <a class="px-4 py-2 rounded-full text-xs font-bold transition-all {{ $currentFilter === 'approved' ? 'bg-choco-900 text-gold-400 shadow-md' : 'bg-white text-stone-500 border border-stone-100 hover:bg-stone-50' }}" 
+           href="{{ route('admin.reviews.index') }}?filter=approved">
+            Disetujui ({{ \App\Models\Review::where('is_approved', true)->count() }})
+        </a>
+        <a class="px-4 py-2 rounded-full text-xs font-bold transition-all {{ $currentFilter === 'featured' ? 'bg-choco-900 text-gold-400 shadow-md' : 'bg-white text-stone-500 border border-stone-100 hover:bg-stone-50' }}" 
+           href="{{ route('admin.reviews.index') }}?filter=featured">
+            Unggulan ({{ \App\Models\Review::where('is_featured', true)->count() }})
+        </a>
     </div>
 
-    <!-- Reviews Table -->
-    <div class="card border-0 shadow-sm">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th class="ps-4">Pelanggan</th>
-                        <th>Paket</th>
-                        <th>Rating</th>
-                        <th>Judul</th>
-                        <th>Status</th>
-                        <th>Unggulan</th>
-                        <th class="text-end pe-4">Aksi</th>
+    <!-- Table Section -->
+    <x-luxury.card class="overflow-hidden border-stone-100/50 shadow-sm">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-stone-50/50 border-b border-stone-100">
+                        <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-widest text-stone-400">Pelanggan</th>
+                        <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-widest text-stone-400">Paket</th>
+                        <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-widest text-stone-400">Rating</th>
+                        <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-widest text-stone-400">Judul & Isi Ulasan</th>
+                        <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-widest text-stone-400 text-center">Status</th>
+                        <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-widest text-stone-400 text-center">Unggulan</th>
+                        <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-widest text-stone-400 text-right">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-stone-50">
                     @forelse($reviews as $review)
-                        <tr>
-                            <td class="ps-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar avatar-sm me-2">
-                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($review->user->name) }}&background=random" 
-                                             alt="{{ $review->user->name }}" class="rounded-circle" width="32">
-                                    </div>
+                        <tr class="group hover:bg-stone-50/30 transition-colors">
+                            <td class="px-8 py-6">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($review->user->name) }}&background=E5DCD3&color=5C4033&size=64" 
+                                         alt="{{ $review->user->name }}" class="h-10 w-10 rounded-full object-cover border border-stone-100">
                                     <div>
-                                        <strong class="d-block">{{ $review->user->name }}</strong>
-                                        <small class="text-muted">{{ $review->user->email }}</small>
+                                        <p class="text-xs font-bold text-choco-900">{{ $review->user->name }}</p>
+                                        <p class="text-[10px] text-stone-400">{{ $review->user->email }}</p>
                                     </div>
                                 </div>
                             </td>
-                            <td>
-                                <a href="{{ route('admin.packages.show', $review->package) }}" class="text-decoration-none">
+                            <td class="px-8 py-6">
+                                <a href="{{ route('admin.packages.show', $review->package) }}" class="text-xs font-bold text-gold-600 hover:text-gold-700 hover:underline">
                                     {{ $review->package->name }}
                                 </a>
                             </td>
-                            <td>
-                                <div class="d-flex align-items-center gap-1">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <i class="fas fa-star {{ $i <= $review->rating ? 'text-warning' : 'text-muted opacity-50' }}"></i>
-                                    @endfor
-                                    <span class="ms-2 badge bg-light text-dark">{{ $review->rating }}/5</span>
+                            <td class="px-8 py-6">
+                                <div class="flex flex-col gap-1">
+                                    <div class="flex items-center gap-0.5 text-[10px]">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <i class="fas fa-star {{ $i <= $review->rating ? 'text-gold-400' : 'text-stone-200' }}"></i>
+                                        @endfor
+                                    </div>
+                                    <span class="text-[9px] font-bold text-stone-400">{{ $review->rating }}/5</span>
                                 </div>
                             </td>
-                            <td>
-                                <strong>{{ Str::limit($review->title, 30) }}</strong>
-                                <br>
-                                <small class="text-muted">{{ Str::limit($review->content, 50) }}</small>
+                            <td class="px-8 py-6 max-w-xs">
+                                <p class="text-xs font-bold text-choco-900 truncate">{{ $review->title }}</p>
+                                <p class="text-[10px] text-stone-400 font-light truncate mt-0.5">{{ $review->content }}</p>
                             </td>
-                            <td>
-                                @if($review->is_approved)
-                                    <span class="badge bg-success">Disetujui</span>
-                                @else
-                                    <span class="badge bg-warning text-dark">Menunggu</span>
-                                @endif
-                                @if($review->is_verified)
-                                    <span class="badge bg-info ms-1">Terverifikasi</span>
-                                @endif
+                            <td class="px-8 py-6">
+                                <div class="flex flex-wrap justify-center gap-1">
+                                    <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest {{ $review->is_approved ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-amber-50 text-amber-600 border border-amber-100' }}">
+                                        {{ $review->is_approved ? 'Disetujui' : 'Menunggu' }}
+                                    </span>
+                                    @if($review->is_verified)
+                                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest bg-blue-50 text-blue-600 border border-blue-100">
+                                            Terverifikasi
+                                        </span>
+                                    @endif
+                                </div>
                             </td>
-                            <td class="text-center">
-                                @if($review->is_featured)
-                                    <span class="badge bg-info"><i class="fas fa-star"></i> Unggulan</span>
-                                @else
-                                    <span class="text-muted small">-</span>
-                                @endif
+                            <td class="px-8 py-6">
+                                <div class="flex justify-center">
+                                    @if($review->is_featured)
+                                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest bg-gold-50 text-gold-600 border border-gold-100 flex items-center gap-1">
+                                            <i class="fas fa-star text-[8px]"></i> Utama
+                                        </span>
+                                    @else
+                                        <span class="text-stone-300 text-xs">-</span>
+                                    @endif
+                                </div>
                             </td>
-                            <td class="text-end pe-4">
-                                <div class="btn-group btn-group-sm" role="group">
+                            <td class="px-8 py-6">
+                                <div class="flex justify-end items-center gap-2 text-stone-400">
                                     <a href="{{ route('admin.reviews.show', $review) }}" 
-                                       class="btn btn-outline-primary" title="Lihat Detail">
-                                        <i class="fas fa-eye"></i>
+                                       class="h-9 w-9 flex items-center justify-center rounded-xl hover:bg-gold-50 hover:text-gold-600 transition-all border border-transparent hover:border-gold-100" title="Lihat Detail">
+                                        <i class="fas fa-eye text-xs"></i>
                                     </a>
                                     
                                     @if(!$review->is_approved)
-                                        <form action="{{ route('admin.reviews.approve', $review) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('admin.reviews.approve', $review) }}" method="POST" class="inline">
                                             @csrf
-                                            <button type="submit" class="btn btn-outline-success" title="Setujui">
-                                                <i class="fas fa-check"></i>
+                                            <button type="submit" class="h-9 w-9 flex items-center justify-center rounded-xl hover:bg-emerald-50 hover:text-emerald-600 transition-all border border-transparent hover:border-emerald-100" title="Setujui">
+                                                <i class="fas fa-check text-xs"></i>
                                             </button>
                                         </form>
-                                        <form action="{{ route('admin.reviews.reject', $review) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('admin.reviews.reject', $review) }}" method="POST" class="inline">
                                             @csrf
-                                            <button type="button" class="btn btn-outline-danger" title="Tolak"
+                                            <button type="button" class="h-9 w-9 flex items-center justify-center rounded-xl hover:bg-rose-50 hover:text-rose-600 transition-all border border-transparent hover:border-rose-100" title="Tolak"
                                                 data-confirm="Apakah Anda yakin ingin menolak ulasan ini?"
                                                 data-confirm-title="Tolak Ulasan"
                                                 data-confirm-btn="Ya, Tolak"
                                                 data-confirm-danger="1">
-                                                <i class="fas fa-times"></i>
+                                                <i class="fas fa-times text-xs"></i>
                                             </button>
                                         </form>
                                     @else
-                                        <form action="{{ route('admin.reviews.feature', $review) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('admin.reviews.feature', $review) }}" method="POST" class="inline">
                                             @csrf
-                                            <button type="submit" class="btn {{ $review->is_featured ? 'btn-warning' : 'btn-outline-warning' }}" 
+                                            <button type="submit" class="h-9 w-9 flex items-center justify-center rounded-xl transition-all border border-transparent {{ $review->is_featured ? 'bg-gold-50 text-gold-600 border-gold-100 hover:bg-gold-100' : 'hover:bg-gold-50 hover:text-gold-600 hover:border-gold-100' }}" 
                                                     title="{{ $review->is_featured ? 'Batalkan Unggulan' : 'Jadikan Unggulan' }}">
-                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star text-xs"></i>
                                             </button>
                                         </form>
-                                        <form action="{{ route('admin.reviews.destroy', $review) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('admin.reviews.destroy', $review) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" class="btn btn-outline-danger" title="Hapus"
+                                            <button type="button" class="h-9 w-9 flex items-center justify-center rounded-xl hover:bg-rose-50 hover:text-rose-600 transition-all border border-transparent hover:border-rose-100" title="Hapus"
                                                 data-confirm="Apakah Anda yakin ingin menghapus ulasan ini secara permanen?"
                                                 data-confirm-title="Hapus Ulasan"
                                                 data-confirm-btn="Ya, Hapus"
                                                 data-confirm-danger="1">
-                                                <i class="fas fa-trash"></i>
+                                                <i class="fas fa-trash text-xs"></i>
                                             </button>
                                         </form>
                                     @endif
@@ -208,37 +174,20 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center py-5">
-                                <i class="fas fa-inbox text-muted fa-3x opacity-50 mb-3 d-block"></i>
-                                <p class="text-muted">Belum ada ulasan</p>
+                            <td colspan="7" class="text-center py-12 text-stone-400 italic">
+                                Belum ada ulasan yang sesuai dengan filter ini.
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        
-        <!-- Paginasi -->
-        @if($reviews->hasPages())
-            <div class="card-footer bg-white border-top">
-                {{ $reviews->links() }}
-            </div>
-        @endif
-    </div>
-</div>
+    </x-luxury.card>
 
-<style>
-    .avatar {
-        display: inline-block;
-    }
-    
-    .avatar img {
-        width: 100%;
-        height: auto;
-    }
-    
-    .btn-group-sm {
-        gap: 0.25rem;
-    }
-</style>
+    @if($reviews->hasPages())
+        <div class="mt-4">
+            {{ $reviews->links() }}
+        </div>
+    @endif
+</div>
 @endsection
