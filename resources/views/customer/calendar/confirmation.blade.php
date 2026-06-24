@@ -127,16 +127,16 @@
 
                         @if($hasEvent && $isCurrentMonth && $firstEvent)
                             <a href="{{ route('customer.calendar.event-details', ['event' => $firstEvent]) }}"
-                               class="aspect-square rounded-xl flex flex-col items-center justify-center p-1 bg-gold-500 text-white shadow-md shadow-gold-500/30 hover:bg-gold-600 transition-all {{ $isToday ? 'ring-2 ring-offset-2 ring-choco-700' : '' }} text-sm font-bold">
+                               class="relative aspect-square rounded-xl flex flex-col items-center justify-center p-1 bg-gradient-to-br from-gold-500 to-gold-600 text-white shadow-lg shadow-gold-500/30 hover:scale-105 transition-all {{ $isToday ? 'ring-2 ring-offset-2 ring-choco-700' : '' }} text-sm font-bold z-10">
                                 <span>{{ $currentDay->day }}</span>
-                                <span class="text-[8px] font-bold opacity-80">Acara</span>
+                                <span class="text-[8px] font-bold opacity-90 mt-0.5">Acara</span>
                             </a>
                         @elseif($isToday)
-                            <div class="aspect-square rounded-xl flex items-center justify-center ring-2 ring-choco-700 ring-offset-2 bg-choco-900 text-white text-sm font-bold">
+                            <div class="relative aspect-square rounded-xl flex items-center justify-center ring-2 ring-choco-700 ring-offset-2 bg-choco-900 text-white text-sm font-bold shadow-md z-10">
                                 {{ $currentDay->day }}
                             </div>
                         @else
-                            <div class="aspect-square rounded-xl flex items-center justify-center text-sm {{ $isCurrentMonth ? 'text-choco-700 hover:bg-stone-50' : 'text-stone-200' }} {{ !$isCurrentMonth ? 'opacity-40' : '' }} transition-colors">
+                            <div class="relative aspect-square rounded-xl flex items-center justify-center text-sm border border-stone-100 {{ $isCurrentMonth ? 'text-choco-700 bg-stone-50 hover:bg-stone-100' : 'text-stone-300 bg-white/50' }} {{ !$isCurrentMonth ? 'opacity-50' : '' }} transition-colors">
                                 {{ $currentDay->day }}
                             </div>
                         @endif
@@ -172,7 +172,7 @@
                     <h3 class="font-serif font-bold text-lg italic mb-1">{{ $upcomingEvent->package->name }}</h3>
                     <p class="text-gold-300 text-2xl font-bold mb-4">{{ $upcomingEvent->calendarEvent->event_date->translatedFormat('d F Y') }}</p>
                     @php
-                        $daysLeft = now()->diffInDays($upcomingEvent->calendarEvent->event_date, false);
+                        $daysLeft = now()->startOfDay()->diffInDays($upcomingEvent->calendarEvent->event_date->copy()->startOfDay());
                     @endphp
                     @if($daysLeft > 0)
                         <div class="bg-white/10 rounded-xl p-3 mb-4 text-center">
