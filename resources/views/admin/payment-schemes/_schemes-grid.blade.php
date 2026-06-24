@@ -75,7 +75,7 @@
 
                 <div class="px-6 py-4 border-t border-stone-100 bg-stone-50/30">
                     <x-luxury.button href="{{ route($routePrefix.'.edit', $scheme) }}" variant="outline" size="sm" class="w-full">
-                        <i class="fas fa-pen mr-2"></i> Edit Skema
+                        <i class="fas fa-pen mr-2"></i> Ubah Skema
                     </x-luxury.button>
                 </div>
             </x-luxury.card>

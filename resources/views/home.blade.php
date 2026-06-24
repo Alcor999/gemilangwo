@@ -190,7 +190,7 @@
                             </div>
 
                             <ul class="space-y-5">
-                                @foreach(json_decode($package->features ?? '[]') as $feature)
+                                @foreach(is_array($package->features) ? $package->features : json_decode($package->features ?? '[]', true) as $feature)
                                     <li class="flex items-center gap-4 text-xs text-stone-400 font-light">
                                         <i class="fas fa-check text-gold-400"></i>
                                         <span>{{ $feature }}</span>

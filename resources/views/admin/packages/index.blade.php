@@ -82,7 +82,7 @@
                             <td class="px-8 py-6">
                                 <div class="flex justify-end items-center gap-2 text-stone-400">
                                     <a href="{{ route('admin.packages.edit', $package->id) }}" 
-                                       class="h-9 w-9 flex items-center justify-center rounded-xl hover:bg-gold-50 hover:text-gold-600 transition-all border border-transparent hover:border-gold-100" title="Edit Data">
+                                       class="h-9 w-9 flex items-center justify-center rounded-xl hover:bg-gold-50 hover:text-gold-600 transition-all border border-transparent hover:border-gold-100" title="Ubah Data">
                                         <i class="fas fa-edit text-xs"></i>
                                     </a>
                                     <form action="{{ route('admin.packages.destroy', $package->id) }}" method="POST" class="inline">

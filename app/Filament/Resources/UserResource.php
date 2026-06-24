@@ -28,38 +28,52 @@ class UserResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nama')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
+                    ->label('Email')
                     ->email()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
+                    ->label('No. Telepon')
                     ->tel()
                     ->maxLength(255)
                     ->default(null),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
+                Forms\Components\DateTimePicker::make('email_verified_at')
+                    ->label('Email Diverifikasi Pada'),
                 Forms\Components\TextInput::make('password')
+                    ->label('Kata Sandi')
                     ->password()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('role')
+                    ->label('Peran')
                     ->required(),
                 Forms\Components\Textarea::make('address')
+                    ->label('Alamat')
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('city')
+                    ->label('Kota')
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\Textarea::make('bio')
+                    ->label('Bio')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('profile_image')
+                    ->label('Foto Profil')
                     ->image(),
-                Forms\Components\DatePicker::make('wedding_date'),
+                Forms\Components\DatePicker::make('wedding_date')
+                    ->label('Tanggal Pernikahan'),
                 Forms\Components\Toggle::make('prefer_whatsapp')
+                    ->label('Prioritas WhatsApp')
                     ->required(),
                 Forms\Components\Toggle::make('prefer_sms')
+                    ->label('Prioritas SMS')
                     ->required(),
                 Forms\Components\Toggle::make('prefer_email')
+                    ->label('Prioritas Email')
                     ->required(),
             ]);
     }
@@ -69,38 +83,52 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nama')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->label('Email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
+                    ->label('No. Telepon')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
+                    ->label('Verifikasi Email')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('role'),
+                Tables\Columns\TextColumn::make('role')
+                    ->label('Peran'),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Tanggal Terdaftar')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Tanggal Diperbarui')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('city')
+                    ->label('Kota')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('profile_image'),
+                Tables\Columns\ImageColumn::make('profile_image')
+                    ->label('Foto Profil'),
                 Tables\Columns\TextColumn::make('wedding_date')
+                    ->label('Tanggal Pernikahan')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')
+                    ->label('Tanggal Dihapus')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('prefer_whatsapp')
+                    ->label('WhatsApp')
                     ->boolean(),
                 Tables\Columns\IconColumn::make('prefer_sms')
+                    ->label('SMS')
                     ->boolean(),
                 Tables\Columns\IconColumn::make('prefer_email')
+                    ->label('Email')
                     ->boolean(),
             ])
             ->filters([

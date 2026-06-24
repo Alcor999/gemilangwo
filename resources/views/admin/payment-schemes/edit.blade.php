@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Skema Pembayaran')
+@section('title', 'Ubah Skema Pembayaran')
 
 @section('content')
 <div class="space-y-8 pb-12 max-w-3xl mx-auto">
     <div>
-        <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Payment Configuration</p>
-        <h1 class="font-serif text-3xl text-choco-900">Edit <span class="italic text-stone-400">{{ $scheme->name }}</span></h1>
+        <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Konfigurasi Pembayaran</p>
+        <h1 class="font-serif text-3xl text-choco-900">Ubah <span class="italic text-stone-400">{{ $scheme->name }}</span></h1>
     </div>
 
     @if(session('error'))

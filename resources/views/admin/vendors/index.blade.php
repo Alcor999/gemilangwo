@@ -80,14 +80,14 @@
                             </td>
                             <td class="px-8 py-6">
                                 <span class="px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest border {{ $v->is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-stone-50 text-stone-400 border-stone-100' }}">
-                                    {{ $v->is_active ? 'Active' : 'Archived' }}
+                                    {{ $v->is_active ? 'Aktif' : 'Diarsipkan' }}
                                 </span>
                             </td>
                             <td class="px-8 py-6">
                                 <div class="flex justify-end gap-2">
                                     <a href="{{ route('admin.vendors.edit', $v) }}" 
                                        class="h-9 w-9 flex items-center justify-center rounded-xl bg-stone-50 text-stone-400 hover:bg-gold-500 hover:text-white transition-all border border-stone-100 hover:border-gold-500" 
-                                       title="Edit Vendor">
+                                       title="Ubah Vendor">
                                         <i class="fas fa-pen text-[10px]"></i>
                                     </a>
                                     <form action="{{ route('admin.vendors.destroy', $v) }}" method="POST" class="inline">

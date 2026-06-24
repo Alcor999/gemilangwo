@@ -6,7 +6,7 @@
 <div class="space-y-8 pb-16">
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-            <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Payment History</p>
+            <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Riwayat Pembayaran</p>
             <h1 class="font-serif text-4xl text-choco-900 leading-tight">Riwayat <span class="italic text-stone-400">Pembayaran</span></h1>
             <p class="text-sm text-stone-400 mt-2">#{{ $order->order_number }} — {{ $order->package->name }}</p>
         </div>

@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Business Dashboard - Gemilang WO')
+@section('title', 'Dashboard Bisnis - Gemilang WO')
 
 @section('content')
 <div class="space-y-10">
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-            <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2 px-1">Executive Overview</p>
+            <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2 px-1">Ringkasan Eksekutif</p>
             <h1 class="font-serif text-4xl text-choco-900 leading-tight">Insight <span class="italic text-stone-400">Bisnis</span></h1>
         </div>
         <div class="flex items-center gap-3">
@@ -26,16 +26,16 @@
             <p class="text-[10px] text-stone-400 mt-1">{{ $partial_orders_count }} order belum lunas</p>
         </x-luxury.card>
         <x-luxury.card class="bg-white p-4">
-            <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest mb-1">Piutang Outstanding</p>
+            <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest mb-1">Piutang Belum Lunas</p>
             <p class="text-xl font-serif text-amber-600">Rp {{ number_format($outstanding_revenue, 0, ',', '.') }}</p>
         </x-luxury.card>
         <x-luxury.card class="bg-white p-4">
-            <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest mb-1">Overdue</p>
+            <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest mb-1">Jatuh Tempo</p>
             <p class="text-xl font-serif text-rose-600">Rp {{ number_format($overdue_amount, 0, ',', '.') }}</p>
             <p class="text-[10px] text-rose-400 mt-1">{{ $overdue_count }} transaksi</p>
         </x-luxury.card>
         <x-luxury.card class="bg-white p-4">
-            <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest mb-1">Forecast Bulan Ini</p>
+            <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest mb-1">Proyeksi Bulan Ini</p>
             <p class="text-xl font-serif text-emerald-600">Rp {{ number_format($forecast_revenue, 0, ',', '.') }}</p>
         </x-luxury.card>
         <x-luxury.card class="bg-white p-4 md:col-span-2">
@@ -56,7 +56,7 @@
                 <div class="mt-8 flex items-center justify-between border-t border-white/10 pt-6">
                     <div class="flex items-center gap-2">
                         <div class="h-2 w-2 rounded-full bg-emerald-500"></div>
-                        <span class="text-white/40 text-[10px] font-bold uppercase tracking-widest">Growth +24%</span>
+                        <span class="text-white/40 text-[10px] font-bold uppercase tracking-widest">Pertumbuhan +24%</span>
                     </div>
                     <svg class="h-6 w-6 text-gold-400/20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path></svg>
                 </div>
