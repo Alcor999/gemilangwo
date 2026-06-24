@@ -1,169 +1,238 @@
 @extends('layouts.app')
 
-@section('title', 'Kalender Konfirmasi Acara')
+@section('title', 'Kalender Acara Saya - Gemilang WO')
+@section('header_title', 'Kalender Acara')
 
 @section('content')
-<!-- Bagian Header -->
-<div style="background: #f8fafc; padding: 1.5rem 0; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0;">
-    <h1 style="font-size: 2rem; font-weight: 700; color: #1e293b; margin: 0 0 0.5rem;">✅ Kalender Konfirmasi Acara</h1>
-    <p style="color: #64748b; margin: 0; font-size: 0.95rem;">Kelola dan konfirmasi acara pernikahan Anda</p>
-</div>
+<div class="space-y-8">
 
-<!-- Tombol Ekspor -->
-<div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
-    <a href="{{ route('customer.calendar.export-confirmation') }}" 
-       style="display: inline-flex; align-items: center; padding: 0.75rem 1.5rem; background: #10b981; color: white; border-radius: 0.375rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; border: none; cursor: pointer; transition: background 0.2s;">
-        📥 Ekspor ke iCal
-    </a>
-</div>
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-serif font-bold text-choco-900 italic">Kalender Acara Pernikahan</h1>
+            <p class="mt-1 text-sm text-stone-500">Pantau dan kelola jadwal acara pernikahan Anda</p>
+        </div>
+        <a href="{{ route('customer.calendar.export-confirmation') }}"
+           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gold-300 text-gold-700 text-sm font-bold hover:bg-gold-50 transition-all">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            Ekspor iCal
+        </a>
+    </div>
 
-<!-- Grid Utama -->
-<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
-    <!-- Calendar Panel -->
-    <div style="background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0; overflow: hidden;">
-        <!-- Month Navigation -->
-        <div style="padding: 1.5rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc; display: flex; justify-content: space-between; align-items: center;">
-            <h2 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin: 0;">
-                📆 {{ now()->createFromDate($year, $month, 1)->locale('id_ID')->format('F Y') }}
-            </h2>
-            <div style="display: flex; gap: 0.75rem;">
-                <form action="{{ route('customer.calendar.confirmation') }}" method="GET" style="display: inline;">
-                    <input type="hidden" name="month" value="{{ $month == 1 ? 12 : $month - 1 }}">
-                    <input type="hidden" name="year" value="{{ $month == 1 ? $year - 1 : $year }}">
-                    <button type="submit" style="padding: 0.5rem 1rem; background: white; border: 1px solid #cbd5e1; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s; font-size: 0.875rem;">← Sebelumnya</button>
-                </form>
-                <form action="{{ route('customer.calendar.confirmation') }}" method="GET" style="display: inline;">
-                    <input type="hidden" name="month" value="{{ $month == 12 ? 1 : $month + 1 }}">
-                    <input type="hidden" name="year" value="{{ $month == 12 ? $year + 1 : $year }}">
-                    <button type="submit" style="padding: 0.5rem 1rem; background: white; border: 1px solid #cbd5e1; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s; font-size: 0.875rem;">Selanjutnya →</button>
-                </form>
+    {{-- Stats Row --}}
+    @php
+        $upcomingEvent = $confirmedOrders->first(fn($o) => $o->calendarEvent && $o->calendarEvent->event_date >= now());
+        $totalEvents = $confirmedOrders->count();
+        $upcomingCount = $confirmedOrders->filter(fn($o) => $o->calendarEvent && $o->calendarEvent->event_date >= now())->count();
+    @endphp
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white rounded-2xl border border-stone-100 shadow-sm p-5 flex items-center gap-4">
+            <div class="w-12 h-12 bg-choco-50 rounded-xl flex items-center justify-center">
+                <svg class="h-6 w-6 text-choco-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+            </div>
+            <div>
+                <p class="text-2xl font-bold text-choco-900">{{ $totalEvents }}</p>
+                <p class="text-xs text-stone-500 font-medium uppercase tracking-wider">Total Acara</p>
             </div>
         </div>
-
-        <!-- Calendar Grid -->
-        <div style="padding: 1.5rem;">
-            <!-- Day Headers -->
-            <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; margin-bottom: 1rem;">
-                @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as $day)
-                    <div style="text-align: center; font-weight: 600; color: #64748b; padding: 0.75rem 0; font-size: 0.875rem;">{{ $day }}</div>
-                @endforeach
+        <div class="bg-white rounded-2xl border border-stone-100 shadow-sm p-5 flex items-center gap-4">
+            <div class="w-12 h-12 bg-gold-50 rounded-xl flex items-center justify-center">
+                <svg class="h-6 w-6 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
             </div>
-
-            <!-- Calendar Days -->
-            <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; margin-bottom: 1.5rem;">
-                @php
-                    $firstDay = $startOfMonth->copy()->startOfWeek();
-                    $lastDay = $endOfMonth->copy()->endOfWeek();
-                    $currentDay = $firstDay->copy();
-                @endphp
-
-                @while($currentDay <= $lastDay)
-                    @php
-                        $dateStr = $currentDay->toDateString();
-                        $isCurrentMonth = $currentDay->month === $startOfMonth->month;
-                        $isToday = $currentDay->isToday();
-                        $hasEvent = isset($eventsData[$dateStr]);
-                        
-                        // Get first event for this date if it exists
-                        $firstEvent = null;
-                        if ($hasEvent && count($eventsData[$dateStr]) > 0) {
-                            // Find the first order with calendar event on this date
-                            foreach ($confirmedOrders as $order) {
-                                if ($order->calendarEvent && $order->calendarEvent->event_date->toDateString() === $dateStr) {
-                                    $firstEvent = $order->calendarEvent;
-                                    break;
-                                }
-                            }
-                        }
-                        
-                        $bgColor = $hasEvent 
-                            ? 'background: #f0fdf4; border: 1px solid #bbf7d0;' 
-                            : 'background: #f8fafc; border: 1px solid #e2e8f0;';
-                        
-                        $textColor = !$isCurrentMonth ? 'color: #cbd5e1;' : 'color: #1e293b;';
-                    @endphp
-                    <a href="{{ $hasEvent && $isCurrentMonth && $firstEvent ? route('customer.calendar.event-details', ['event' => $firstEvent]) : '#' }}" 
-                       style="aspect-ratio: 1; padding: 0.75rem; border-radius: 0.375rem; {{ $bgColor }} {{ $textColor }} display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-decoration: none; {{ $isToday ? 'box-shadow: 0 0 0 2px #10b981; font-weight: 700;' : '' }} {{ !$hasEvent ? 'cursor: default;' : 'cursor: pointer; transition: all 0.2s;' }}">
-                        <div style="font-size: 0.95rem; font-weight: 600;">{{ $currentDay->day }}</div>
-                        @if($hasEvent && $isCurrentMonth)
-                            <div style="font-size: 0.625rem; color: #10b981; font-weight: 700;">✓</div>
-                        @endif
-                    </a>
-                    @php $currentDay->addDay(); @endphp
-                @endwhile
+            <div>
+                <p class="text-2xl font-bold text-choco-900">{{ $upcomingCount }}</p>
+                <p class="text-xs text-stone-500 font-medium uppercase tracking-wider">Acara Mendatang</p>
             </div>
-
-            <!-- Legend -->
-            <div style="padding-top: 1rem; border-top: 1px solid #e2e8f0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <div style="width: 1rem; height: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.25rem;"></div>
-                    <span style="font-size: 0.875rem; color: #475569;">Tidak ada acara</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <div style="width: 1rem; height: 1rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.25rem;"></div>
-                    <span style="font-size: 0.875rem; color: #475569;">Ada acara</span>
-                </div>
+        </div>
+        <div class="bg-white rounded-2xl border border-stone-100 shadow-sm p-5 flex items-center gap-4">
+            <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center">
+                <svg class="h-6 w-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div>
+                <p class="text-2xl font-bold text-choco-900">{{ $totalEvents - $upcomingCount }}</p>
+                <p class="text-xs text-stone-500 font-medium uppercase tracking-wider">Selesai</p>
             </div>
         </div>
     </div>
 
-    <!-- Sidebar -->
-    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-        <!-- Stats Card -->
-        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 0.5rem; color: white; padding: 1.5rem;">
-            <h3 style="font-size: 0.875rem; font-weight: 600; opacity: 0.95; margin: 0 0 1rem; text-transform: uppercase; letter-spacing: 0.05em;">📊 Statistik Acara</h3>
-            <div>
-                <p style="font-size: 0.75rem; opacity: 0.9; margin: 0; margin-bottom: 0.5rem;">Total Acara</p>
-                <p style="font-size: 2rem; font-weight: 700; margin: 0;">{{ $confirmedOrders->count() }}</p>
+    {{-- Main Layout: Calendar + Sidebar --}}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        {{-- Calendar Panel --}}
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
+            {{-- Month Navigation --}}
+            <div class="px-6 py-4 border-b border-stone-100 bg-gradient-to-r from-choco-800 to-choco-900 flex items-center justify-between">
+                <h2 class="text-lg font-serif font-bold text-white italic">
+                    {{ now()->createFromDate($year, $month, 1)->locale('id_ID')->isoFormat('MMMM YYYY') }}
+                </h2>
+                <div class="flex gap-2">
+                    <form action="{{ route('customer.calendar.confirmation') }}" method="GET">
+                        <input type="hidden" name="month" value="{{ $month == 1 ? 12 : $month - 1 }}">
+                        <input type="hidden" name="year" value="{{ $month == 1 ? $year - 1 : $year }}">
+                        <button type="submit" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm rounded-lg transition-all">
+                            ← Sebelumnya
+                        </button>
+                    </form>
+                    <form action="{{ route('customer.calendar.confirmation') }}" method="GET">
+                        <input type="hidden" name="month" value="{{ $month == 12 ? 1 : $month + 1 }}">
+                        <input type="hidden" name="year" value="{{ $month == 12 ? $year + 1 : $year }}">
+                        <button type="submit" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm rounded-lg transition-all">
+                            Selanjutnya →
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="p-6">
+                {{-- Day Headers --}}
+                <div class="grid grid-cols-7 gap-1 mb-2">
+                    @foreach(['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'] as $day)
+                        <div class="text-center text-[10px] font-bold uppercase tracking-wider text-stone-400 py-2">{{ $day }}</div>
+                    @endforeach
+                </div>
+
+                {{-- Calendar Days --}}
+                <div class="grid grid-cols-7 gap-1 mb-6">
+                    @php
+                        $firstDay = $startOfMonth->copy()->startOfWeek();
+                        $lastDay = $endOfMonth->copy()->endOfWeek();
+                        $currentDay = $firstDay->copy();
+                    @endphp
+
+                    @while($currentDay <= $lastDay)
+                        @php
+                            $dateStr = $currentDay->toDateString();
+                            $isCurrentMonth = $currentDay->month === $startOfMonth->month;
+                            $isToday = $currentDay->isToday();
+                            $hasEvent = isset($eventsData[$dateStr]);
+
+                            $firstEvent = null;
+                            if ($hasEvent && count($eventsData[$dateStr]) > 0) {
+                                foreach ($confirmedOrders as $order) {
+                                    if ($order->calendarEvent && $order->calendarEvent->event_date->toDateString() === $dateStr) {
+                                        $firstEvent = $order->calendarEvent;
+                                        break;
+                                    }
+                                }
+                            }
+                        @endphp
+
+                        @if($hasEvent && $isCurrentMonth && $firstEvent)
+                            <a href="{{ route('customer.calendar.event-details', ['event' => $firstEvent]) }}"
+                               class="aspect-square rounded-xl flex flex-col items-center justify-center p-1 bg-gold-500 text-white shadow-md shadow-gold-500/30 hover:bg-gold-600 transition-all {{ $isToday ? 'ring-2 ring-offset-2 ring-choco-700' : '' }} text-sm font-bold">
+                                <span>{{ $currentDay->day }}</span>
+                                <span class="text-[8px] font-bold opacity-80">Acara</span>
+                            </a>
+                        @elseif($isToday)
+                            <div class="aspect-square rounded-xl flex items-center justify-center ring-2 ring-choco-700 ring-offset-2 bg-choco-900 text-white text-sm font-bold">
+                                {{ $currentDay->day }}
+                            </div>
+                        @else
+                            <div class="aspect-square rounded-xl flex items-center justify-center text-sm {{ $isCurrentMonth ? 'text-choco-700 hover:bg-stone-50' : 'text-stone-200' }} {{ !$isCurrentMonth ? 'opacity-40' : '' }} transition-colors">
+                                {{ $currentDay->day }}
+                            </div>
+                        @endif
+
+                        @php $currentDay->addDay(); @endphp
+                    @endwhile
+                </div>
+
+                {{-- Legend --}}
+                <div class="border-t border-stone-100 pt-4 flex items-center gap-6 flex-wrap">
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 rounded-md bg-stone-100 border border-stone-200"></div>
+                        <span class="text-xs text-stone-500">Tidak Ada Acara</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 rounded-md bg-gold-500"></div>
+                        <span class="text-xs text-stone-500">Acara Pernikahan</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 rounded-md bg-choco-900 ring-2 ring-choco-700 ring-offset-1"></div>
+                        <span class="text-xs text-stone-500">Hari Ini</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Events List -->
-        <div style="background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0; overflow: hidden; display: flex; flex-direction: column;">
-            <div style="padding: 1rem 1.25rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
-                <h3 style="font-size: 0.875rem; font-weight: 700; color: #1e293b; margin: 0; margin-bottom: 0.25rem;">📅 Daftar Acara</h3>
-                <p style="font-size: 0.75rem; color: #64748b; margin: 0;">{{ $confirmedOrders->count() }} acara</p>
-            </div>
-            <div style="flex: 1; max-height: 500px; overflow-y: auto; padding: 1rem;">
-                @if($confirmedOrders->count() > 0)
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        {{-- Sidebar: Events List --}}
+        <div class="space-y-4">
+            {{-- Upcoming Event Card --}}
+            @if($upcomingEvent && $upcomingEvent->calendarEvent)
+                <div class="bg-gradient-to-br from-choco-800 to-choco-900 rounded-2xl p-5 text-white">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-gold-400 mb-3">✨ Acara Mendatang Anda</p>
+                    <h3 class="font-serif font-bold text-lg italic mb-1">{{ $upcomingEvent->package->name }}</h3>
+                    <p class="text-gold-300 text-2xl font-bold mb-4">{{ $upcomingEvent->calendarEvent->event_date->translatedFormat('d F Y') }}</p>
+                    @php
+                        $daysLeft = now()->diffInDays($upcomingEvent->calendarEvent->event_date, false);
+                    @endphp
+                    @if($daysLeft > 0)
+                        <div class="bg-white/10 rounded-xl p-3 mb-4 text-center">
+                            <p class="text-3xl font-bold text-gold-400">{{ $daysLeft }}</p>
+                            <p class="text-xs text-white/70">hari lagi</p>
+                        </div>
+                    @endif
+                    <a href="{{ route('customer.calendar.event-details', $upcomingEvent->calendarEvent) }}"
+                       class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-gold-500 hover:bg-gold-600 text-white text-sm font-bold transition-all">
+                        Lihat Detail Acara →
+                    </a>
+                </div>
+            @endif
+
+            {{-- Events List --}}
+            <div class="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
+                <div class="px-5 py-4 border-b border-stone-100 bg-stone-50">
+                    <h3 class="font-bold text-choco-900 text-sm">Semua Acara</h3>
+                    <p class="text-xs text-stone-400 mt-0.5">{{ $totalEvents }} acara terdaftar</p>
+                </div>
+                <div class="divide-y divide-stone-50 max-h-96 overflow-y-auto">
+                    @if($confirmedOrders->count() > 0)
                         @foreach($confirmedOrders as $order)
                             @if($order->calendarEvent)
-                                <a href="{{ route('customer.calendar.event-details', $order->calendarEvent) }}" style="padding: 0.75rem; border-left: 3px solid #10b981; background: #f0fdf4; border-radius: 0.25rem; text-decoration: none; color: inherit; transition: background 0.2s;">
-                                    <p style="font-size: 0.875rem; font-weight: 600; color: #1e293b; margin: 0;">📍 {{ $order->calendarEvent->event_date->format('d M Y') }}</p>
-                                    <p style="font-size: 0.75rem; color: #64748b; margin: 0.25rem 0 0;">📦 {{ $order->package->name }}</p>
-                                    <span style="display: inline-block; margin-top: 0.5rem; font-size: 0.625rem; font-weight: 700; color: #047857; background: #d1fae5; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">{{ $order->calendarEvent->getStatusLabel() }}</span>
+                                <a href="{{ route('customer.calendar.event-details', $order->calendarEvent) }}"
+                                   class="flex items-start gap-3 p-4 hover:bg-stone-50 transition-colors group">
+                                    <div class="shrink-0 w-10 h-10 rounded-xl {{ $order->calendarEvent->event_date >= now() ? 'bg-gold-50' : 'bg-stone-100' }} flex flex-col items-center justify-center">
+                                        <span class="text-xs font-bold {{ $order->calendarEvent->event_date >= now() ? 'text-gold-700' : 'text-stone-500' }}">
+                                            {{ $order->calendarEvent->event_date->format('d') }}
+                                        </span>
+                                        <span class="text-[8px] font-bold {{ $order->calendarEvent->event_date >= now() ? 'text-gold-500' : 'text-stone-400' }} uppercase">
+                                            {{ $order->calendarEvent->event_date->format('M') }}
+                                        </span>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-sm font-bold text-choco-900 truncate group-hover:text-gold-700 transition-colors">{{ $order->package->name }}</p>
+                                        <p class="text-xs text-stone-400 mt-0.5">{{ $order->calendarEvent->event_date->translatedFormat('l, d F Y') }}</p>
+                                        <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold {{ $order->calendarEvent->event_date >= now() ? 'bg-gold-50 text-gold-700' : 'bg-stone-100 text-stone-500' }}">
+                                            {{ $order->calendarEvent->event_date >= now() ? 'Akan Datang' : 'Selesai' }}
+                                        </span>
+                                    </div>
                                 </a>
                             @endif
                         @endforeach
-                    </div>
-                @else
-                    <p style="text-align: center; color: #cbd5e1; padding: 2rem 0; margin: 0;">Belum ada acara</p>
-                @endif
+                    @else
+                        <div class="p-8 text-center">
+                            <div class="w-12 h-12 bg-stone-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                                <svg class="h-6 w-6 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <p class="text-sm text-stone-400">Belum ada acara terdaftar</p>
+                            <a href="{{ route('customer.packages.index') }}" class="mt-3 inline-block text-xs font-bold text-gold-600 hover:text-gold-700">
+                                Pilih Paket →
+                            </a>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
-
-        <!-- Upcoming Event Info -->
-        @php
-            $upcomingEvent = $confirmedOrders->first(fn($o) => $o->calendarEvent && $o->calendarEvent->event_date >= now());
-        @endphp
-        @if($upcomingEvent && $upcomingEvent->calendarEvent)
-            <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 0.5rem; color: white; padding: 1.5rem;">
-                <h3 style="font-size: 0.875rem; font-weight: 600; opacity: 0.95; margin: 0 0 1rem;">🎉 Acara Mendatang</h3>
-                <p style="font-size: 0.75rem; opacity: 0.9; margin: 0; margin-bottom: 0.25rem;">{{ $upcomingEvent->package->name }}</p>
-                <p style="font-size: 1.25rem; font-weight: 700; margin: 0; margin-bottom: 0.75rem;">{{ $upcomingEvent->calendarEvent->event_date->format('d M Y') }}</p>
-                <a href="{{ route('customer.calendar.event-details', $upcomingEvent->calendarEvent) }}" style="display: inline-block; padding: 0.5rem 1rem; background: white; color: #3b82f6; border-radius: 0.375rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; transition: all 0.2s;">
-                    Lihat Detail →
-                </a>
-            </div>
-        @endif
     </div>
 </div>
-
-@push('scripts')
-<script>
-    // Auto-refresh calendar data
-    // Implementasi real-time updates bisa ditambahkan di sini
-</script>
-@endpush
 @endsection

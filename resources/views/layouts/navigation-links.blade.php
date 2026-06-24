@@ -79,6 +79,14 @@
         Moderasi Ulasan
     </a>
 
+    <a href="{{ route('admin.testimonials.index') }}" 
+       class="{{ $linkClass }} {{ str_contains($routeName ?? '', 'admin.testimonials') ? $activeClass : $inactiveClass }}">
+        <svg class="{{ $iconClass }} {{ str_contains($routeName ?? '', 'admin.testimonials') ? $activeIconClass : $inactiveIconClass }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+        </svg>
+        Testimoni Klien
+    </a>
+
     <a href="{{ route('admin.users.index') }}" 
        class="{{ $linkClass }} {{ str_contains($routeName ?? '', 'admin.users') ? $activeClass : $inactiveClass }}">
         <svg class="{{ $iconClass }} {{ str_contains($routeName ?? '', 'admin.users') ? $activeIconClass : $inactiveIconClass }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,5 +163,31 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
         </svg>
         Favorit
+    </a>
+
+    <a href="{{ route('customer.reviews.index') }}" 
+       class="{{ $linkClass }} {{ str_contains($routeName ?? '', 'customer.reviews') ? $activeClass : $inactiveClass }}">
+        <svg class="{{ $iconClass }} {{ str_contains($routeName ?? '', 'customer.reviews') ? $activeIconClass : $inactiveIconClass }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.382-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+        </svg>
+        Ulasan Saya
+    </a>
+
+    <a href="{{ route('customer.testimonials.index') }}" 
+       class="{{ $linkClass }} {{ str_contains($routeName ?? '', 'customer.testimonials') ? $activeClass : $inactiveClass }}">
+        <svg class="{{ $iconClass }} {{ str_contains($routeName ?? '', 'customer.testimonials') ? $activeIconClass : $inactiveIconClass }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+        </svg>
+        Testimoni Saya
+    </a>
+
+    <div class="px-4 py-2 mt-4 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500">Jadwal & Acara</div>
+
+    <a href="{{ route('customer.calendar.confirmation') }}" 
+       class="{{ $linkClass }} {{ str_contains($routeName ?? '', 'customer.calendar') ? $activeClass : $inactiveClass }}">
+        <svg class="{{ $iconClass }} {{ str_contains($routeName ?? '', 'customer.calendar') ? $activeIconClass : $inactiveIconClass }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        Kalender Acara
     </a>
 @endif
