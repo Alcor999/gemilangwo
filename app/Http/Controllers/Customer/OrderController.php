@@ -82,15 +82,19 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        $minDate = now()->addDays(4)->format('Y-m-d');
         $validated = $request->validate([
             'package_id' => 'required|exists:packages,id',
-            'event_date' => 'required|date|after:today',
+            'event_date' => 'required|date|after_or_equal:' . $minDate,
             'event_location' => 'required|string|max:255',
             'guest_count' => 'required|integer|min:1',
             'special_request' => 'nullable|string',
             'vendors' => 'nullable|array',
             'vendors.*' => 'exists:vendors,id',
             'payment_scheme' => 'required|in:full_payment,dp_20,dp_30,dp_40,dp_50,installment_3x,installment_5x',
+            'custom_schedules' => 'nullable|string'
+        ], [
+            'event_date.after_or_equal' => 'Tanggal acara minimal 4 hari dari hari ini karena pembayaran harus lunas sebelum H-4.'
         ]);
 
         $package = Package::with('requiredVendorCategories.vendors')->findOrFail($validated['package_id']);
@@ -102,15 +106,20 @@ class OrderController extends Controller
                 ->with('error', 'Skema pembayaran yang dipilih tidak tersedia untuk tanggal acara ini. Pilih tanggal lebih jauh atau gunakan Bayar Lunas.');
         }
 
-        // Validate guest count
-        if ($package->max_guests && $validated['guest_count'] > $package->max_guests) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Guest count exceeds package maximum of '.$package->max_guests);
+        // Calculate extra guests charge
+        $extraGuestCharge = 0;
+        $threshold = config('gemilang.guests.threshold', 1000);
+        $chargePerUnit = config('gemilang.guests.charge_per_unit', 1000000);
+        $unitSize = config('gemilang.guests.unit_size', 100);
+
+        if ($validated['guest_count'] > $threshold) {
+            $extraGuests = $validated['guest_count'] - $threshold;
+            $units = ceil($extraGuests / $unitSize);
+            $extraGuestCharge = $units * $chargePerUnit;
         }
 
-        // Calculate total: package base + vendor prices
-        $totalPrice = $package->getDiscountedPrice();
+        // Calculate total: package base + vendor prices + extra guest charge
+        $totalPrice = $package->getDiscountedPrice() + $extraGuestCharge;
         $selectedVendors = [];
 
         foreach ($package->requiredVendorCategories as $category) {
@@ -169,7 +178,9 @@ class OrderController extends Controller
             'guest_count' => $validated['guest_count'],
             'special_request' => $validated['special_request'] ?? null,
             'total_price' => $totalPrice,
+            'extra_guest_charge' => $extraGuestCharge,
             'payment_scheme' => $paymentScheme,
+            'custom_schedules' => $validated['custom_schedules'] ?? null,
             'dp_percentage' => $dpPercentage,
             'total_paid' => 0.00,
             'remaining_amount' => $totalPrice,

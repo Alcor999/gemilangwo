@@ -24,7 +24,9 @@ class Order extends Model
         'guest_count',
         'special_request',
         'total_price',
+        'extra_guest_charge',
         'payment_scheme',
+        'custom_schedules',
         'dp_percentage',
         'total_paid',
         'remaining_amount',
@@ -97,6 +99,8 @@ class Order extends Model
             'dp_percentage' => 'float',
             'total_paid' => 'float',
             'remaining_amount' => 'float',
+            'extra_guest_charge' => 'float',
+            'custom_schedules' => 'array',
         ];
     }
 

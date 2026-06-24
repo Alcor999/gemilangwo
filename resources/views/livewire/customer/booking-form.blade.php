@@ -86,9 +86,16 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-brown-700 mb-2">Jumlah Tamu *</label>
-                                <input type="number" wire:model="guest_count" placeholder="Contoh: 500" class="w-full px-4 py-3 rounded-xl border border-brown-200 focus:border-gold-500 focus:ring-2 focus:ring-gold-200 outline-none transition-all">
-                                <p class="text-[10px] text-brown-400 mt-1">Maksimal tamu untuk paket ini: {{ $selectedPackageModel?->max_guests }}</p>
+                                <input type="number" wire:model.live.debounce.500ms="guest_count" placeholder="Contoh: 500" class="w-full px-4 py-3 rounded-xl border border-brown-200 focus:border-gold-500 focus:ring-2 focus:ring-gold-200 outline-none transition-all">
+                                <p class="text-[10px] text-brown-400 mt-1">Kapasitas dasar paket ini: {{ $selectedPackageModel?->max_guests }}</p>
                                 @error('guest_count') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                @if($extra_guest_charge > 0)
+                                    <div class="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-xl animate-fade-in">
+                                        <p class="text-xs text-amber-700 font-bold"><i class="fas fa-exclamation-triangle mr-1"></i> Biaya Tamu Tambahan</p>
+                                        <p class="text-[10px] text-amber-600 mt-1">Jumlah tamu melebihi {{ config('gemilang.guests.threshold', 1000) }}. Dikenakan biaya tambahan Rp {{ number_format(config('gemilang.guests.charge_per_unit', 1000000), 0, ',', '.') }} per {{ config('gemilang.guests.unit_size', 100) }} tamu tambahan.</p>
+                                        <p class="text-xs font-bold text-amber-800 mt-1">Charge: Rp {{ number_format($extra_guest_charge, 0, ',', '.') }}</p>
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -192,17 +199,27 @@
                     @if(count($this->paymentBreakdown) > 0)
                         <div class="bg-brown-50 rounded-2xl p-6 border border-brown-100">
                             <h6 class="font-bold text-brown-900 mb-4 text-sm">Rincian Pembayaran</h6>
-                            <div class="space-y-3">
-                                @foreach($this->paymentBreakdown as $item)
-                                    <div class="flex justify-between items-center text-sm">
-                                        <span class="text-brown-700">{{ $item['label'] }}</span>
-                                        <div class="text-right">
-                                            <div class="font-bold text-brown-900">Rp {{ number_format($item['amount'], 0, ',', '.') }}</div>
-                                            @if($item['due_date'])
-                                                <div class="text-[10px] text-brown-400">{{ $item['due_date']->format('d M Y') }}</div>
+                            <p class="text-xs text-brown-500 italic mb-4">Anda dapat menyesuaikan tanggal jatuh tempo cicilan (maksimal H-4 acara).</p>
+                            <div class="space-y-4">
+                                @foreach($this->paymentBreakdown as $index => $item)
+                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center text-sm gap-2">
+                                        <span class="text-brown-700 font-bold">{{ $item['label'] }}</span>
+                                        <div class="flex items-center gap-4 justify-between sm:justify-end">
+                                            <div class="font-bold text-brown-900 w-28 text-left sm:text-right">Rp {{ number_format($item['amount'], 0, ',', '.') }}</div>
+                                            @if($item['due_date'] && $index > 0)
+                                                <input type="date" wire:model.live="custom_due_dates.{{ $index }}" 
+                                                    min="{{ now()->addDay()->format('Y-m-d') }}" 
+                                                    max="{{ \Carbon\Carbon::parse($event_date)->subDays(4)->format('Y-m-d') }}"
+                                                    value="{{ $item['due_date']->format('Y-m-d') }}"
+                                                    class="px-2 py-1 text-xs rounded border border-brown-200 focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none w-32 bg-white text-brown-700">
+                                            @else
+                                                <div class="text-[10px] text-brown-500 bg-brown-200/50 px-2 py-1 rounded w-32 text-center font-bold">
+                                                    {{ $item['due_date'] ? $item['due_date']->format('d M Y') : 'Segera' }}
+                                                </div>
                                             @endif
                                         </div>
                                     </div>
+                                    @error('custom_due_dates.'.$index) <p class="text-red-500 text-[10px] text-right">{{ $message }}</p> @enderror
                                 @endforeach
                             </div>
                         </div>
@@ -252,8 +269,17 @@
                             @if($vendorAdjustment !== 0)
                                 <div class="flex justify-between text-sm">
                                     <span class="text-brown-600">Penyesuaian Vendor</span>
-                                    <span class="{{ $vendorAdjustment > 0 ? 'text-red-500' : 'text-green-600' }} fw-medium">
+                                    <span class="{{ $vendorAdjustment > 0 ? 'text-red-500' : 'text-green-600' }} font-bold">
                                         {{ $vendorAdjustment > 0 ? '+' : '-' }} Rp {{ number_format(abs($vendorAdjustment), 0, ',', '.') }}
+                                    </span>
+                                </div>
+                            @endif
+
+                            @if($extra_guest_charge > 0)
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-brown-600">Biaya Tambahan Tamu (>{{ config('gemilang.guests.threshold', 1000) }})</span>
+                                    <span class="text-red-500 font-bold">
+                                        + Rp {{ number_format($extra_guest_charge, 0, ',', '.') }}
                                     </span>
                                 </div>
                             @endif

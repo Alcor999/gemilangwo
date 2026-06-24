@@ -166,96 +166,62 @@ class PaymentService
     }
 
     /**
+     * Buat jadwal pembayaran berdasarkan skema dan custom schedules
+     */
+    public function createPaymentSchedule(Order $order): array
+    {
+        $breakdown = app(PaymentSchemeService::class)->calculateBreakdown(
+            $order->payment_scheme,
+            (float) $order->total_price,
+            $order->event_date
+        );
+
+        if ($order->custom_schedules && is_array($order->custom_schedules)) {
+            foreach ($breakdown as $index => &$item) {
+                if (!empty($order->custom_schedules[$index])) {
+                    $item['due_date'] = \Carbon\Carbon::parse($order->custom_schedules[$index]);
+                }
+            }
+        }
+
+        return $breakdown;
+    }
+
+    /**
      * Get details of the next payment required for an order
      */
     public function getNextPaymentDetails(Order $order)
     {
         $totalPrice = (float) $order->total_price;
-        $totalPaid = (float) $order->total_paid;
         $remaining = (float) $order->remaining_amount;
 
         if ($order->payment_status === 'fully_paid' || $remaining <= 0) {
             return null;
         }
 
-        if ($order->payment_status === 'unpaid') {
-            if ($order->payment_scheme === 'full_payment') {
-                return [
-                    'amount' => $totalPrice,
-                    'payment_type' => 'full',
-                    'installment_number' => null,
-                    'label' => 'Lunas Penuh',
-                    'due_date' => now()->addDays(1),
-                ];
-            } elseif ($order->payment_scheme === 'dp_30') {
-                return [
-                    'amount' => round($totalPrice * 0.3, 2),
-                    'payment_type' => 'dp',
-                    'installment_number' => null,
-                    'label' => 'Uang Muka (DP 30%)',
-                    'due_date' => now()->addDays(1),
-                ];
-            } elseif ($order->payment_scheme === 'dp_50') {
-                return [
-                    'amount' => round($totalPrice * 0.5, 2),
-                    'payment_type' => 'dp',
-                    'installment_number' => null,
-                    'label' => 'Uang Muka (DP 50%)',
-                    'due_date' => now()->addDays(1),
-                ];
-            } elseif ($order->payment_scheme === 'installment_3x') {
-                return [
-                    'amount' => round($totalPrice * 0.4, 2),
-                    'payment_type' => 'installment',
-                    'installment_number' => 1,
-                    'label' => 'Cicilan ke-1 (40%)',
-                    'due_date' => now()->addDays(1),
-                ];
-            }
-        }
+        $schedule = $this->createPaymentSchedule($order);
+        
+        // Count how many successful payments have been made
+        $successCount = $order->payments()
+            ->where('status', 'success')
+            ->count();
 
-        if ($order->payment_status === 'dp_paid') {
-            return [
-                'amount' => $remaining,
-                'payment_type' => 'remaining',
-                'installment_number' => null,
-                'label' => 'Pelunasan Sisa',
-                'due_date' => $order->event_date->copy()->subDays(14),
-            ];
-        }
-
-        if ($order->payment_status === 'partially_paid') {
-            if ($order->payment_scheme === 'installment_3x') {
-                $successCount = $order->payments()
-                    ->where('status', 'success')
-                    ->where('payment_type', 'installment')
-                    ->count();
-
-                if ($successCount === 1) {
-                    return [
-                        'amount' => round($totalPrice * 0.3, 2),
-                        'payment_type' => 'installment',
-                        'installment_number' => 2,
-                        'label' => 'Cicilan ke-2 (30%)',
-                        'due_date' => $order->event_date->copy()->subDays(30),
-                    ];
-                } elseif ($successCount === 2) {
-                    return [
-                        'amount' => $remaining,
-                        'payment_type' => 'installment',
-                        'installment_number' => 3,
-                        'label' => 'Cicilan ke-3 / Pelunasan (30%)',
-                        'due_date' => $order->event_date->copy()->subDays(14),
-                    ];
-                }
+        // The next payment is the one at index $successCount
+        if (isset($schedule[$successCount])) {
+            $nextItem = $schedule[$successCount];
+            
+            // Adjust amount if it's the last payment (to avoid rounding issues)
+            $amount = $nextItem['amount'];
+            if ($successCount === count($schedule) - 1) {
+                $amount = $remaining;
             }
 
             return [
-                'amount' => $remaining,
-                'payment_type' => 'remaining',
-                'installment_number' => null,
-                'label' => 'Pelunasan Sisa',
-                'due_date' => $order->event_date->copy()->subDays(14),
+                'amount' => $amount,
+                'payment_type' => $nextItem['payment_type'],
+                'installment_number' => $nextItem['installment_number'],
+                'label' => $nextItem['label'],
+                'due_date' => $nextItem['due_date'],
             ];
         }
 
@@ -267,19 +233,18 @@ class PaymentService
      */
     public function getPaymentSummary(Order $order): array
     {
-        return app(PaymentSchemeService::class)->getPaymentSummary($order);
-    }
-
-    /**
-     * Buat jadwal pembayaran berdasarkan skema
-     */
-    public function createPaymentSchedule(Order $order): array
-    {
-        return app(PaymentSchemeService::class)->calculateBreakdown(
-            $order->payment_scheme,
-            (float) $order->total_price,
-            $order->event_date
-        );
+        $summary = app(PaymentSchemeService::class)->getPaymentSummary($order);
+        
+        // Ensure the summary uses the order's custom schedules
+        if ($order->custom_schedules && is_array($order->custom_schedules)) {
+            foreach ($summary['schedule'] as $index => &$item) {
+                if (!empty($order->custom_schedules[$index])) {
+                    $item['due_date'] = \Carbon\Carbon::parse($order->custom_schedules[$index]);
+                }
+            }
+        }
+        
+        return $summary;
     }
 
     /**

@@ -15,7 +15,9 @@ class BookingForm extends Component
     public $special_request;
     public $selected_vendors = [];
     public $total_price = 0;
+    public $extra_guest_charge = 0;
     public $payment_scheme = 'full_payment';
+    public $custom_due_dates = [];
 
     public function mount()
     {
@@ -52,6 +54,26 @@ class BookingForm extends Component
         // trigger breakdown refresh
     }
 
+    public function updatedGuestCount()
+    {
+        $this->calculateTotalPrice();
+    }
+
+    public function calculateExtraGuestCharge()
+    {
+        $threshold = config('gemilang.guests.threshold', 1000);
+        $chargePerUnit = config('gemilang.guests.charge_per_unit', 1000000);
+        $unitSize = config('gemilang.guests.unit_size', 100);
+
+        if ((int)$this->guest_count > $threshold) {
+            $extraGuests = (int)$this->guest_count - $threshold;
+            $units = ceil($extraGuests / $unitSize);
+            return $units * $chargePerUnit;
+        }
+
+        return 0;
+    }
+
     public function calculateVendorAdjustment()
     {
         if (!$this->package_id) return 0;
@@ -81,7 +103,8 @@ class BookingForm extends Component
         if (!$this->package_id) return;
         
         $pkg = \App\Models\Package::find($this->package_id);
-        $this->total_price = $pkg->getDiscountedPrice() + $this->calculateVendorAdjustment();
+        $this->extra_guest_charge = $this->calculateExtraGuestCharge();
+        $this->total_price = $pkg->getDiscountedPrice() + $this->calculateVendorAdjustment() + $this->extra_guest_charge;
     }
 
     public function nextStep()
@@ -104,17 +127,17 @@ class BookingForm extends Component
         if ($this->step === 1) {
             $this->validate(['package_id' => 'required|exists:packages,id']);
         } elseif ($this->step === 2) {
+            $minDate = \Carbon\Carbon::now()->addDays(4)->format('Y-m-d');
             $this->validate([
-                'event_date' => 'required|date|after:today',
+                'event_date' => 'required|date|after_or_equal:' . $minDate,
                 'event_location' => 'required|string|max:255',
                 'guest_count' => 'required|integer|min:1',
+            ], [
+                'event_date.after_or_equal' => 'Tanggal acara minimal 4 hari dari hari ini karena pembayaran harus lunas sebelum H-4.',
             ]);
             
-            $pkg = \App\Models\Package::find($this->package_id);
-            if ($pkg->max_guests && $this->guest_count > $pkg->max_guests) {
-                $this->addError('guest_count', 'Jumlah tamu melebihi kapasitas paket (' . $pkg->max_guests . ').');
-                throw \Illuminate\Validation\ValidationException::withMessages(['guest_count' => 'Kapasitas terlampaui.']);
-            }
+            // Re-calculate to show extra guest charge if any
+            $this->calculateTotalPrice();
         } elseif ($this->step === 3) {
             // Vendors are optional or pre-selected
         } elseif ($this->step === 4) {
@@ -128,6 +151,22 @@ class BookingForm extends Component
                 throw \Illuminate\Validation\ValidationException::withMessages([
                     'payment_scheme' => 'Pilih tanggal lebih jauh atau gunakan Bayar Lunas.',
                 ]);
+            }
+
+            if (!empty($this->custom_due_dates)) {
+                $maxDueDate = $eventDate->copy()->subDays(4)->endOfDay();
+                foreach ($this->custom_due_dates as $index => $date) {
+                    if (!$date) continue;
+                    $parsedDate = \Carbon\Carbon::parse($date);
+                    if ($parsedDate->isBefore(today())) {
+                        $this->addError('custom_due_dates.'.$index, 'Tanggal tidak boleh di masa lalu.');
+                        throw \Illuminate\Validation\ValidationException::withMessages(['custom_due_dates' => 'Tanggal tidak valid.']);
+                    }
+                    if ($parsedDate->isAfter($maxDueDate)) {
+                        $this->addError('custom_due_dates.'.$index, 'Tanggal harus sebelum H-4 acara.');
+                        throw \Illuminate\Validation\ValidationException::withMessages(['custom_due_dates' => 'Tanggal harus sebelum H-4 acara.']);
+                    }
+                }
             }
         }
     }
@@ -146,6 +185,10 @@ class BookingForm extends Component
             default => null,
         };
 
+        // Extract custom schedules if any, only keeping non-null strings
+        $filteredSchedules = array_filter($this->custom_due_dates, fn($val) => !empty($val));
+        $customSchedulesJson = !empty($filteredSchedules) ? json_encode($filteredSchedules) : null;
+
         $order = \App\Models\Order::create([
             'user_id' => auth()->id(),
             'package_id' => $this->package_id,
@@ -155,7 +198,9 @@ class BookingForm extends Component
             'guest_count' => $this->guest_count,
             'special_request' => $this->special_request,
             'total_price' => $this->total_price,
+            'extra_guest_charge' => $this->extra_guest_charge,
             'payment_scheme' => $this->payment_scheme,
+            'custom_schedules' => $customSchedulesJson ? json_decode($customSchedulesJson, true) : null,
             'dp_percentage' => $dpPercentage,
             'total_paid' => 0,
             'remaining_amount' => $this->total_price,
@@ -194,11 +239,20 @@ class BookingForm extends Component
             return [];
         }
 
-        return app(\App\Services\PaymentSchemeService::class)->calculateBreakdown(
+        $breakdown = app(\App\Services\PaymentSchemeService::class)->calculateBreakdown(
             $this->payment_scheme,
             (float) $this->total_price,
             \Carbon\Carbon::parse($this->event_date)
         );
+
+        // Apply custom due dates dynamically if user entered them
+        foreach ($breakdown as $i => &$item) {
+            if (!empty($this->custom_due_dates[$i])) {
+                $item['due_date'] = \Carbon\Carbon::parse($this->custom_due_dates[$i]);
+            }
+        }
+
+        return $breakdown;
     }
 
     public function render()

@@ -41,6 +41,15 @@ class PaymentSchemeService
 
             if ($eventDate && ! empty($item['days_before_event'])) {
                 $dueDate = $eventDate->copy()->subDays($item['days_before_event']);
+                
+                // Fallback: if computed due date is in the past, adjust it forward
+                if ($dueDate->isBefore(now()->startOfDay())) {
+                    $dueDate = now()->addDays(7 * $index);
+                    $maxDate = $eventDate->copy()->subDays(4);
+                    if ($dueDate->isAfter($maxDate)) {
+                        $dueDate = $maxDate;
+                    }
+                }
             } elseif ($index === 0) {
                 $dueDate = now()->addDay();
             }
