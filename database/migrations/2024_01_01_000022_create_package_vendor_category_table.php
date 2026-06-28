@@ -9,11 +9,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('package_vendor_category', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('package_id')->constrained('packages')->onDelete('cascade');
             $table->foreignId('vendor_category_id')->constrained('vendor_categories')->onDelete('cascade');
             $table->foreignId('default_vendor_id')->nullable()->constrained('vendors')->nullOnDelete();
-            $table->primary(['package_id', 'vendor_category_id']);
             $table->timestamps();
+
+            $table->unique(['package_id', 'vendor_category_id']);
         });
     }
 

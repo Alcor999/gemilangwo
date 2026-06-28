@@ -92,7 +92,6 @@ class OrderController extends Controller
             'vendors' => 'nullable|array',
             'vendors.*' => 'exists:vendors,id',
             'payment_scheme' => 'required|in:full_payment,dp_20,dp_30,dp_40,dp_50,installment_3x,installment_5x',
-            'custom_schedules' => 'nullable|string'
         ], [
             'event_date.after_or_equal' => 'Tanggal acara minimal 4 hari dari hari ini karena pembayaran harus lunas sebelum H-4.'
         ]);
@@ -178,9 +177,7 @@ class OrderController extends Controller
             'guest_count' => $validated['guest_count'],
             'special_request' => $validated['special_request'] ?? null,
             'total_price' => $totalPrice,
-            'extra_guest_charge' => $extraGuestCharge,
             'payment_scheme' => $paymentScheme,
-            'custom_schedules' => $validated['custom_schedules'] ?? null,
             'dp_percentage' => $dpPercentage,
             'total_paid' => 0.00,
             'remaining_amount' => $totalPrice,
