@@ -44,14 +44,16 @@ class SupportController extends Controller
             });
         }
 
-        $tickets = $query->latest()->paginate(15);
+        $tickets = $query->withCount('messages')->latest()->paginate(15);
 
         $stats = [
             'open' => SupportTicket::open()->count(),
             'in_progress' => SupportTicket::inProgress()->count(),
+            'waiting' => SupportTicket::where('status', 'waiting_customer')->count(),
             'resolved' => SupportTicket::resolved()->count(),
             'closed' => SupportTicket::closed()->count(),
-            'urgent' => SupportTicket::where('priority', 'urgent')->count(),
+            'urgent' => SupportTicket::where('priority', 'urgent')->whereNotIn('status', ['resolved', 'closed'])->count(),
+            'total' => SupportTicket::whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count(),
         ];
 
         return view('admin.support.tickets.index', compact('tickets', 'stats', 'status', 'priority', 'category', 'search'));
@@ -90,7 +92,7 @@ class SupportController extends Controller
             return response()->json(['success' => true]);
         }
 
-        return back()->with('success', 'Ticket assigned successfully');
+        return back()->with('success', 'Tiket berhasil ditugaskan.');
     }
 
     /**
@@ -116,7 +118,7 @@ class SupportController extends Controller
             return response()->json(['success' => true]);
         }
 
-        return back()->with('success', 'Status updated');
+        return back()->with('success', 'Status tiket diperbarui.');
     }
 
     /**
@@ -156,7 +158,7 @@ class SupportController extends Controller
             return response()->json(['success' => true]);
         }
 
-        return back()->with('success', 'Notes updated');
+        return back()->with('success', 'Catatan internal disimpan.');
     }
 
     /**

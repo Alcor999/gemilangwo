@@ -14,6 +14,7 @@ class SupportTicketController extends Controller
     public function index()
     {
         $tickets = auth()->user()->supportTickets()
+            ->withCount('messages')
             ->latest()
             ->paginate(10);
 
@@ -43,6 +44,13 @@ class SupportTicketController extends Controller
             'priority' => 'required|in:low,medium,high,urgent',
         ]);
 
+        if (! empty($validated['order_id'])) {
+            $ownsOrder = auth()->user()->orders()->where('id', $validated['order_id'])->exists();
+            if (! $ownsOrder) {
+                return back()->withErrors(['order_id' => 'Pesanan tidak valid.'])->withInput();
+            }
+        }
+
         $ticket = auth()->user()->supportTickets()->create([
             'subject' => $validated['subject'],
             'description' => $validated['description'],
@@ -60,7 +68,7 @@ class SupportTicketController extends Controller
         ]);
 
         return redirect()->route('customer.support.tickets.show', $ticket)
-            ->with('success', 'Support ticket created successfully!');
+            ->with('success', 'Tiket bantuan berhasil dibuat.');
     }
 
     /**
@@ -78,7 +86,7 @@ class SupportTicketController extends Controller
         // Mark messages as read
         $ticket->markMessagesAsRead();
 
-        $messages = $ticket->messages()->with('sender')->latest()->get();
+        $messages = $ticket->messages()->with('sender')->get();
 
         return view('customer.support.tickets.show', compact('ticket', 'messages'));
     }
@@ -125,7 +133,7 @@ class SupportTicketController extends Controller
 
         $ticket->markAsClosed();
 
-        return back()->with('success', 'Support ticket closed');
+        return back()->with('success', 'Tiket berhasil ditutup.');
     }
 
     /**

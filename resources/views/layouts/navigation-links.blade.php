@@ -53,6 +53,18 @@
         Skema Pembayaran
     </a>
 
+    @php $openSupportCount = \App\Models\SupportTicket::whereIn('status', ['open', 'in_progress', 'waiting_customer'])->count(); @endphp
+    <a href="{{ route('admin.support.tickets.index') }}" 
+       class="{{ $linkClass }} {{ str_contains($routeName ?? '', 'admin.support') ? $activeClass : $inactiveClass }}">
+        <svg class="{{ $iconClass }} {{ str_contains($routeName ?? '', 'admin.support') ? $activeIconClass : $inactiveIconClass }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+        <span class="flex-1">Support & Pengaduan</span>
+        @if($openSupportCount > 0)
+            <span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-rose-500 text-white">{{ $openSupportCount }}</span>
+        @endif
+    </a>
+
     <div class="px-4 py-2 mt-4 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500">Manajemen</div>
     
     <a href="{{ route('admin.vendors.index') }}" 
@@ -189,5 +201,19 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
         </svg>
         Kalender Acara
+    </a>
+
+    <div class="px-4 py-2 mt-4 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500">Layanan Pelanggan</div>
+
+    @php $myOpenTickets = auth()->user()->supportTickets()->whereIn('status', ['open', 'in_progress', 'waiting_customer'])->count(); @endphp
+    <a href="{{ route('customer.support.tickets.index') }}" 
+       class="{{ $linkClass }} {{ str_contains($routeName ?? '', 'customer.support') ? $activeClass : $inactiveClass }}">
+        <svg class="{{ $iconClass }} {{ str_contains($routeName ?? '', 'customer.support') ? $activeIconClass : $inactiveIconClass }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+        <span class="flex-1">Pusat Bantuan</span>
+        @if($myOpenTickets > 0)
+            <span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-gold-400 text-white">{{ $myOpenTickets }}</span>
+        @endif
     </a>
 @endif

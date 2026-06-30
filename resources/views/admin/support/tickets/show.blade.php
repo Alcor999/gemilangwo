@@ -1,279 +1,200 @@
 @extends('layouts.app')
 
-@section('title', 'Tiket #' . $ticket->id)
+@section('title', 'Tiket #' . $ticket->id . ' - Admin')
 
 @section('content')
-<div class="container-fluid mt-4">
-    <div class="row">
-        <!-- Chat Section -->
-        <div class="col-lg-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-1">
-                                <i class="fas fa-ticket-alt"></i> Tiket #{{ $ticket->id }}
-                            </h5>
-                            <p class="mb-0 small">Dari: <strong>{{ $ticket->user->name }}</strong> ({{ $ticket->user->email }})</p>
-                        </div>
-                        <div>
-                            <span class="badge bg-light text-dark">
-                                {{ $ticket->messages()->count() }} Pesan
-                            </span>
-                        </div>
-                    </div>
+@php $lastMessageId = $messages->last()?->id ?? 0; @endphp
+
+<div class="space-y-6 pb-12">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <a href="{{ route('admin.support.tickets.index') }}" class="inline-flex items-center text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-gold-500 transition-colors mb-3">
+                <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                Daftar Tiket
+            </a>
+            <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-1">Tiket #{{ $ticket->id }}</p>
+            <h1 class="font-serif text-2xl sm:text-3xl text-choco-900">{{ $ticket->subject }}</h1>
+            <p class="text-sm text-stone-500 mt-1">
+                Dari <strong class="text-choco-900">{{ $ticket->user->name }}</strong> · {{ $ticket->user->email }}
+            </p>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+            <x-support.status-badge :status="$ticket->status" />
+            <x-support.priority-badge :priority="$ticket->priority" />
+        </div>
+    </div>
+
+    @if(session('success'))
+        <div class="px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-100 text-sm text-emerald-700">{{ session('success') }}</div>
+    @endif
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2">
+            <x-luxury.card padding="p-0" class="flex flex-col border-stone-100">
+                <div class="px-6 py-4 border-b border-stone-100 bg-stone-50/50 flex items-center justify-between">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Percakapan dengan Pelanggan</span>
+                    <span class="text-xs text-stone-500">{{ $messages->count() }} pesan</span>
                 </div>
 
-                <!-- Chat Messages -->
-                <div class="card-body" id="chatContainer" data-last-message-id="{{ $ticket->messages()->orderBy('created_at', 'desc')->first()?->id ?? 0 }}" style="height: 500px; overflow-y: auto; background-color: #f8f9fa;">
-                    @foreach ($ticket->messages()->orderBy('created_at', 'asc')->get() as $message)
-                        <div class="mb-3">
-                            <div class="d-flex {{ $message->sender_id === auth()->id() ? 'justify-content-end' : 'justify-content-start' }}">
-                                <div class="d-flex gap-2" style="max-width: 80%;">
-                                    @if ($message->sender_id !== auth()->id())
-                                        <div class="flex-shrink-0">
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name) }}&background=random"
-                                                alt="{{ $message->sender->name }}" class="rounded-circle" width="35" height="35">
-                                        </div>
-                                    @endif
-
-                                    <div>
-                                        <div class="bg-white p-3 rounded-3 border {{ $message->sender_id === auth()->id() ? 'bg-primary text-white' : '' }}"
-                                            style="{{ $message->sender_id === auth()->id() ? 'background-color: #007bff !important;' : '' }}">
-                                            <p class="mb-1 small fw-bold">
-                                                {{ $message->sender->name }}
-                                                @if ($message->sender_type === 'admin')
-                                                    <span class="badge bg-success ms-2">Admin</span>
-                                                @endif
-                                            </p>
-                                            <p class="mb-0">{{ $message->message }}</p>
-                                        </div>
-                                        <small class="d-block mt-1 text-muted">
-                                            {{ $message->created_at->format('d M Y H:i') }}
-                                        </small>
+                <div id="chatContainer"
+                     data-last-message-id="{{ $lastMessageId }}"
+                     data-perspective="admin"
+                     class="flex-1 h-[420px] sm:h-[480px] overflow-y-auto px-4 sm:px-6 py-4 space-y-4 bg-stone-50/30">
+                    @foreach($messages as $message)
+                        @php $isAdmin = $message->sender_type === 'admin'; @endphp
+                        <div class="flex {{ $isAdmin ? 'justify-end' : 'justify-start' }}">
+                            <div class="flex gap-2 max-w-[85%] {{ $isAdmin ? 'flex-row-reverse' : '' }}">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name) }}&background={{ $isAdmin ? 'D4AF37' : '78716c' }}&color=fff&size=64"
+                                     alt="" class="w-8 h-8 rounded-full flex-shrink-0 ring-2 ring-white shadow-sm">
+                                <div>
+                                    <div class="px-4 py-3 rounded-2xl text-sm {{ $isAdmin ? 'bg-choco-900 text-gold-100 rounded-tr-sm' : 'bg-white border border-stone-100 text-choco-900 rounded-tl-sm shadow-sm' }}">
+                                        @if(!$isAdmin)
+                                            <p class="text-[10px] font-bold uppercase tracking-wider mb-1 text-stone-400">{{ $message->sender->name }} · Pelanggan</p>
+                                        @endif
+                                        <p class="leading-relaxed whitespace-pre-wrap">{{ $message->message }}</p>
                                     </div>
-
-                                    @if ($message->sender_id === auth()->id())
-                                        <div class="flex-shrink-0">
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($message->sender->name) }}&background=random"
-                                                alt="{{ $message->sender->name }}" class="rounded-circle" width="35" height="35">
-                                        </div>
-                                    @endif
+                                    <p class="text-[10px] text-stone-400 mt-1 {{ $isAdmin ? 'text-right' : '' }}">{{ $message->created_at->format('d M Y H:i') }}</p>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
 
-                <!-- Form Pesan Baru -->
-                @if ($ticket->status !== 'closed')
-                    <div class="card-footer bg-light">
-                        <form id="messageForm" class="d-flex gap-2">
+                @if($ticket->status !== 'closed')
+                    <div class="px-4 sm:px-6 py-4 border-t border-stone-100 bg-white">
+                        <form id="messageForm" class="flex gap-2">
                             @csrf
-                            <input type="text" class="form-control" id="messageInput" name="message"
-                                placeholder="Ketik respons Anda..." autocomplete="off" required>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-paper-plane"></i> Kirim
-                            </button>
+                            <input type="text" id="messageInput" name="message" placeholder="Ketik balasan untuk pelanggan..."
+                                class="flex-1 px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm text-choco-900 placeholder:text-stone-400 focus:ring-2 focus:ring-gold-300 focus:border-gold-400 transition-all"
+                                autocomplete="off" required>
+                            <x-luxury.button type="submit" variant="primary" size="sm" class="flex-shrink-0">Kirim</x-luxury.button>
                         </form>
                     </div>
                 @else
-                    <div class="card-footer bg-danger text-white text-center">
-                        <i class="fas fa-lock"></i> Tiket ini telah ditutup
-                    </div>
+                    <div class="px-6 py-4 border-t border-stone-100 bg-stone-100 text-center text-sm text-stone-500">Tiket ditutup</div>
                 @endif
-            </div>
+            </x-luxury.card>
         </div>
 
-        <!-- Sidebar: Detail Tiket & Aksi -->
-        <div class="col-lg-4">
-            <!-- Ticket Info -->
-            <div class="card shadow mb-3">
-                <div class="card-header bg-secondary text-white">
-                    <h6 class="mb-0">
-                        <i class="fas fa-info-circle"></i> Informasi Tiket
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="small fw-bold text-muted">SUBJEK</label>
-                        <p class="mb-0">{{ $ticket->subject }}</p>
+        <div class="space-y-4">
+            <x-luxury.card class="border-stone-100">
+                <h3 class="text-[10px] font-bold uppercase tracking-widest text-stone-400 mb-4">Detail Tiket</h3>
+                <dl class="space-y-3 text-sm">
+                    <div>
+                        <dt class="text-[10px] font-bold uppercase tracking-wider text-stone-400">Deskripsi Awal</dt>
+                        <dd class="text-stone-600 mt-1 leading-relaxed">{{ $ticket->description }}</dd>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="small fw-bold text-muted">DESKRIPSI</label>
-                        <p class="mb-0 small">{{ $ticket->description }}</p>
+                    <div>
+                        <dt class="text-[10px] font-bold uppercase tracking-wider text-stone-400">Kategori</dt>
+                        <dd class="text-choco-900">{{ $ticket->category_label }}</dd>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="small fw-bold text-muted">KATEGORI</label>
-                        <p class="mb-0">
-                            <span class="badge bg-secondary">
-                                {{ ucfirst(str_replace('_', ' ', $ticket->category)) }}
-                            </span>
-                        </p>
-                    </div>
-
-                    @if ($ticket->order_id)
-                        <div class="mb-3">
-                            <label class="small fw-bold text-muted">PESANAN TERKAIT</label>
-                            <p class="mb-0">
-                                <a href="{{ route('admin.orders.show', $ticket->order_id) }}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-shopping-bag"></i> Pesanan #{{ $ticket->order_id }}
+                    @if($ticket->order_id)
+                        <div>
+                            <dt class="text-[10px] font-bold uppercase tracking-wider text-stone-400">Pesanan Terkait</dt>
+                            <dd class="mt-1">
+                                <a href="{{ route('admin.orders.show', $ticket->order_id) }}" class="text-gold-600 hover:text-gold-700 text-sm font-medium">
+                                    Pesanan #{{ $ticket->order_id }} →
                                 </a>
-                            </p>
+                            </dd>
                         </div>
                     @endif
-
-                    <div class="mb-3">
-                        <label class="small fw-bold text-muted">DIBUAT</label>
-                        <p class="mb-0">
-                            {{ $ticket->created_at->format('d M Y H:i') }}
-                        </p>
+                    <div>
+                        <dt class="text-[10px] font-bold uppercase tracking-wider text-stone-400">Dibuat</dt>
+                        <dd class="text-stone-600">{{ $ticket->created_at->format('d M Y H:i') }}</dd>
                     </div>
-                </div>
-            </div>
+                </dl>
+            </x-luxury.card>
 
-            <!-- Manajemen Status & Prioritas -->
-            @if ($ticket->status !== 'closed')
-                <div class="card shadow mb-3">
-                    <div class="card-header bg-secondary text-white">
-                        <h6 class="mb-0">
-                            <i class="fas fa-sliders-h"></i> Manajemen
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <!-- Status Update -->
-                        <div class="mb-3">
-                            <label for="status" class="form-label small fw-bold">Status</label>
-                            <form method="POST" action="{{ route('admin.support.tickets.updateStatus', $ticket->id) }}" id="statusForm">
-                                @csrf
-                                @method('PATCH')
-                                <div class="input-group">
-                                    <select class="form-select form-select-sm" name="status" id="status">
-                                        <option value="open" {{ $ticket->status === 'open' ? 'selected' : '' }}>Terbuka</option>
-                                        <option value="in_progress" {{ $ticket->status === 'in_progress' ? 'selected' : '' }}>Sedang Diproses</option>
-                                        <option value="waiting_customer" {{ $ticket->status === 'waiting_customer' ? 'selected' : '' }}>Menunggu Pelanggan</option>
-                                        <option value="resolved" {{ $ticket->status === 'resolved' ? 'selected' : '' }}>Diselesaikan</option>
-                                        <option value="closed" {{ $ticket->status === 'closed' ? 'selected' : '' }}>Ditutup</option>
-                                    </select>
-                                    <button type="submit" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-check"></i> Perbarui
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+            @if($ticket->status !== 'closed')
+                <x-luxury.card class="border-stone-100">
+                    <h3 class="text-[10px] font-bold uppercase tracking-widest text-stone-400 mb-4">Manajemen</h3>
 
-                        <!-- Priority -->
-                        <div class="mb-3">
-                            <label class="small fw-bold text-muted">PRIORITAS SAAT INI</label>
-                            <p class="mb-0">
-                                @switch($ticket->priority)
-                                    @case('low')
-                                        <span class="badge bg-success">Rendah</span>
-                                    @break
-                                    @case('medium')
-                                        <span class="badge bg-warning">Sedang</span>
-                                    @break
-                                    @case('high')
-                                        <span class="badge bg-danger">Tinggi</span>
-                                    @break
-                                    @case('urgent')
-                                        <span class="badge bg-dark">Mendesak</span>
-                                    @break
-                                @endswitch
-                            </p>
-                        </div>
-
-                        <!-- Assignment -->
-                        <div class="mb-3">
-                            <label for="assigned_to" class="form-label small fw-bold">Tugaskan Ke Admin</label>
-                            <form method="POST" action="{{ route('admin.support.tickets.assign', $ticket->id) }}" id="assignForm">
-                                @csrf
-                                @method('PATCH')
-                                <div class="input-group">
-                                    <select class="form-select form-select-sm" name="assigned_to" id="assigned_to">
-                                        <option value="">- Belum ditugaskan -</option>
-                                        @foreach ($admins as $admin)
-                                            <option value="{{ $admin->id }}" {{ $ticket->assigned_to === $admin->id ? 'selected' : '' }}>
-                                                {{ $admin->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <button type="submit" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-check"></i> Tugaskan
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-            <!-- Internal Notes -->
-            <div class="card shadow">
-                <div class="card-header bg-secondary text-white">
-                    <h6 class="mb-0">
-                        <i class="fas fa-sticky-note"></i> Catatan Internal
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <form method="POST" action="{{ route('admin.support.tickets.addNotes', $ticket->id) }}" id="notesForm">
+                    <form method="POST" action="{{ route('admin.support.tickets.updateStatus', $ticket) }}" class="space-y-4">
                         @csrf
                         @method('PATCH')
-                        <textarea class="form-control form-control-sm" name="internal_notes" rows="5"
-                            placeholder="Catatan untuk tim admin...">{{ $ticket->internal_notes }}</textarea>
-                        <button type="submit" class="btn btn-sm btn-primary mt-2 w-100">
-                            <i class="fas fa-save"></i> Simpan Catatan
-                        </button>
+                        <div>
+                            <label for="status" class="block text-[10px] font-bold uppercase tracking-wider text-stone-400 mb-1.5">Status</label>
+                            <div class="flex gap-2">
+                                <select id="status" name="status" class="flex-1 px-3 py-2.5 bg-white border border-stone-200 rounded-lg text-sm focus:ring-2 focus:ring-gold-300">
+                                    @foreach(['open' => 'Terbuka', 'in_progress' => 'Diproses', 'waiting_customer' => 'Menunggu Pelanggan', 'resolved' => 'Selesai', 'closed' => 'Ditutup'] as $val => $label)
+                                        <option value="{{ $val }}" @selected($ticket->status === $val)>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                                <x-luxury.button type="submit" variant="secondary" size="sm">Simpan</x-luxury.button>
+                            </div>
+                        </div>
                     </form>
-                </div>
-            </div>
+
+                    <form method="POST" action="{{ route('admin.support.tickets.assign', $ticket) }}" class="pt-4 border-t border-stone-100">
+                        @csrf
+                        @method('PATCH')
+                        <label for="assigned_to" class="block text-[10px] font-bold uppercase tracking-wider text-stone-400 mb-1.5">Tugaskan Admin</label>
+                        <div class="flex gap-2">
+                            <select id="assigned_to" name="assigned_to" required class="flex-1 px-3 py-2.5 bg-white border border-stone-200 rounded-lg text-sm focus:ring-2 focus:ring-gold-300">
+                                <option value="">Pilih admin...</option>
+                                @foreach($admins as $admin)
+                                    <option value="{{ $admin->id }}" @selected($ticket->assigned_to === $admin->id)>{{ $admin->name }}</option>
+                                @endforeach
+                            </select>
+                            <x-luxury.button type="submit" variant="outline" size="sm">Tugaskan</x-luxury.button>
+                        </div>
+                    </form>
+                </x-luxury.card>
+            @endif
+
+            <x-luxury.card class="border-stone-100">
+                <h3 class="text-[10px] font-bold uppercase tracking-widest text-stone-400 mb-3">Catatan Internal</h3>
+                <p class="text-xs text-stone-400 mb-3">Hanya terlihat oleh tim admin.</p>
+                <form method="POST" action="{{ route('admin.support.tickets.addNotes', $ticket) }}">
+                    @csrf
+                    @method('PATCH')
+                    <textarea name="internal_notes" rows="4" placeholder="Catatan untuk tim..."
+                        class="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-lg text-sm text-choco-900 focus:ring-2 focus:ring-gold-300 resize-y">{{ $ticket->internal_notes }}</textarea>
+                    <x-luxury.button type="submit" variant="ghost" size="sm" class="w-full mt-3">Simpan Catatan</x-luxury.button>
+                </form>
+            </x-luxury.card>
         </div>
     </div>
 </div>
 
-<!-- Skrip untuk polling pesan real-time -->
+@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const chatContainer = document.getElementById('chatContainer');
     const messageForm = document.getElementById('messageForm');
     const messageInput = document.getElementById('messageInput');
-    
+    if (!chatContainer) return;
+
     let lastMessageId = parseInt(chatContainer.dataset.lastMessageId || 0);
     let isUserTyping = false;
     let pollInterval = null;
 
-    // Lacak apakah pengguna sedang mengetik
-    messageInput?.addEventListener('focus', function () {
+    messageInput?.addEventListener('focus', () => {
         isUserTyping = true;
-        // Hentikan polling saat sedang mengetik
         if (pollInterval) clearInterval(pollInterval);
+        pollInterval = null;
     });
 
-    messageInput?.addEventListener('blur', function () {
+    messageInput?.addEventListener('blur', () => {
         isUserTyping = false;
-        // Lanjutkan polling setelah 1 detik
         setTimeout(startPolling, 1000);
     });
 
-    // Gulir ke bawah
     function scrollToBottom() {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    // Kirim pesan
     messageForm?.addEventListener('submit', async function (e) {
         e.preventDefault();
-
-        const message = messageInput.value;
-        if (!message.trim()) return;
+        const message = messageInput.value.trim();
+        if (!message) return;
 
         try {
-            const response = await fetch('{{ route("admin.support.tickets.addMessage", $ticket->id) }}', {
+            const response = await fetch('{{ route("admin.support.tickets.addMessage", $ticket) }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
                 },
                 body: JSON.stringify({ message }),
@@ -282,136 +203,67 @@ document.addEventListener('DOMContentLoaded', function () {
             if (response.ok) {
                 messageInput.value = '';
                 isUserTyping = false;
-                loadNewMessages();
+                await loadNewMessages();
             }
         } catch (error) {
-            console.error('Kesalahan:', error);
-            alert('Gagal mengirim pesan');
+            alert('Gagal mengirim pesan.');
         }
     });
 
-    // Polling pesan baru tanpa memuat ulang halaman
     async function loadNewMessages() {
         try {
-            const response = await fetch('{{ route("admin.support.tickets.getNewMessages", $ticket->id) }}?last_message_id=' + lastMessageId);
+            const response = await fetch('{{ route("admin.support.tickets.getNewMessages", $ticket) }}?last_message_id=' + lastMessageId);
             const data = await response.json();
 
-            if (data.messages && data.messages.length > 0) {
-                // Tambahkan pesan baru ke chat
+            if (data.messages?.length) {
                 data.messages.forEach(message => {
-                    const messageDiv = createMessageElement(message);
-                    chatContainer.appendChild(messageDiv);
+                    chatContainer.appendChild(createMessageElement(message));
                     lastMessageId = message.id;
-                    // Perbarui data attribute untuk mencegah duplikasi saat reload
                     chatContainer.dataset.lastMessageId = lastMessageId;
                 });
-                
-                // Gulir ke bawah
                 setTimeout(scrollToBottom, 100);
             }
         } catch (error) {
-            console.error('Gagal memuat pesan baru:', error);
+            console.error(error);
         }
     }
 
-    // Buat elemen DOM untuk pesan
     function createMessageElement(message) {
-        const div = document.createElement('div');
-        div.className = 'mb-3';
-        
         const isAdmin = message.is_admin;
-        const justifyClass = isAdmin ? 'justify-content-end' : 'justify-content-start';
-        const bgColor = isAdmin ? 'background-color: #007bff !important;' : '';
-        const textColor = isAdmin ? 'text-white' : '';
-        
-        div.innerHTML = `
-            <div class="d-flex ${justifyClass}">
-                <div class="d-flex gap-2" style="max-width: 80%;">
-                    ${!isAdmin ? `
-                        <div class="flex-shrink-0">
-                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(message.sender_name)}&background=random"
-                                alt="${message.sender_name}" class="rounded-circle" width="35" height="35">
-                        </div>
-                    ` : ''}
-                    
-                    <div>
-                        <div class="bg-white p-3 rounded-3 border ${isAdmin ? 'bg-primary text-white' : ''}" style="${bgColor}">
-                            ${!isAdmin ? `<p class="mb-1 small fw-bold">${message.sender_name}</p>` : ''}
-                            <p class="mb-0">${escapeHtml(message.message)}</p>
-                        </div>
-                        <small class="d-block mt-1 text-muted">
-                            ${message.time}
-                            ${isAdmin ? '<span class="badge bg-success ms-2">Admin</span>' : ''}
-                        </small>
+        const wrapper = document.createElement('div');
+        wrapper.className = 'flex ' + (isAdmin ? 'justify-end' : 'justify-start');
+
+        wrapper.innerHTML = `
+            <div class="flex gap-2 max-w-[85%] ${isAdmin ? 'flex-row-reverse' : ''}">
+                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(message.sender_name)}&background=${isAdmin ? 'D4AF37' : '78716c'}&color=fff&size=64"
+                     alt="" class="w-8 h-8 rounded-full flex-shrink-0 ring-2 ring-white shadow-sm">
+                <div>
+                    <div class="px-4 py-3 rounded-2xl text-sm ${isAdmin ? 'bg-choco-900 text-gold-100 rounded-tr-sm' : 'bg-white border border-stone-100 text-choco-900 rounded-tl-sm shadow-sm'}">
+                        ${!isAdmin ? `<p class="text-[10px] font-bold uppercase tracking-wider mb-1 text-stone-400">${escapeHtml(message.sender_name)} · Pelanggan</p>` : ''}
+                        <p class="leading-relaxed whitespace-pre-wrap">${escapeHtml(message.message)}</p>
                     </div>
-                    
-                    ${isAdmin ? `
-                        <div class="flex-shrink-0">
-                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(message.sender_name)}&background=random"
-                                alt="${message.sender_name}" class="rounded-circle" width="35" height="35">
-                        </div>
-                    ` : ''}
+                    <p class="text-[10px] text-stone-400 mt-1 ${isAdmin ? 'text-right' : ''}">${message.time}</p>
                 </div>
-            </div>
-        `;
-        
-        return div;
+            </div>`;
+
+        return wrapper;
     }
 
-    // Escape HTML to prevent XSS
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
 
-    // Start polling
     function startPolling() {
         if (!isUserTyping && !pollInterval) {
-            // Poll every 5 seconds when not typing, slower to reduce server load
             pollInterval = setInterval(loadNewMessages, 5000);
         }
     }
 
-    // Stop polling
-    function stopPolling() {
-        if (pollInterval) {
-            clearInterval(pollInterval);
-            pollInterval = null;
-        }
-    }
-
-    // Initial scroll
     scrollToBottom();
-    
-    // Start polling
     startPolling();
 });
 </script>
-
-<style>
-    #chatContainer {
-        border: 1px solid #e9ecef;
-        background-color: #f8f9fa;
-    }
-
-    .rounded-3 {
-        border-radius: 15px;
-    }
-
-    .bg-white {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .card {
-        border: 1px solid #e9ecef;
-        border-radius: 8px;
-    }
-
-    @media (max-width: 992px) {
-        #chatContainer {
-            height: 400px !important;
-        }
-    }
-</style>
+@endpush
 @endsection

@@ -166,4 +166,40 @@ class SupportTicket extends Model
                 'read_at' => now(),
             ]);
     }
+
+    public function getCategoryLabelAttribute(): string
+    {
+        return match ($this->category) {
+            'general' => 'Pertanyaan Umum',
+            'order' => 'Pesanan',
+            'payment' => 'Pembayaran',
+            'complaint' => 'Pengaduan',
+            'suggestion' => 'Saran',
+            'other' => 'Lainnya',
+            default => ucfirst($this->category),
+        };
+    }
+
+    public function getPriorityLabelAttribute(): string
+    {
+        return match ($this->priority) {
+            'low' => 'Rendah',
+            'medium' => 'Sedang',
+            'high' => 'Tinggi',
+            'urgent' => 'Mendesak',
+            default => ucfirst($this->priority),
+        };
+    }
+
+    public function getStatusLabelAttribute(): string
+    {
+        return match ($this->status) {
+            'open' => 'Terbuka',
+            'in_progress' => 'Diproses',
+            'waiting_customer' => 'Menunggu Pelanggan',
+            'resolved' => 'Selesai',
+            'closed' => 'Ditutup',
+            default => ucfirst(str_replace('_', ' ', $this->status)),
+        };
+    }
 }

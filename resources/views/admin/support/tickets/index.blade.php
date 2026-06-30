@@ -1,254 +1,121 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen Dukungan Pelanggan')
+@section('title', 'Support & Pengaduan - Admin')
 
 @section('content')
-<div class="container-fluid mt-4">
-    <!-- Statistics Cards -->
-    <div class="row mb-4">
-        <div class="col-md-3 mb-3">
-            <div class="card stat-card">
-                <div class="card-body">
-                    <h6 class="card-title text-muted">Tiket Terbuka</h6>
-                    <h3 class="mb-0">{{ $stats['open'] ?? 0 }}</h3>
-                </div>
-                <div class="card-footer bg-light">
-                    <small class="text-primary">Membutuhkan perhatian</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="card stat-card">
-                <div class="card-body">
-                    <h6 class="card-title text-muted">Sedang Diproses</h6>
-                    <h3 class="mb-0">{{ $stats['in_progress'] ?? 0 }}</h3>
-                </div>
-                <div class="card-footer bg-light">
-                    <small class="text-info">Dalam penanganan</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="card stat-card">
-                <div class="card-body">
-                    <h6 class="card-title text-muted">Mendesak</h6>
-                    <h3 class="mb-0">{{ $stats['urgent'] ?? 0 }}</h3>
-                </div>
-                <div class="card-footer bg-light">
-                    <small class="text-danger">Prioritas tinggi</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="card stat-card">
-                <div class="card-body">
-                    <h6 class="card-title text-muted">Total Bulan Ini</h6>
-                    <h3 class="mb-0">{{ $stats['total'] ?? 0 }}</h3>
-                </div>
-                <div class="card-footer bg-light">
-                    <small class="text-muted">Semua tiket</small>
-                </div>
-            </div>
-        </div>
+<div class="space-y-8 pb-12">
+    <div>
+        <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Customer Service</p>
+        <h1 class="font-serif text-4xl text-choco-900 leading-tight">Support & <span class="italic text-stone-400">Pengaduan</span></h1>
     </div>
 
-    <!-- Filters and Search -->
-    <div class="card shadow mb-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">
-                <i class="fas fa-ticket-alt"></i> Tiket Dukungan
-            </h5>
-        </div>
-        <div class="card-body">
-            <form method="GET" action="{{ route('admin.support.tickets.index') }}" class="row g-3">
-                <div class="col-md-3">
-                    <input type="text" class="form-control" name="search" placeholder="Cari subjek atau ID..."
-                        value="{{ request('search') }}">
-                </div>
-                <div class="col-md-2">
-                    <select class="form-select" name="status">
-                        <option value="">Semua Status</option>
-                        <option value="open" {{ request('status') === 'open' ? 'selected' : '' }}>Terbuka</option>
-                        <option value="in_progress" {{ request('status') === 'in_progress' ? 'selected' : '' }}>Sedang Diproses</option>
-                        <option value="waiting_customer" {{ request('status') === 'waiting_customer' ? 'selected' : '' }}>Menunggu Pelanggan</option>
-                        <option value="resolved" {{ request('status') === 'resolved' ? 'selected' : '' }}>Diselesaikan</option>
-                        <option value="closed" {{ request('status') === 'closed' ? 'selected' : '' }}>Ditutup</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <select class="form-select" name="priority">
-                        <option value="">Semua Prioritas</option>
-                        <option value="low" {{ request('priority') === 'low' ? 'selected' : '' }}>Rendah</option>
-                        <option value="medium" {{ request('priority') === 'medium' ? 'selected' : '' }}>Sedang</option>
-                        <option value="high" {{ request('priority') === 'high' ? 'selected' : '' }}>Tinggi</option>
-                        <option value="urgent" {{ request('priority') === 'urgent' ? 'selected' : '' }}>Mendesak</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <select class="form-select" name="category">
-                        <option value="">Semua Kategori</option>
-                        <option value="general" {{ request('category') === 'general' ? 'selected' : '' }}>Umum</option>
-                        <option value="order" {{ request('category') === 'order' ? 'selected' : '' }}>Pesanan</option>
-                        <option value="payment" {{ request('category') === 'payment' ? 'selected' : '' }}>Pembayaran</option>
-                        <option value="complaint" {{ request('category') === 'complaint' ? 'selected' : '' }}>Keluhan</option>
-                        <option value="suggestion" {{ request('category') === 'suggestion' ? 'selected' : '' }}>Saran</option>
-                        <option value="other" {{ request('category') === 'other' ? 'selected' : '' }}>Lainnya</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="fas fa-search"></i> Cari
-                    </button>
-                </div>
-            </form>
-        </div>
+    @if(session('success'))
+        <div class="px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-100 text-sm text-emerald-700">{{ session('success') }}</div>
+    @endif
+
+    {{-- Stats --}}
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        @foreach([
+            ['label' => 'Terbuka', 'value' => $stats['open'] ?? 0, 'sub' => 'Perlu ditangani', 'accent' => 'border-l-blue-400'],
+            ['label' => 'Diproses', 'value' => $stats['in_progress'] ?? 0, 'sub' => 'Sedang dikerjakan', 'accent' => 'border-l-sky-400'],
+            ['label' => 'Mendesak', 'value' => $stats['urgent'] ?? 0, 'sub' => 'Prioritas tinggi', 'accent' => 'border-l-rose-400'],
+            ['label' => 'Bulan Ini', 'value' => $stats['total'] ?? 0, 'sub' => 'Total tiket', 'accent' => 'border-l-gold-400'],
+        ] as $stat)
+            <x-luxury.card class="border-stone-100 border-l-4 {{ $stat['accent'] }}">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-stone-400 mb-1">{{ $stat['label'] }}</p>
+                <p class="font-serif text-3xl text-choco-900">{{ $stat['value'] }}</p>
+                <p class="text-xs text-stone-500 mt-1">{{ $stat['sub'] }}</p>
+            </x-luxury.card>
+        @endforeach
     </div>
 
-    <!-- Tickets Table -->
-    <div class="card shadow">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th width="10%">#</th>
-                        <th width="25%">Subjek</th>
-                        <th width="15%">Pelanggan</th>
-                        <th width="10%">Kategori</th>
-                        <th width="10%">Prioritas</th>
-                        <th width="10%">Status</th>
-                        <th width="15%">Ditugaskan Ke</th>
-                        <th width="10%">Aksi</th>
+    {{-- Filters --}}
+    <x-luxury.card class="border-stone-100">
+        <form method="GET" action="{{ route('admin.support.tickets.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <input type="text" name="search" value="{{ $search }}" placeholder="Cari subjek atau ID..."
+                class="px-4 py-3 bg-white border border-stone-200 rounded-lg text-sm text-choco-900 placeholder:text-stone-400 focus:ring-2 focus:ring-gold-300 focus:border-gold-400 lg:col-span-2">
+            <select name="status" class="px-4 py-3 bg-white border border-stone-200 rounded-lg text-sm text-choco-900 focus:ring-2 focus:ring-gold-300">
+                <option value="">Semua Status</option>
+                @foreach(['open' => 'Terbuka', 'in_progress' => 'Diproses', 'waiting_customer' => 'Menunggu Pelanggan', 'resolved' => 'Selesai', 'closed' => 'Ditutup'] as $val => $label)
+                    <option value="{{ $val }}" @selected($status === $val)>{{ $label }}</option>
+                @endforeach
+            </select>
+            <select name="priority" class="px-4 py-3 bg-white border border-stone-200 rounded-lg text-sm text-choco-900 focus:ring-2 focus:ring-gold-300">
+                <option value="">Semua Prioritas</option>
+                @foreach(['low' => 'Rendah', 'medium' => 'Sedang', 'high' => 'Tinggi', 'urgent' => 'Mendesak'] as $val => $label)
+                    <option value="{{ $val }}" @selected($priority === $val)>{{ $label }}</option>
+                @endforeach
+            </select>
+            <select name="category" class="px-4 py-3 bg-white border border-stone-200 rounded-lg text-sm text-choco-900 focus:ring-2 focus:ring-gold-300">
+                <option value="">Semua Kategori</option>
+                @foreach(['general' => 'Umum', 'order' => 'Pesanan', 'payment' => 'Pembayaran', 'complaint' => 'Pengaduan', 'suggestion' => 'Saran', 'other' => 'Lainnya'] as $val => $label)
+                    <option value="{{ $val }}" @selected($category === $val)>{{ $label }}</option>
+                @endforeach
+            </select>
+            <div class="sm:col-span-2 lg:col-span-5 flex gap-3">
+                <x-luxury.button type="submit" variant="primary" size="sm">Terapkan Filter</x-luxury.button>
+                <x-luxury.button href="{{ route('admin.support.tickets.index') }}" variant="ghost" size="sm">Reset</x-luxury.button>
+            </div>
+        </form>
+    </x-luxury.card>
+
+    {{-- Table --}}
+    <x-luxury.card class="overflow-hidden border-stone-100">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="bg-stone-50/80 border-b border-stone-100 text-[10px] font-bold uppercase tracking-widest text-stone-400">
+                        <th class="px-6 py-4">#</th>
+                        <th class="px-6 py-4">Subjek</th>
+                        <th class="px-6 py-4">Pelanggan</th>
+                        <th class="px-6 py-4">Kategori</th>
+                        <th class="px-6 py-4">Prioritas</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4">Ditugaskan</th>
+                        <th class="px-6 py-4 text-right">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse ($tickets as $ticket)
-                        <tr>
-                            <td>
-                                <strong>#{{ $ticket->id }}</strong>
-                            </td>
-                            <td>
-                                {{ Str::limit($ticket->subject, 40) }}
-                                @if ($ticket->messages()->count() > 0)
-                                    <br>
-                                    <small class="text-muted">
-                                        <i class="fas fa-comments"></i> {{ $ticket->messages()->count() }} pesan
-                                    </small>
+                <tbody class="divide-y divide-stone-50">
+                    @forelse($tickets as $ticket)
+                        <tr class="hover:bg-stone-50/40 transition-colors">
+                            <td class="px-6 py-4 text-sm font-bold text-choco-900">#{{ $ticket->id }}</td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm text-choco-900">{{ Str::limit($ticket->subject, 45) }}</div>
+                                @if($ticket->messages_count ?? $ticket->messages()->count())
+                                    <div class="text-[10px] text-stone-400 mt-0.5">{{ $ticket->messages_count ?? $ticket->messages()->count() }} pesan</div>
                                 @endif
                             </td>
-                            <td>
-                                <div>
-                                    <strong>{{ $ticket->user->name }}</strong>
-                                    <br>
-                                    <small class="text-muted">{{ $ticket->user->email }}</small>
-                                </div>
+                            <td class="px-6 py-4">
+                                <div class="text-sm font-medium text-choco-900">{{ $ticket->user->name }}</div>
+                                <div class="text-[10px] text-stone-400">{{ $ticket->user->email }}</div>
                             </td>
-                            <td>
-                                <span class="badge bg-secondary">
-                                    {{ ucfirst(str_replace('_', ' ', $ticket->category)) }}
-                                </span>
+                            <td class="px-6 py-4">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-stone-500">{{ $ticket->category_label }}</span>
                             </td>
-                            <td>
-                                @switch($ticket->priority)
-                                    @case('low')
-                                        <span class="badge bg-success">Rendah</span>
-                                    @break
-                                    @case('medium')
-                                        <span class="badge bg-warning">Sedang</span>
-                                    @break
-                                    @case('high')
-                                        <span class="badge bg-danger">Tinggi</span>
-                                    @break
-                                    @case('urgent')
-                                        <span class="badge bg-dark">Mendesak</span>
-                                    @break
-                                @endswitch
+                            <td class="px-6 py-4"><x-support.priority-badge :priority="$ticket->priority" /></td>
+                            <td class="px-6 py-4"><x-support.status-badge :status="$ticket->status" /></td>
+                            <td class="px-6 py-4 text-xs text-stone-500">
+                                {{ $ticket->assignedTo?->name ?? '—' }}
                             </td>
-                            <td>
-                                @switch($ticket->status)
-                                    @case('open')
-                                        <span class="badge bg-primary">Terbuka</span>
-                                    @break
-                                    @case('in_progress')
-                                        <span class="badge bg-info">Diproses</span>
-                                    @break
-                                    @case('waiting_customer')
-                                        <span class="badge bg-warning">Menunggu</span>
-                                    @break
-                                    @case('resolved')
-                                        <span class="badge bg-success">Diselesaikan</span>
-                                    @break
-                                    @case('closed')
-                                        <span class="badge bg-secondary">Ditutup</span>
-                                    @break
-                                @endswitch
-                            </td>
-                            <td>
-                                @if ($ticket->assigned_to)
-                                    <small>{{ $ticket->assignedTo->name }}</small>
-                                @else
-                                    <small class="text-muted"><em>Belum ditugaskan</em></small>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('admin.support.tickets.show', $ticket->id) }}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-eye"></i> Lihat
+                            <td class="px-6 py-4 text-right">
+                                <a href="{{ route('admin.support.tickets.show', $ticket) }}" class="px-3 py-1.5 rounded-lg border border-stone-200 text-[10px] font-bold uppercase tracking-widest text-choco-900 hover:bg-stone-50 transition-colors">
+                                    Kelola
                                 </a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center text-muted py-4">
-                                <i class="fas fa-inbox"></i> Tidak ada tiket
-                            </td>
+                            <td colspan="8" class="px-6 py-16 text-center text-stone-400 text-sm">Tidak ada tiket ditemukan.</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        @if ($tickets->hasPages())
-            <div class="card-footer bg-light">
-                {{ $tickets->links() }}
+        @if($tickets->hasPages())
+            <div class="px-6 py-4 border-t border-stone-100 bg-stone-50/30">
+                {{ $tickets->withQueryString()->links() }}
             </div>
         @endif
-    </div>
+    </x-luxury.card>
 </div>
-
-<style>
-    .stat-card {
-        border-left: 4px solid #007bff;
-    }
-
-    .stat-card:hover {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transform: translateY(-2px);
-        transition: all 0.2s ease;
-    }
-
-    .stat-card .card-title {
-        font-size: 0.875rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .stat-card h3 {
-        font-weight: 700;
-        color: #2c3e50;
-    }
-
-    .table {
-        font-size: 0.95rem;
-    }
-
-    .badge {
-        font-size: 0.75rem;
-        padding: 0.4rem 0.6rem;
-    }
-
-    @media (max-width: 768px) {
-        .table-responsive {
-            font-size: 0.85rem;
-        }
-    }
-</style>
 @endsection

@@ -1,160 +1,92 @@
 @extends('layouts.app')
 
-@section('title', 'Buat Tiket Dukungan Baru')
+@section('title', 'Buat Tiket Bantuan - Gemilang WO')
 
 @section('content')
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-plus-circle"></i> Buat Tiket Dukungan Baru
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <form method="POST" action="{{ route('customer.support.tickets.store') }}" id="supportForm">
-                        @csrf
-
-                        <!-- Subject -->
-                        <div class="mb-3">
-                            <label for="subject" class="form-label">
-                                <i class="fas fa-heading"></i> Subjek <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" class="form-control @error('subject') is-invalid @enderror"
-                                id="subject" name="subject" value="{{ old('subject') }}"
-                                placeholder="Deskripsi singkat masalah Anda" required>
-                            @error('subject')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Category -->
-                        <div class="mb-3">
-                            <label for="category" class="form-label">
-                                <i class="fas fa-list"></i> Kategori <span class="text-danger">*</span>
-                            </label>
-                            <select class="form-select @error('category') is-invalid @enderror"
-                                id="category" name="category" required>
-                                <option value="">Pilih Kategori...</option>
-                                <option value="general" {{ old('category') === 'general' ? 'selected' : '' }}>Pertanyaan Umum</option>
-                                <option value="order" {{ old('category') === 'order' ? 'selected' : '' }}>Masalah Pesanan</option>
-                                <option value="payment" {{ old('category') === 'payment' ? 'selected' : '' }}>Masalah Pembayaran</option>
-                                <option value="complaint" {{ old('category') === 'complaint' ? 'selected' : '' }}>Keluhan</option>
-                                <option value="suggestion" {{ old('category') === 'suggestion' ? 'selected' : '' }}>Saran</option>
-                                <option value="other" {{ old('category') === 'other' ? 'selected' : '' }}>Lainnya</option>
-                            </select>
-                            @error('category')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Priority -->
-                        <div class="mb-3">
-                            <label for="priority" class="form-label">
-                                <i class="fas fa-exclamation-triangle"></i> Prioritas <span class="text-danger">*</span>
-                            </label>
-                            <select class="form-select @error('priority') is-invalid @enderror"
-                                id="priority" name="priority" required>
-                                <option value="">Pilih Prioritas...</option>
-                                <option value="low" {{ old('priority') === 'low' ? 'selected' : '' }}>Rendah</option>
-                                <option value="medium" {{ old('priority') === 'medium' ? 'selected' : '' }} selected>Sedang</option>
-                                <option value="high" {{ old('priority') === 'high' ? 'selected' : '' }}>Tinggi</option>
-                                <option value="urgent" {{ old('priority') === 'urgent' ? 'selected' : '' }}>Mendesak</option>
-                            </select>
-                            @error('priority')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Pesanan Terkait (Opsional) -->
-                        @php
-                            $userOrders = auth()->user()->orders()->get();
-                        @endphp
-                        @if ($userOrders->isNotEmpty())
-                            <div class="mb-3">
-                                <label for="order_id" class="form-label">
-                                    <i class="fas fa-shopping-bag"></i> Pesanan Terkait (Opsional)
-                                </label>
-                                <select class="form-select @error('order_id') is-invalid @enderror"
-                                    id="order_id" name="order_id">
-                                    <option value="">Tidak ada pesanan terkait</option>
-                                    @foreach ($userOrders as $order)
-                                        <option value="{{ $order->id }}" {{ old('order_id') == $order->id ? 'selected' : '' }}>
-                                            Pesanan #{{ $order->id }} - {{ $order->package->name }} ({{ $order->created_at->format('d M Y') }})
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('order_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        @endif
-
-                        <!-- Description -->
-                        <div class="mb-3">
-                            <label for="description" class="form-label">
-                                <i class="fas fa-align-left"></i> Deskripsi Detail <span class="text-danger">*</span>
-                            </label>
-                            <textarea class="form-control @error('description') is-invalid @enderror"
-                                id="description" name="description" rows="6"
-                                placeholder="Jelaskan masalah Anda secara detail..." required>{{ old('description') }}</textarea>
-                            <small class="text-muted d-block mt-2">
-                                <i class="fas fa-info-circle"></i>
-                                Semakin detail penjelasan Anda, semakin cepat kami dapat membantu.
-                            </small>
-                            @error('description')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Form Actions -->
-                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
-                            <a href="{{ route('customer.support.tickets.index') }}" class="btn btn-secondary">
-                                <i class="fas fa-times"></i> Batal
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-check"></i> Buat Tiket
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Info Box -->
-            <div class="alert alert-info mt-4" role="alert">
-                <h6 class="alert-heading">
-                    <i class="fas fa-lightbulb"></i> Tips
-                </h6>
-                <ul class="mb-0 ps-3">
-                    <li>Jelaskan masalah Anda dengan detail untuk respons yang lebih cepat</li>
-                    <li>Sertakan nomor pesanan jika masalah terkait dengan pesanan</li>
-                    <li>Tim support kami siap membantu Anda 24/7</li>
-                </ul>
-            </div>
-        </div>
+<div class="space-y-8 pb-12 max-w-3xl">
+    <div>
+        <a href="{{ route('customer.support.tickets.index') }}" class="inline-flex items-center text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-gold-500 transition-colors mb-4">
+            <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            Kembali ke Pusat Bantuan
+        </a>
+        <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Customer Service</p>
+        <h1 class="font-serif text-4xl text-choco-900 leading-tight">Buat <span class="italic text-stone-400">Tiket Baru</span></h1>
     </div>
+
+    <x-luxury.card>
+        <form method="POST" action="{{ route('customer.support.tickets.store') }}" class="space-y-6">
+            @csrf
+
+            <x-luxury.input
+                id="subject"
+                name="subject"
+                label="Subjek"
+                type="text"
+                value="{{ old('subject') }}"
+                placeholder="Ringkasan singkat masalah atau pertanyaan Anda"
+                required
+                :error="$errors->first('subject')"
+            />
+
+            <div class="space-y-1.5">
+                <label for="category" class="block text-xs font-semibold text-choco-800 uppercase tracking-wider">Kategori</label>
+                <select id="category" name="category" required class="block w-full px-4 py-3 bg-white border border-stone-200 rounded-lg text-choco-900 focus:ring-2 focus:ring-gold-300 focus:border-gold-400 transition-all">
+                    <option value="">Pilih kategori...</option>
+                    @foreach(['general' => 'Pertanyaan Umum', 'order' => 'Masalah Pesanan', 'payment' => 'Masalah Pembayaran', 'complaint' => 'Pengaduan', 'suggestion' => 'Saran', 'other' => 'Lainnya'] as $val => $label)
+                        <option value="{{ $val }}" @selected(old('category') === $val)>{{ $label }}</option>
+                    @endforeach
+                </select>
+                @error('category')<p class="text-xs text-red-600 italic mt-1">{{ $message }}</p>@enderror
+            </div>
+
+            <div class="space-y-1.5">
+                <label for="priority" class="block text-xs font-semibold text-choco-800 uppercase tracking-wider">Prioritas</label>
+                <select id="priority" name="priority" required class="block w-full px-4 py-3 bg-white border border-stone-200 rounded-lg text-choco-900 focus:ring-2 focus:ring-gold-300 focus:border-gold-400 transition-all">
+                    @foreach(['low' => 'Rendah', 'medium' => 'Sedang', 'high' => 'Tinggi', 'urgent' => 'Mendesak'] as $val => $label)
+                        <option value="{{ $val }}" @selected(old('priority', 'medium') === $val)>{{ $label }}</option>
+                    @endforeach
+                </select>
+                @error('priority')<p class="text-xs text-red-600 italic mt-1">{{ $message }}</p>@enderror
+            </div>
+
+            @php $userOrders = auth()->user()->orders()->with('package')->latest()->get(); @endphp
+            @if($userOrders->isNotEmpty())
+                <div class="space-y-1.5">
+                    <label for="order_id" class="block text-xs font-semibold text-choco-800 uppercase tracking-wider">Pesanan Terkait <span class="text-stone-400 font-normal normal-case">(opsional)</span></label>
+                    <select id="order_id" name="order_id" class="block w-full px-4 py-3 bg-white border border-stone-200 rounded-lg text-choco-900 focus:ring-2 focus:ring-gold-300 focus:border-gold-400 transition-all">
+                        <option value="">Tidak terkait pesanan</option>
+                        @foreach($userOrders as $order)
+                            <option value="{{ $order->id }}" @selected(old('order_id') == $order->id)>
+                                #{{ $order->order_number ?? $order->id }} — {{ $order->package->name }} ({{ $order->created_at->format('d M Y') }})
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('order_id')<p class="text-xs text-red-600 italic mt-1">{{ $message }}</p>@enderror
+                </div>
+            @endif
+
+            <div class="space-y-1.5">
+                <label for="description" class="block text-xs font-semibold text-choco-800 uppercase tracking-wider">Deskripsi Detail</label>
+                <textarea id="description" name="description" rows="6" required placeholder="Jelaskan masalah atau pertanyaan Anda secara detail..."
+                    class="block w-full px-4 py-3 bg-white border border-stone-200 rounded-lg text-choco-900 placeholder:text-stone-400 focus:ring-2 focus:ring-gold-300 focus:border-gold-400 transition-all resize-y">{{ old('description') }}</textarea>
+                <p class="text-xs text-stone-500">Semakin detail penjelasan Anda, semakin cepat kami dapat membantu.</p>
+                @error('description')<p class="text-xs text-red-600 italic mt-1">{{ $message }}</p>@enderror
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <x-luxury.button type="submit" variant="primary" size="sm">Kirim Tiket</x-luxury.button>
+                <x-luxury.button href="{{ route('customer.support.tickets.index') }}" variant="ghost" size="sm">Batal</x-luxury.button>
+            </div>
+        </form>
+    </x-luxury.card>
+
+    <x-luxury.card class="bg-stone-50/50 border-stone-100">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-gold-600 mb-3">Tips</h3>
+        <ul class="space-y-2 text-sm text-stone-600 list-disc list-inside">
+            <li>Sertakan nomor pesanan jika masalah terkait pemesanan</li>
+            <li>Jelaskan langkah yang sudah Anda coba</li>
+            <li>Respon biasanya diberikan dalam 1×24 jam kerja</li>
+        </ul>
+    </x-luxury.card>
 </div>
-
-<style>
-    .form-label {
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-    }
-
-    .form-control:focus,
-    .form-select:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-    }
-
-    .card {
-        border: 1px solid #e9ecef;
-        border-radius: 8px;
-    }
-
-    .card-header {
-        border-radius: 8px 8px 0 0;
-    }
-</style>
 @endsection
