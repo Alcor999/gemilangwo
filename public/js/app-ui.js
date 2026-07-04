@@ -82,40 +82,47 @@
                 const title = this.dataset.confirmTitle || 'Konfirmasi';
                 const body = this.dataset.confirm || 'Apakah Anda yakin?';
                 const btnText = this.dataset.confirmBtn || 'Ya, Lanjutkan';
-                const btnClass = (this.dataset.confirmDanger === 'true' || this.dataset.confirmDanger === '1') ? 'btn-danger' : 'btn-primary';
+                const isDanger = (this.dataset.confirmDanger === 'true' || this.dataset.confirmDanger === '1');
                 const icon = this.dataset.confirmIcon || 'fa-exclamation-triangle';
 
-                const modalInstance = new bootstrap.Modal(modal);
+                // Update text content
                 modal.querySelector('#confirmModalLabel').textContent = title;
                 modal.querySelector('#confirmModalBody').textContent = body;
-                modal.querySelector('#confirmModalBtn').innerHTML = `<i class="fas fa-check me-2"></i>${btnText}`;
-                modal.querySelector('#confirmModalBtn').className = `btn ${btnClass} px-4`;
-                const iconEl = modal.querySelector('#confirmModalIcon');
-                iconEl.className = `fas ${icon} modal-icon`;
-                iconEl.classList.add(btnClass === 'btn-danger' ? 'text-danger' : 'text-warning');
+                
+                // Update confirm button label & style
+                const submitBtn = modal.querySelector('#confirmModalBtn');
+                submitBtn.innerHTML = `<i class="fas fa-check mr-2"></i>${btnText}`;
+                if (isDanger) {
+                    submitBtn.className = "px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest text-white bg-rose-600 hover:bg-rose-700 transition-all shadow-md shadow-rose-600/10 active:scale-95";
+                    modal.querySelector('#confirmModalIconWrapper').className = "mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-rose-50 text-rose-500";
+                    modal.querySelector('#confirmModalIcon').className = `fas ${icon} text-2xl`;
+                } else {
+                    submitBtn.className = "px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest text-white bg-choco-900 hover:bg-stone-800 transition-all shadow-md shadow-choco-900/10 active:scale-95";
+                    modal.querySelector('#confirmModalIconWrapper').className = "mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-50 text-amber-500";
+                    modal.querySelector('#confirmModalIcon').className = `fas ${icon} text-2xl`;
+                }
 
+                // Action form setup
                 const modalForm = modal.querySelector('#confirmModalForm');
                 modalForm.action = form.action;
                 modalForm.method = form.method || 'POST';
-                modalForm.querySelectorAll('[name="_method"]').forEach(i => i.remove());
+                
+                // Clear and recreate hidden method if custom (e.g. DELETE)
+                const methodInput = modalForm.querySelector('#confirmModalMethod');
                 const origMethod = form.querySelector('[name="_method"]');
-                if (origMethod && origMethod.value) {
-                    const m = document.createElement('input');
-                    m.type = 'hidden';
-                    m.name = '_method';
-                    m.value = origMethod.value;
-                    modalForm.appendChild(m);
+                if (methodInput) {
+                    methodInput.value = origMethod ? origMethod.value : 'POST';
                 }
-                modalForm.querySelectorAll('[name="_token"]').forEach(i => i.remove());
-                const csrf = form.querySelector('[name="_token"]');
-                if (csrf) modalForm.appendChild(csrf.cloneNode(true));
-                modalForm.querySelectorAll('input:not([name="_token"]):not([name="_method"])').forEach(i => i.remove());
-                form.querySelectorAll('input[type="hidden"]').forEach(input => {
-                    if (input.name !== '_token' && input.name !== '_method')
-                        modalForm.appendChild(input.cloneNode(true));
-                });
 
-                modalInstance.show();
+                // Match CSRF token
+                const formToken = form.querySelector('[name="_token"]');
+                const modalTokenInput = modalForm.querySelector('[name="_token"]');
+                if (formToken && modalTokenInput) {
+                    modalTokenInput.value = formToken.value;
+                }
+
+                // Open modal
+                modal.classList.remove('hidden');
             });
         });
     }
