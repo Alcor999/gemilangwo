@@ -182,20 +182,6 @@
                         </div>
                     </div>
                 </a>
-
-                <a href="{{ route('customer.support.tickets.create') }}" class="group block p-6 bg-choco-900 rounded-3xl border-none shadow-xl hover:shadow-choco-900/20 hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex items-center gap-6">
-                        <div class="h-14 w-14 rounded-2xl bg-white/10 flex items-center justify-center text-gold-400 group-hover:bg-gold-400 group-hover:text-white transition-colors duration-300">
-                            <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-white font-bold">Butuh Bantuan?</p>
-                            <p class="text-stone-400 text-xs mt-1 text-gold-400/60 font-medium italic">Chat de Concierge</p>
-                        </div>
-                    </div>
-                </a>
             </div>
         </div>
     </div>

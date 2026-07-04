@@ -252,7 +252,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         const total = pkg.discounted + diffSum;
         const scheme = schemeInput.value;
-        let eventDate = eventDateInput.value ? new Date(eventDateInput.value) : null;
+        // Parse as LOCAL midnight to prevent UTC-vs-local timezone shift (e.g. UTC+7 would
+        // see "2026-08-02T00:00:00Z" as 2026-08-01 07:00 local, causing off-by-one day bugs)
+        let eventDate = eventDateInput.value ? new Date(eventDateInput.value + 'T00:00:00') : null;
         let items = [];
 
         if (scheme === 'full_payment') {
@@ -294,7 +296,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function fmtDate(d, daysBefore) {
         if (!d) return `H-${daysBefore} sebelum acara`;
-        const copy = new Date(d);
+        // Clone as local-midnight date then subtract days using UTC date methods to avoid
+        // Daylight Saving Time (DST) boundary shifts on long intervals (e.g. 60, 90 days)
+        const copy = new Date(d.getFullYear(), d.getMonth(), d.getDate());
         copy.setDate(copy.getDate() - daysBefore);
         return copy.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
     }

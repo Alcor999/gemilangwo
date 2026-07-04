@@ -24,7 +24,7 @@ class PaymentSchemeService
             return true;
         }
 
-        $daysUntilEvent = now()->diffInDays($eventDate, false);
+        $daysUntilEvent = now()->startOfDay()->diffInDays($eventDate->startOfDay(), false);
 
         return $daysUntilEvent >= $scheme->min_days_before_event;
     }
@@ -40,18 +40,20 @@ class PaymentSchemeService
             $dueDate = null;
 
             if ($eventDate && ! empty($item['days_before_event'])) {
-                $dueDate = $eventDate->copy()->subDays($item['days_before_event']);
-                
-                // Fallback: if computed due date is in the past, adjust it forward
+                // Normalize to start-of-day so subDays is purely calendar-based
+                $dueDate = $eventDate->copy()->startOfDay()->subDays($item['days_before_event']);
+
+                // If computed due date is already in the past, use the earliest available
+                // date that is still before H-4 (the hard deadline before the event)
                 if ($dueDate->isBefore(now()->startOfDay())) {
-                    $dueDate = now()->addDays(7 * $index);
-                    $maxDate = $eventDate->copy()->subDays(4);
+                    $maxDate = $eventDate->copy()->startOfDay()->subDays(4);
+                    $dueDate = now()->startOfDay()->addDay(); // start from tomorrow
                     if ($dueDate->isAfter($maxDate)) {
-                        $dueDate = $maxDate;
+                        $dueDate = $maxDate; // cap at H-4 if tomorrow exceeds it
                     }
                 }
             } elseif ($index === 0) {
-                $dueDate = now()->addDay();
+                $dueDate = now()->startOfDay()->addDay();
             }
 
             $items[] = [
