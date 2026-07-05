@@ -275,11 +275,11 @@ Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->grou
         Route::get('/', [OwnerCalendarController::class, 'index'])->name('index');
         Route::get('/data/{package}', [OwnerCalendarController::class, 'getCalendarData'])->name('data');
         Route::get('/blocked/create', [OwnerCalendarController::class, 'createBlocked'])->name('blocked.create');
-        Route::post('/{package}/blocked', [OwnerCalendarController::class, 'storeBlocked'])->name('blocked.store');
+        Route::post('/blocked/store', [OwnerCalendarController::class, 'storeBlocked'])->name('blocked.store');
         Route::get('/blocked/{blockedDate}/edit', [OwnerCalendarController::class, 'editBlocked'])->name('blocked.edit');
         Route::put('/blocked/{blockedDate}', [OwnerCalendarController::class, 'updateBlocked'])->name('blocked.update');
         Route::delete('/blocked/{blockedDate}', [OwnerCalendarController::class, 'destroyBlocked'])->name('blocked.destroy');
-        Route::get('/{package}/export', [OwnerCalendarController::class, 'exportCalendar'])->name('export');
+        Route::get('/export', [OwnerCalendarController::class, 'exportCalendar'])->name('export');
     });
 });
 

@@ -39,6 +39,39 @@ class ICalExportService
     }
 
     /**
+     * Generate iCal format for all owner's packages
+     */
+    public function generateOwnerCalendarFile($ownerId, $type = 'all')
+    {
+        $packages = Package::where('owner_id', $ownerId)->get();
+        if ($packages->isEmpty()) {
+            return null;
+        }
+
+        $packageIds = $packages->pluck('id')->toArray();
+        $events = [];
+
+        if ($type === 'all' || $type === 'events') {
+            $calendarEvents = CalendarEvent::whereIn('package_id', $packageIds)
+                ->where('is_confirmed', true)
+                ->get();
+            $events = array_merge($events, $this->buildEventsFromCalendarEvents($calendarEvents));
+        }
+
+        if ($type === 'all' || $type === 'blocked') {
+            $blockedDates = BlockedDate::whereIn('package_id', $packageIds)
+                ->where('is_active', true)
+                ->get();
+            $events = array_merge($events, $this->buildEventsFromBlockedDates($blockedDates));
+        }
+
+        $owner = \App\Models\User::find($ownerId);
+        $calendarName = $owner ? "Kalender Kelola - " . $owner->name : "Kalender Kelola";
+
+        return $this->generateICalContent($calendarName, $events);
+    }
+
+    /**
      * Build iCal events from CalendarEvent objects
      */
     private function buildEventsFromCalendarEvents($calendarEvents)
@@ -52,7 +85,7 @@ class ICalExportService
             $events[] = [
                 'uid' => 'event-'.$event->id.'@gemilangwo.com',
                 'dtstart' => $startDate->format('Ymd'),
-                'dtend' => $endDate->addDay()->format('Ymd'), // iCal end date is exclusive
+                'dtend' => $endDate->copy()->addDay()->format('Ymd'), // iCal end date is exclusive
                 'summary' => $this->buildEventSummary($event),
                 'description' => $this->buildEventDescription($event),
                 'location' => $event->order->event_location ?? '',
@@ -92,15 +125,16 @@ class ICalExportService
     /**
      * Generate complete iCal content
      */
-    private function generateICalContent($package, $events)
+    private function generateICalContent($calendarName, $events)
     {
+        $name = is_string($calendarName) ? $calendarName : $calendarName->name;
         $now = Carbon::now()->format('Ymd\THis\Z');
         $content = "BEGIN:VCALENDAR\r\n";
         $content .= "VERSION:2.0\r\n";
         $content .= "PRODID:-//Wedding App//Wedding Package Calendar//EN\r\n";
         $content .= "CALSCALE:GREGORIAN\r\n";
         $content .= "METHOD:PUBLISH\r\n";
-        $content .= 'X-WR-CALNAME:'.$this->escapeString($package->name)."\r\n";
+        $content .= 'X-WR-CALNAME:'.$this->escapeString($name)."\r\n";
         $content .= "X-WR-TIMEZONE:Asia/Jakarta\r\n";
         $content .= "BEGIN:VTIMEZONE\r\n";
         $content .= "TZID:Asia/Jakarta\r\n";

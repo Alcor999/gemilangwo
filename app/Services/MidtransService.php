@@ -128,8 +128,17 @@ class MidtransService
             $payment->status = 'success';
             $payment->paid_at = now();
             $payment->verification_status = 'verified';
+            $oldStatus = $order->status;
             if ($order->status === 'pending') {
                 $order->status = 'confirmed';
+            }
+            
+            $payment->save();
+            $order->save();
+            
+            // Automatically create calendar event when order is confirmed
+            if ($order->status === 'confirmed' && $oldStatus !== 'confirmed' && !$order->calendarEvent) {
+                \App\Models\CalendarEvent::createFromOrder($order);
             }
         } elseif ($transaction_status == 'pending') {
             $payment->status = 'pending';

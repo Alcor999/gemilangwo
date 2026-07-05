@@ -26,27 +26,33 @@ class CalendarController extends Controller
     {
         $user = auth()->user();
         $packages = $user->packages ?? Package::where('owner_id', $user->id)->get();
+        $packageIds = $packages->pluck('id')->toArray();
 
-        $selectedPackageId = $request->get('package_id', $packages->first()->id ?? null);
-        $month = $request->get('month', now()->month);
-        $year = $request->get('year', now()->year);
-
-        if (! $selectedPackageId) {
+        if (empty($packageIds)) {
             return redirect()->back()->with('warning', 'Tidak ada paket yang tersedia.');
         }
 
-        $package = Package::findOrFail($selectedPackageId);
+        $month = $request->get('month', now()->month);
+        $year = $request->get('year', now()->year);
 
-        // Check authorization
-        if ($package->owner_id !== $user->id) {
-            abort(403);
+        // Auto-complete past events
+        $pastEvents = CalendarEvent::whereIn('package_id', $packageIds)
+            ->where('status', '!=', 'completed')
+            ->where('event_date', '<', now()->toDateString())
+            ->get();
+
+        foreach ($pastEvents as $event) {
+            $event->update(['status' => 'completed']);
+            if ($event->order && $event->order->status !== 'completed') {
+                $event->order->update(['status' => 'completed']);
+            }
         }
 
-        $blockedDates = BlockedDate::where('package_id', $selectedPackageId)
+        $blockedDates = BlockedDate::whereIn('package_id', $packageIds)
             ->where('is_active', true)
             ->get();
 
-        $calendarEvents = CalendarEvent::where('package_id', $selectedPackageId)
+        $calendarEvents = CalendarEvent::whereIn('package_id', $packageIds)
             ->whereYear('event_date', $year)
             ->whereMonth('event_date', $month)
             ->where('is_confirmed', true)
@@ -55,11 +61,10 @@ class CalendarController extends Controller
         $startOfMonth = Carbon::createFromDate($year, $month, 1);
         $endOfMonth = $startOfMonth->copy()->endOfMonth();
 
-        $heatmapData = $this->generateHeatmapData($selectedPackageId, $startOfMonth, $endOfMonth);
+        $heatmapData = $this->generateHeatmapData($packageIds, $startOfMonth, $endOfMonth);
 
         return view('owner.calendar.index', [
             'packages' => $packages,
-            'selectedPackage' => $package,
             'blockedDates' => $blockedDates,
             'calendarEvents' => $calendarEvents,
             'month' => $month,
@@ -76,36 +81,45 @@ class CalendarController extends Controller
     public function createBlocked(Request $request)
     {
         $user = auth()->user();
+        $packages = Package::where('owner_id', $user->id)->get();
+
+        if ($packages->isEmpty()) {
+            return redirect()->back()->with('warning', 'Anda belum memiliki paket untuk diblokir.');
+        }
+
         $packageId = $request->get('package_id');
+        $selectedPackage = $packageId ? Package::find($packageId) : $packages->first();
 
-        $package = Package::findOrFail($packageId);
-
-        if ($package->owner_id !== $user->id) {
+        if ($selectedPackage && $selectedPackage->owner_id !== $user->id) {
             abort(403);
         }
 
         return view('owner.calendar.create-blocked', [
-            'package' => $package,
+            'packages' => $packages,
+            'selectedPackage' => $selectedPackage,
         ]);
     }
 
     /**
      * Store blocked date
      */
-    public function storeBlocked(Request $request, Package $package)
+    public function storeBlocked(Request $request)
     {
         $user = auth()->user();
 
-        if ($package->owner_id !== $user->id) {
-            abort(403);
-        }
-
         $validated = $request->validate([
+            'package_id' => 'required|exists:packages,id',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date',
             'reason' => 'nullable|string|max:255',
             'block_type' => 'required|in:unavailable,maintenance,reserved,personal',
         ]);
+
+        $package = Package::findOrFail($validated['package_id']);
+
+        if ($package->owner_id !== $user->id) {
+            abort(403);
+        }
 
         BlockedDate::create([
             'package_id' => $package->id,
@@ -116,7 +130,7 @@ class CalendarController extends Controller
             'is_active' => true,
         ]);
 
-        return redirect()->route('owner.calendar.index', ['package_id' => $package->id])
+        return redirect()->route('owner.calendar.index')
             ->with('success', 'Tanggal diblokir berhasil ditambahkan.');
     }
 
@@ -158,7 +172,7 @@ class CalendarController extends Controller
 
         $blockedDate->update($validated);
 
-        return redirect()->route('owner.calendar.index', ['package_id' => $blockedDate->package_id])
+        return redirect()->route('owner.calendar.index')
             ->with('success', 'Tanggal blokir berhasil diperbarui.');
     }
 
@@ -173,10 +187,9 @@ class CalendarController extends Controller
             abort(403);
         }
 
-        $packageId = $blockedDate->package_id;
         $blockedDate->delete();
 
-        return redirect()->route('owner.calendar.index', ['package_id' => $packageId])
+        return redirect()->route('owner.calendar.index')
             ->with('success', 'Tanggal blokir berhasil dihapus.');
     }
 
@@ -260,18 +273,13 @@ class CalendarController extends Controller
     /**
      * Export calendar to iCal format
      */
-    public function exportCalendar(Request $request, Package $package)
+    public function exportCalendar(Request $request)
     {
         $user = auth()->user();
-
-        if ($package->owner_id !== $user->id) {
-            abort(403);
-        }
-
         $type = $request->get('type', 'all'); // 'all', 'events', 'blocked'
 
-        $iCalContent = $this->iCalService->generateCalendarFile($package->id, $type);
-        $filename = $this->iCalService->getFilename($package, $type);
+        $iCalContent = $this->iCalService->generateOwnerCalendarFile($user->id, $type);
+        $filename = "calendar-owner-".now()->format('Y-m-d')."-{$type}.ics";
 
         return response($iCalContent, 200)
             ->header('Content-Type', 'text/calendar')
@@ -282,18 +290,18 @@ class CalendarController extends Controller
     /**
      * Get heatmap data for visualization
      */
-    private function generateHeatmapData($packageId, $startOfMonth, $endOfMonth)
+    private function generateHeatmapData($packageIds, $startOfMonth, $endOfMonth)
     {
         $heatmapData = [];
 
         // Get all confirmed events and blocked dates in the month
-        $blockedDates = BlockedDate::where('package_id', $packageId)
+        $blockedDates = BlockedDate::whereIn('package_id', $packageIds)
             ->where('is_active', true)
             ->where('start_date', '<=', $endOfMonth->toDateString())
             ->where('end_date', '>=', $startOfMonth->toDateString())
             ->get();
 
-        $calendarEvents = CalendarEvent::where('package_id', $packageId)
+        $calendarEvents = CalendarEvent::whereIn('package_id', $packageIds)
             ->where('is_confirmed', true)
             ->whereYear('event_date', $startOfMonth->year)
             ->whereMonth('event_date', $startOfMonth->month)

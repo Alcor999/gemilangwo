@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Kelola Kalender - ' . $selectedPackage->name)
+@section('title', 'Kelola Kalender')
 
 @section('content')
 <!-- Bagian Header -->
@@ -9,31 +9,9 @@
     <p style="color: #64748b; margin: 0; font-size: 0.95rem;">Atur tanggal terblokir dan lihat heatmap ketersediaan paket Anda</p>
 </div>
 
-<!-- Kartu Info Paket -->
-<div style="background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0; margin-bottom: 1.5rem; padding: 1.5rem;">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
-        <div>
-            <label style="font-size: 0.875rem; font-weight: 600; color: #475569; display: block; margin-bottom: 0.5rem;">Pilih Paket :</label>
-            <form action="{{ route('owner.calendar.index') }}" method="GET">
-                <select name="package_id" id="package_id" onchange="this.form.submit()" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 0.375rem; font-size: 1rem; background: white;">
-                    @foreach($packages as $pkg)
-                        <option value="{{ $pkg->id }}" {{ $pkg->id === $selectedPackage->id ? 'selected' : '' }}>
-                            {{ $pkg->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </form>
-        </div>
-        <div style="text-align: right;">
-            <p style="font-size: 0.875rem; color: #64748b; margin: 0 0 0.5rem;">Paket Terpilih</p>
-            <p style="font-size: 1.75rem; font-weight: 700; color: #6366f1; margin: 0;">{{ $selectedPackage->name }}</p>
-        </div>
-    </div>
-</div>
-
 <!-- Tombol Aksi -->
 <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
-    <a href="{{ route('owner.calendar.blocked.create', ['package_id' => $selectedPackage->id]) }}" 
+    <a href="{{ route('owner.calendar.blocked.create') }}" 
        style="display: inline-flex; align-items: center; padding: 0.75rem 1.5rem; background: #ef4444; color: white; border-radius: 0.375rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; border: none; cursor: pointer; transition: background 0.2s;">
         🚫 Blokir Tanggal
     </a>
@@ -43,9 +21,9 @@
             📥 Ekspor
         </button>
         <div id="exportMenu" style="display: none; position: absolute; top: calc(100% + 0.5rem); left: 0; background: white; border: 1px solid #e2e8f0; border-radius: 0.375rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 220px; z-index: 100;">
-            <a href="{{ route('owner.calendar.export', ['package' => $selectedPackage->id, 'type' => 'all']) }}" download style="display: block; padding: 0.75rem 1rem; color: #374151; text-decoration: none; border-bottom: 1px solid #f3f4f6; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">📊 Semua Data</a>
-            <a href="{{ route('owner.calendar.export', ['package' => $selectedPackage->id, 'type' => 'events']) }}" download style="display: block; padding: 0.75rem 1rem; color: #374151; text-decoration: none; border-bottom: 1px solid #f3f4f6; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">📅 Acara Saja</a>
-            <a href="{{ route('owner.calendar.export', ['package' => $selectedPackage->id, 'type' => 'blocked']) }}" download style="display: block; padding: 0.75rem 1rem; color: #374151; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">🚫 Tanggal Terblokir</a>
+            <a href="{{ route('owner.calendar.export', ['type' => 'all']) }}" download style="display: block; padding: 0.75rem 1rem; color: #374151; text-decoration: none; border-bottom: 1px solid #f3f4f6; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">📊 Semua Data</a>
+            <a href="{{ route('owner.calendar.export', ['type' => 'events']) }}" download style="display: block; padding: 0.75rem 1rem; color: #374151; text-decoration: none; border-bottom: 1px solid #f3f4f6; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">📅 Acara Saja</a>
+            <a href="{{ route('owner.calendar.export', ['type' => 'blocked']) }}" download style="display: block; padding: 0.75rem 1rem; color: #374151; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">🚫 Tanggal Terblokir</a>
         </div>
     </div>
 </div>
@@ -61,13 +39,11 @@
             </h2>
             <div style="display: flex; gap: 0.75rem;">
                 <form action="{{ route('owner.calendar.index') }}" method="GET" style="display: inline;">
-                    <input type="hidden" name="package_id" value="{{ $selectedPackage->id }}">
                     <input type="hidden" name="month" value="{{ $month == 1 ? 12 : $month - 1 }}">
                     <input type="hidden" name="year" value="{{ $month == 1 ? $year - 1 : $year }}">
                     <button type="submit" style="padding: 0.5rem 1rem; background: white; border: 1px solid #cbd5e1; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s; font-size: 0.875rem;">← Sebelumnya</button>
                 </form>
                 <form action="{{ route('owner.calendar.index') }}" method="GET" style="display: inline;">
-                    <input type="hidden" name="package_id" value="{{ $selectedPackage->id }}">
                     <input type="hidden" name="month" value="{{ $month == 12 ? 1 : $month + 1 }}">
                     <input type="hidden" name="year" value="{{ $month == 12 ? $year + 1 : $year }}">
                     <button type="submit" style="padding: 0.5rem 1rem; background: white; border: 1px solid #cbd5e1; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s; font-size: 0.875rem;">Selanjutnya →</button>

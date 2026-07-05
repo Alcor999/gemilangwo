@@ -165,6 +165,8 @@ class CalendarEvent extends Model
         $eventStart = $order->event_date->copy()->subDays($order->pre_event_days ?? 0);
         $eventEnd = $order->event_date->copy()->addDays($order->post_event_days ?? 0);
 
+        $isConfirmed = $order->status === 'confirmed' || $order->status === 'in_progress' || $order->status === 'completed';
+
         return self::create([
             'order_id' => $order->id,
             'package_id' => $order->package_id,
@@ -172,6 +174,8 @@ class CalendarEvent extends Model
             'event_start' => $eventStart,
             'event_end' => $eventEnd,
             'status' => 'pending',
+            'is_confirmed' => $isConfirmed,
+            'confirmed_at' => $isConfirmed ? now() : null,
         ]);
     }
 }
