@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\SupportController as AdminSupportController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\AnnouncementController as AdminAnnouncementController;
 use App\Http\Controllers\Admin\VendorCategoryController as AdminVendorCategoryController;
 use App\Http\Controllers\Admin\VendorController as AdminVendorController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
@@ -60,6 +61,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::get('/payments', [AdminAnalyticsController::class, 'payments'])->name('payments');
         Route::get('/export', [AdminAnalyticsController::class, 'export'])->name('export');
     });
+
+    // Pengumuman (Announcements) - CRUD Baru
+    Route::resource('announcements', AdminAnnouncementController::class);
 
     // Vendor Management
     Route::resource('vendor-categories', AdminVendorCategoryController::class)->except(['show']);
