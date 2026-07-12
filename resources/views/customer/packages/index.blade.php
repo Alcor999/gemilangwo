@@ -3,7 +3,7 @@
 @section('title', 'Koleksi Paket Eksklusif - Gemilang WO')
 
 @section('content')
-<div class="space-y-12 pb-20">
+<div class="space-y-12 pb-20" x-data="{ category: 'all' }">
     <!-- Header Section -->
     <div class="relative py-16 px-8 rounded-[3rem] overflow-hidden text-center">
         <div class="absolute inset-0 bg-stone-900">
@@ -20,15 +20,21 @@
             </p>
             
             <div class="pt-8 flex flex-wrap justify-center gap-4">
-                <div class="px-6 py-2 bg-white/5 backdrop-blur-md rounded-full border border-white/10 text-white/80 text-[10px] font-bold uppercase tracking-widest">
+                <button @click="category = 'all'" 
+                        :class="category === 'all' ? 'bg-white text-choco-900 shadow-md font-bold' : 'bg-white/5 hover:bg-white/10 text-white/40 border border-white/5'"
+                        class="px-6 py-2 backdrop-blur-md rounded-full text-[10px] uppercase tracking-widest transition-all cursor-pointer">
                     Semua Paket
-                </div>
-                <div class="px-6 py-2 hover:bg-white/10 transition-colors cursor-pointer rounded-full border border-white/5 text-white/40 text-[10px] font-bold uppercase tracking-widest">
+                </button>
+                <button @click="category = 'platinum'" 
+                        :class="category === 'platinum' ? 'bg-white text-choco-900 shadow-md font-bold' : 'bg-white/5 hover:bg-white/10 text-white/40 border border-white/5'"
+                        class="px-6 py-2 backdrop-blur-md rounded-full text-[10px] uppercase tracking-widest transition-all cursor-pointer">
                     Platinum Series
-                </div>
-                <div class="px-6 py-2 hover:bg-white/10 transition-colors cursor-pointer rounded-full border border-white/5 text-white/40 text-[10px] font-bold uppercase tracking-widest">
+                </button>
+                <button @click="category = 'intimate'" 
+                        :class="category === 'intimate' ? 'bg-white text-choco-900 shadow-md font-bold' : 'bg-white/5 hover:bg-white/10 text-white/40 border border-white/5'"
+                        class="px-6 py-2 backdrop-blur-md rounded-full text-[10px] uppercase tracking-widest transition-all cursor-pointer">
                     Intimate Royal
-                </div>
+                </button>
             </div>
         </div>
     </div>
@@ -37,7 +43,11 @@
     @if($packages->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-4">
             @foreach($packages as $package)
-                <div class="group relative bg-white rounded-[2.5rem] border border-stone-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+                <div x-show="category === 'all' || (category === 'platinum' && {{ $package->price }} >= 50000000) || (category === 'intimate' && {{ $package->price }} < 50000000)"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     class="group relative bg-white rounded-[2.5rem] border border-stone-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden">
                     <!-- Image Wrapper -->
                     <div class="relative h-80 overflow-hidden">
                         @if($package->image)

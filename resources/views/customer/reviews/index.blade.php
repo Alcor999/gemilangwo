@@ -12,7 +12,7 @@
             <h1 class="text-2xl font-serif font-bold text-choco-900 italic">Ulasan Saya</h1>
             <p class="mt-1 text-sm text-stone-500">Pendapat Anda sangat berharga untuk kami dan calon pelanggan lainnya</p>
         </div>
-        <a href="{{ route('customer.orders.index') }}"
+        <a href="{{ route('customer.orders.index', ['from' => 'review']) }}"
            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 text-white text-sm font-bold shadow-lg shadow-gold-500/20 hover:from-gold-600 hover:to-gold-700 transition-all active:scale-95">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -153,7 +153,7 @@
             </div>
             <h3 class="text-xl font-serif font-bold text-choco-900 mb-2 italic">Belum Ada Ulasan</h3>
             <p class="text-stone-500 text-sm mb-8 max-w-sm mx-auto">Setelah acara pernikahan Anda selesai, bagikan pengalaman indah Anda bersama kami</p>
-            <a href="{{ route('customer.orders.index') }}"
+            <a href="{{ route('customer.orders.index', ['from' => 'review']) }}"
                class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 text-white text-sm font-bold shadow-lg shadow-gold-500/20 hover:from-gold-600 hover:to-gold-700 transition-all">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>

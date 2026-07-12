@@ -201,7 +201,7 @@
                     alert('Please select a rating');
                     return false;
                 }
-                if (!form.checkValidity() === false) {
+                if (form.checkValidity() === false) {
                     event.preventDefault();
                     event.stopPropagation();
                 }

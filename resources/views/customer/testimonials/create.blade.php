@@ -191,6 +191,24 @@
     </div>
 </div>
 
+<!-- Upload Progress Modal / Overlay -->
+<div id="uploadProgressOverlay" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 text-center border border-stone-100">
+        <div class="w-16 h-16 bg-gold-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-gold-500 text-2xl animate-bounce">
+            <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <h3 class="text-lg font-serif font-bold text-choco-900 mb-2">Mengunggah Testimoni</h3>
+        <p class="text-sm text-stone-500 mb-6">Harap tunggu, media Anda sedang diunggah ke server kami...</p>
+        <div class="w-full bg-stone-100 h-2.5 rounded-full overflow-hidden mb-3">
+            <div id="uploadProgressBar" class="bg-gradient-to-r from-gold-400 to-gold-600 h-full w-0 rounded-full transition-all duration-300"></div>
+        </div>
+        <div class="flex justify-between text-xs text-stone-400 font-bold font-mono">
+            <span id="uploadPercent">0%</span>
+            <span id="uploadSize">0 MB / 0 MB</span>
+        </div>
+    </div>
+</div>
+
 <script>
     const typeUpload = document.getElementById('typeUpload');
     const typeYoutube = document.getElementById('typeYoutube');
@@ -198,7 +216,7 @@
     const youtubeUrlDiv = document.getElementById('youtubeUrlDiv');
 
     function updateFields() {
-        if (typeUpload.checked) {
+        if (typeUpload && typeUpload.checked) {
             videoFileDiv.style.display = 'block';
             youtubeUrlDiv.style.display = 'none';
         } else {
@@ -207,8 +225,62 @@
         }
     }
 
-    typeUpload.addEventListener('change', updateFields);
-    typeYoutube.addEventListener('change', updateFields);
+    if (typeUpload) typeUpload.addEventListener('change', updateFields);
+    if (typeYoutube) typeYoutube.addEventListener('change', updateFields);
     updateFields();
+
+    const form = document.querySelector('form');
+    const overlay = document.getElementById('uploadProgressOverlay');
+    const bar = document.getElementById('uploadProgressBar');
+    const percent = document.getElementById('uploadPercent');
+    const size = document.getElementById('uploadSize');
+
+    if (form && overlay) {
+        form.addEventListener('submit', function(e) {
+            const selectedType = document.querySelector('input[name="type"]:checked')?.value;
+            const fileInput = document.getElementById('video_file');
+            const thumbnailInput = document.getElementById('thumbnail');
+            const hasVideo = selectedType === 'upload' && fileInput && fileInput.files.length > 0;
+            const hasThumbnail = thumbnailInput && thumbnailInput.files.length > 0;
+            
+            // Show upload progress overlay only if actual file uploading is involved
+            if (!hasVideo && !hasThumbnail) {
+                return; // Submit normally
+            }
+
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const xhr = new XMLHttpRequest();
+
+            xhr.upload.addEventListener('progress', function(event) {
+                if (event.lengthComputable) {
+                    const pct = Math.round((event.loaded / event.total) * 100);
+                    bar.style.width = pct + '%';
+                    percent.textContent = pct + '%';
+                    
+                    const loadedMB = (event.loaded / (1024 * 1024)).toFixed(1);
+                    const totalMB = (event.total / (1024 * 1024)).toFixed(1);
+                    size.textContent = `${loadedMB} MB / ${totalMB} MB`;
+                }
+            });
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        window.location.href = "{{ route('customer.testimonials.index') }}";
+                    } else {
+                        // Submit form normally to trigger Laravel's normal validation display
+                        overlay.classList.add('hidden');
+                        form.submit();
+                    }
+                }
+            };
+
+            overlay.classList.remove('hidden');
+            xhr.open('POST', form.action);
+            xhr.send(formData);
+        });
+    }
 </script>
 @endsection

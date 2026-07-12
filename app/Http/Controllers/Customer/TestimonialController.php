@@ -45,9 +45,9 @@ class TestimonialController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string|min:10',
             'type' => 'required|in:upload,youtube',
-            'video_file' => 'nullable|required_if:type,upload|mimes:mp4,avi,mov,mkv|max:40960', // 40MB max (PHP limit)
+            'video_file' => 'nullable|required_if:type,upload|mimes:mp4,avi,mov,mkv|max:512000', // 500MB max
             'youtube_url' => 'nullable|required_if:type,youtube|url',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:10240', // 10MB max
             'order_id' => 'nullable|exists:orders,id',
             'rating' => 'nullable|numeric|min:1|max:5',
         ]);
@@ -119,9 +119,9 @@ class TestimonialController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string|min:10',
             'type' => 'required|in:upload,youtube',
-            'video_file' => 'nullable|mimes:mp4,avi,mov,mkv|max:40960', // 40MB max (PHP limit)
+            'video_file' => 'nullable|mimes:mp4,avi,mov,mkv|max:512000', // 500MB max
             'youtube_url' => 'nullable|url',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',
             'rating' => 'nullable|numeric|min:1|max:5',
             'order_id' => 'nullable|exists:orders,id',
         ]);

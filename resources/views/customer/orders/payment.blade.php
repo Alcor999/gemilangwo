@@ -3,15 +3,6 @@
 @section('title', 'Pilih Rekening Pembayaran - Gemilang WO')
 
 @section('content')
-@php
-    $schemeLabels = [
-        'full_payment' => 'Lunas Penuh (100%)',
-        'dp_30' => 'Uang Muka (DP 30%)',
-        'dp_50' => 'Uang Muka (DP 50%)',
-        'installment_3x' => 'Cicilan 3 Termin',
-    ];
-@endphp
-
 <div class="space-y-8 pb-16 max-w-3xl mx-auto">
     <div>
         <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Payment</p>
@@ -21,7 +12,7 @@
     <x-luxury.card :padding="'p-8'" class="border-stone-100">
         <div class="p-4 rounded-2xl bg-gold-50/50 border border-gold-100 text-sm text-choco-900 mb-6">
             <i class="fas fa-info-circle text-gold-500 mr-2"></i>
-            Skema <strong>{{ $schemeLabels[$order->payment_scheme] ?? $order->scheme_label }}</strong> — pilih rekening tujuan transfer.
+            Skema <strong>{{ $order->scheme_label }}</strong> — pilih rekening tujuan transfer.
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-6 p-5 rounded-2xl bg-stone-50 border border-stone-100 text-sm">

@@ -14,6 +14,15 @@
         </x-luxury.button>
     </div>
 
+    @if(request('from') === 'review')
+        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-100 text-sm text-emerald-800 flex items-center gap-3">
+            <i class="fas fa-info-circle text-emerald-500 text-lg"></i>
+            <div>
+                Silakan pilih pesanan pernikahan Anda yang telah selesai (<span class="font-bold text-stone-700">Completed</span>) di bawah ini, lalu klik tombol <strong class="text-emerald-700">Tulis Ulasan</strong> untuk membagikan ulasan Anda.
+            </div>
+        </div>
+    @endif
+
     @if($orders->count() > 0)
         <x-luxury.card class="overflow-hidden border-stone-100">
             <div class="overflow-x-auto">
@@ -84,6 +93,11 @@
                                                     Bayar
                                                 </a>
                                             @endif
+                                        @endif
+                                        @if($order->isCompleted())
+                                            <a href="{{ route('customer.reviews.create', $order->id) }}" class="px-3 py-1.5 rounded-lg bg-emerald-500 text-[10px] font-bold uppercase tracking-widest text-white hover:bg-emerald-600 transition-colors">
+                                                Tulis Ulasan
+                                            </a>
                                         @endif
                                     </div>
                                 </td>

@@ -65,6 +65,7 @@
                 <div>
                     <label for="event_date" class="{{ $coLabel }}">Tanggal Acara *</label>
                     <input type="date" id="event_date" name="event_date" value="{{ old('event_date') }}" required
+                        min="{{ now()->addDays(4)->format('Y-m-d') }}"
                         class="{{ $coInput }} @error('event_date') border-rose-300 @enderror">
                     @error('event_date')<p class="text-rose-500 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
@@ -234,13 +235,164 @@ document.addEventListener('DOMContentLoaded', function() {
 
     schemeCards.forEach(card => {
         card.addEventListener('click', function() {
+            if (this.classList.contains('pointer-events-none')) return;
             schemeCards.forEach(c => c.classList.remove('active', 'border-gold-400', 'bg-gold-50/50', 'shadow-sm'));
             this.classList.add('active', 'border-gold-400', 'bg-gold-50/50', 'shadow-sm');
             schemeInput.value = this.dataset.scheme;
             updatePaymentBreakdown();
         });
     });
-    eventDateInput.addEventListener('change', updatePaymentBreakdown);
+
+    const schemeMinDays = {
+        'full_payment': 0,
+        'dp_20': 5,
+        'dp_30': 5,
+        'dp_40': 5,
+        'dp_50': 5,
+        'installment_3x': 5,
+        'installment_5x': 5
+    };
+
+    function validatePaymentSchemes() {
+        if (!eventDateInput.value) {
+            schemeCards.forEach(card => {
+                card.classList.remove('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+            });
+            return;
+        }
+
+        const parts = eventDateInput.value.split('-');
+        const selectedDate = new Date(parts[0], parts[1] - 1, parts[2]);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const diffTime = selectedDate - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        let currentSchemeIneligible = false;
+
+        schemeCards.forEach(card => {
+            const scheme = card.dataset.scheme;
+            const minDays = schemeMinDays[scheme] || 0;
+
+            if (diffDays < minDays) {
+                card.classList.add('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+                card.classList.remove('active', 'border-gold-400', 'bg-gold-50/50', 'shadow-sm');
+                if (schemeInput.value === scheme) {
+                    currentSchemeIneligible = true;
+                }
+            } else {
+                card.classList.remove('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+            }
+        });
+
+        if (currentSchemeIneligible) {
+            schemeInput.value = 'full_payment';
+            schemeCards.forEach(c => {
+                if (c.dataset.scheme === 'full_payment') {
+                    c.classList.add('active', 'border-gold-400', 'bg-gold-50/50', 'shadow-sm');
+                } else {
+                    c.classList.remove('active', 'border-gold-400', 'bg-gold-50/50', 'shadow-sm');
+                }
+            });
+
+            // Show custom warning near the date input
+            const prevWarning = document.getElementById('schemeWarning');
+            if (prevWarning) prevWarning.remove();
+
+            const alertBox = document.createElement('div');
+            alertBox.id = 'schemeWarning';
+            alertBox.className = 'mt-3 p-4 rounded-xl bg-amber-50 text-amber-800 text-xs border border-amber-200';
+            alertBox.innerHTML = '<i class="fas fa-exclamation-triangle mr-1"></i> Skema pembayaran disetel ulang ke <strong>Bayar Lunas</strong> karena tanggal acara terlalu dekat untuk cicilan/DP.';
+            eventDateInput.parentNode.appendChild(alertBox);
+            setTimeout(() => alertBox.remove(), 6000);
+        }
+    }
+
+    eventDateInput.addEventListener('change', function() {
+        validatePaymentSchemes();
+        updatePaymentBreakdown();
+    });
+
+    eventDateInput.addEventListener('input', function() {
+        validatePaymentSchemes();
+        updatePaymentBreakdown();
+    });
+
+    function calculateDueDates(evDate, breakdownDays) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        const lastIndex = breakdownDays.length - 1;
+        const dueDates = [];
+
+        // 1. Initial raw calculation
+        for (let i = 0; i <= lastIndex; i++) {
+            if (i === 0) {
+                dueDates[0] = new Date(tomorrow);
+            } else {
+                const daysBefore = breakdownDays[i];
+                if (evDate && daysBefore !== null) {
+                    const rawDate = new Date(evDate);
+                    rawDate.setDate(rawDate.getDate() - daysBefore);
+                    dueDates[i] = rawDate;
+                } else {
+                    dueDates[i] = new Date(tomorrow);
+                }
+            }
+        }
+
+        // 2. Adjustments if the dates are in the past
+        if (evDate) {
+            let maxFinalDate = new Date(evDate);
+            maxFinalDate.setDate(maxFinalDate.getDate() - 4);
+            if (maxFinalDate < tomorrow) {
+                maxFinalDate = new Date(tomorrow);
+            }
+
+            // Cap final installment if raw is before tomorrow
+            if (dueDates[lastIndex] < tomorrow) {
+                dueDates[lastIndex] = new Date(maxFinalDate);
+            }
+
+            // Forward pass
+            for (let i = 1; i <= lastIndex; i++) {
+                const nextAllowed = new Date(dueDates[i-1]);
+                nextAllowed.setDate(nextAllowed.getDate() + 1);
+
+                if (dueDates[i] < nextAllowed) {
+                    const diffTime = dueDates[lastIndex] - dueDates[i-1];
+                    const daysRemaining = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                    const stepsLeft = lastIndex - i + 1;
+
+                    if (stepsLeft > 0 && daysRemaining > 0) {
+                        const increment = Math.max(1, Math.round(daysRemaining / stepsLeft));
+                        const adjusted = new Date(dueDates[i-1]);
+                        adjusted.setDate(adjusted.getDate() + increment);
+                        dueDates[i] = adjusted;
+                    } else {
+                        dueDates[i] = new Date(nextAllowed);
+                    }
+                }
+            }
+
+            // Final cap
+            for (let i = 1; i <= lastIndex; i++) {
+                if (dueDates[i] > maxFinalDate) {
+                    dueDates[i] = new Date(maxFinalDate);
+                }
+            }
+        }
+
+        return dueDates;
+    }
+
+    function formatTextDate(d, fallbackDaysBefore) {
+        if (!eventDateInput.value) return `H-${fallbackDaysBefore} sebelum acara`;
+        return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
 
     function updatePaymentBreakdown() {
         const pkg = getSelectedPackage();
@@ -252,35 +404,45 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         const total = pkg.discounted + diffSum;
         const scheme = schemeInput.value;
-        // Parse as LOCAL midnight to prevent UTC-vs-local timezone shift (e.g. UTC+7 would
-        // see "2026-08-02T00:00:00Z" as 2026-08-01 07:00 local, causing off-by-one day bugs)
-        let eventDate = eventDateInput.value ? new Date(eventDateInput.value + 'T00:00:00') : null;
+
+        let evDate = null;
+        if (eventDateInput.value) {
+            const parts = eventDateInput.value.split('-');
+            evDate = new Date(parts[0], parts[1] - 1, parts[2]);
+        }
+
         let items = [];
 
         if (scheme === 'full_payment') {
             items.push({ label: 'Lunas Penuh (100%)', amount: total, date: 'Saat checkout' });
         } else if (scheme === 'dp_20') {
+            const dates = calculateDueDates(evDate, [null, 14]);
             items.push({ label: 'DP 1 (20%)', amount: total * 0.2, date: 'Saat checkout' });
-            items.push({ label: 'Pelunasan (80%)', amount: total * 0.8, date: fmtDate(eventDate, 14) });
+            items.push({ label: 'Pelunasan (80%)', amount: total * 0.8, date: formatTextDate(dates[1], 14) });
         } else if (scheme === 'dp_30') {
+            const dates = calculateDueDates(evDate, [null, 14]);
             items.push({ label: 'DP 1 (30%)', amount: total * 0.3, date: 'Saat checkout' });
-            items.push({ label: 'Pelunasan (70%)', amount: total * 0.7, date: fmtDate(eventDate, 14) });
+            items.push({ label: 'Pelunasan (70%)', amount: total * 0.7, date: formatTextDate(dates[1], 14) });
         } else if (scheme === 'dp_40') {
+            const dates = calculateDueDates(evDate, [null, 14]);
             items.push({ label: 'DP 1 (40%)', amount: total * 0.4, date: 'Saat checkout' });
-            items.push({ label: 'Pelunasan (60%)', amount: total * 0.6, date: fmtDate(eventDate, 14) });
+            items.push({ label: 'Pelunasan (60%)', amount: total * 0.6, date: formatTextDate(dates[1], 14) });
         } else if (scheme === 'dp_50') {
+            const dates = calculateDueDates(evDate, [null, 14]);
             items.push({ label: 'DP 1 (50%)', amount: total * 0.5, date: 'Saat checkout' });
-            items.push({ label: 'Pelunasan (50%)', amount: total * 0.5, date: fmtDate(eventDate, 14) });
+            items.push({ label: 'Pelunasan (50%)', amount: total * 0.5, date: formatTextDate(dates[1], 14) });
         } else if (scheme === 'installment_3x') {
+            const dates = calculateDueDates(evDate, [null, 30, 14]);
             items.push({ label: 'Cicilan 1 (40%)', amount: total * 0.4, date: 'Saat checkout' });
-            items.push({ label: 'Cicilan 2 (30%)', amount: total * 0.3, date: fmtDate(eventDate, 30) });
-            items.push({ label: 'Cicilan 3 (30%)', amount: total * 0.3, date: fmtDate(eventDate, 14) });
+            items.push({ label: 'Cicilan 2 (30%)', amount: total * 0.3, date: formatTextDate(dates[1], 30) });
+            items.push({ label: 'Cicilan 3 (30%)', amount: total * 0.3, date: formatTextDate(dates[2], 14) });
         } else if (scheme === 'installment_5x') {
+            const dates = calculateDueDates(evDate, [null, 60, 45, 30, 14]);
             items.push({ label: 'Cicilan 1 (30%)', amount: total * 0.30, date: 'Saat checkout' });
-            items.push({ label: 'Cicilan 2 (20%)', amount: total * 0.20, date: fmtDate(eventDate, 60) });
-            items.push({ label: 'Cicilan 3 (20%)', amount: total * 0.20, date: fmtDate(eventDate, 45) });
-            items.push({ label: 'Cicilan 4 (15%)', amount: total * 0.15, date: fmtDate(eventDate, 30) });
-            items.push({ label: 'Cicilan 5 (15%)', amount: total * 0.15, date: fmtDate(eventDate, 14) });
+            items.push({ label: 'Cicilan 2 (20%)', amount: total * 0.20, date: formatTextDate(dates[1], 60) });
+            items.push({ label: 'Cicilan 3 (20%)', amount: total * 0.20, date: formatTextDate(dates[2], 45) });
+            items.push({ label: 'Cicilan 4 (15%)', amount: total * 0.15, date: formatTextDate(dates[3], 30) });
+            items.push({ label: 'Cicilan 5 (15%)', amount: total * 0.15, date: formatTextDate(dates[4], 14) });
         }
 
         breakdownList.innerHTML = items.map((item, i) => `
@@ -292,15 +454,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>`).join('');
         breakdownCard.classList.remove('hidden');
-    }
-
-    function fmtDate(d, daysBefore) {
-        if (!d) return `H-${daysBefore} sebelum acara`;
-        // Clone as local-midnight date then subtract days using UTC date methods to avoid
-        // Daylight Saving Time (DST) boundary shifts on long intervals (e.g. 60, 90 days)
-        const copy = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-        copy.setDate(copy.getDate() - daysBefore);
-        return copy.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
     function updateTotal(base, vendorSum) {
@@ -319,8 +472,11 @@ document.addEventListener('DOMContentLoaded', function() {
             c.classList.toggle('border-gold-400', active);
             c.classList.toggle('bg-gold-50/50', active);
         });
-        updatePaymentBreakdown();
     @endif
+
+    // Run validation and preview setup at the end of initialization
+    validatePaymentSchemes();
+    updatePaymentBreakdown();
 
     @if(old('vendors'))
         setTimeout(() => {

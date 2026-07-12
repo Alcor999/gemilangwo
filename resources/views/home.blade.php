@@ -213,6 +213,234 @@
         </div>
     </section>
 
+    <!-- Kesan Klien (Testimonials) Section -->
+    <section id="testimonials" class="py-32 bg-stone-50/50 relative overflow-hidden" x-data="{ tab: 'text', activeVideo: null, activeVideoType: null, activeVideoTitle: '' }">
+        <!-- Decorative Background elements -->
+        <div class="absolute top-1/4 -left-64 w-[500px] h-[500px] rounded-full bg-gold-200/10 blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-1/4 -right-64 w-[500px] h-[500px] rounded-full bg-choco-200/10 blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-8 relative z-10">
+            <!-- Section Header -->
+            <div class="text-center space-y-6 mb-20">
+                <p class="text-gold-500 text-[10px] font-bold uppercase tracking-[0.5em]">Kesan Kebahagiaan</p>
+                <h2 class="font-serif text-5xl text-choco-900 leading-tight italic">
+                    Cerita Cinta <span class="not-italic text-stone-300">Mereka</span>
+                </h2>
+                <p class="text-stone-400 font-light leading-relaxed text-sm max-w-lg mx-auto">
+                    Kisah nyata dari pasangan berbahagia yang telah mempercayakan hari terpenting mereka dalam pengelolaan Gemilang Wedding Organizer.
+                </p>
+
+                <!-- Tab Switcher -->
+                <div class="inline-flex p-1.5 rounded-full bg-stone-100 border border-stone-200/50 shadow-inner mt-8">
+                    <button @click="tab = 'text'" 
+                            :class="tab === 'text' ? 'bg-white text-choco-900 shadow-md font-bold' : 'text-stone-500 hover:text-choco-900 font-medium'"
+                            class="px-8 py-3 rounded-full text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer">
+                        Kesan Klien
+                        <span class="ml-1 px-2 py-0.5 rounded-full text-[10px] font-bold transition-all" 
+                              :class="tab === 'text' ? 'bg-gold-100 text-gold-700' : 'bg-stone-200 text-stone-600'">
+                            {{ $reviews->count() }}
+                        </span>
+                    </button>
+                    <button @click="tab = 'video'" 
+                            :class="tab === 'video' ? 'bg-white text-choco-900 shadow-md font-bold' : 'text-stone-500 hover:text-choco-900 font-medium'"
+                            class="px-8 py-3 rounded-full text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer">
+                        Video Testimoni
+                        <span class="ml-1 px-2 py-0.5 rounded-full text-[10px] font-bold transition-all" 
+                              :class="tab === 'video' ? 'bg-gold-100 text-gold-700' : 'bg-stone-200 text-stone-600'">
+                            {{ $videoTestimonials->count() }}
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Content: Kesan Teks -->
+            <div x-show="tab === 'text'" 
+                 x-transition:enter="transition ease-out duration-500"
+                 x-transition:enter-start="opacity-0 translate-y-8"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                
+                @forelse($reviews as $review)
+                    <div class="group bg-white rounded-[2.5rem] p-10 border border-stone-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col h-full relative overflow-hidden">
+                        <!-- Decorative Quote Icon -->
+                        <div class="absolute right-8 top-8 text-stone-50 group-hover:text-gold-50/50 transition-colors duration-500">
+                            <i class="fas fa-quote-right text-7xl font-bold"></i>
+                        </div>
+
+                        <div class="space-y-6 flex-1 relative z-10">
+                            <!-- Star Rating -->
+                            <div class="flex gap-1 text-gold-400">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i class="{{ $i <= $review->rating ? 'fas fa-star' : 'far fa-star text-stone-200' }} text-sm"></i>
+                                @endfor
+                            </div>
+
+                            <div class="space-y-3">
+                                <h4 class="font-serif text-xl font-bold text-choco-900">{{ $review->title }}</h4>
+                                <p class="text-stone-500 text-sm leading-relaxed font-light italic">
+                                    "{{ $review->content }}"
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- User Info -->
+                        <div class="mt-8 pt-6 border-t border-stone-50 flex items-center gap-4 relative z-10">
+                            <div class="h-12 w-12 rounded-full overflow-hidden bg-gradient-to-tr from-gold-100 to-gold-200 flex items-center justify-center text-gold-600 font-bold border border-gold-300 shrink-0">
+                                @if($review->user->profile_image)
+                                    <img src="{{ asset('storage/' . $review->user->profile_image) }}" class="w-full h-full object-cover" alt="{{ $review->user->name }}">
+                                @else
+                                    {{ strtoupper(substr($review->user->name, 0, 1)) }}
+                                @endif
+                            </div>
+                            <div class="truncate">
+                                <h5 class="font-bold text-choco-900 text-sm tracking-wide truncate">{{ $review->user->name }}</h5>
+                                <p class="text-[10px] text-stone-400 font-bold uppercase tracking-wider mt-0.5 truncate">
+                                    {{ $review->package ? 'Paket ' . $review->package->name : 'Client Gemilang' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-span-full bg-white rounded-[2.5rem] p-16 text-center border border-stone-100 shadow-sm">
+                        <div class="w-20 h-20 bg-gold-50 rounded-2xl flex items-center justify-center mx-auto mb-6 text-gold-400">
+                            <i class="fas fa-comment-slash text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-serif font-bold text-choco-900 italic mb-2">Belum Ada Kesan Teks</h3>
+                        <p class="text-stone-400 text-sm max-w-sm mx-auto">Kami akan segera menghadirkan cerita cinta indah para pasangan kami di sini.</p>
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- Tab Content: Kesan Video -->
+            <div x-show="tab === 'video'" 
+                 x-transition:enter="transition ease-out duration-500"
+                 x-transition:enter-start="opacity-0 translate-y-8"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 class="grid md:grid-cols-2 lg:grid-cols-2 gap-12"
+                 x-cloak>
+
+                @forelse($videoTestimonials as $vt)
+                    <div @click="activeVideo = '{{ $vt->type === 'youtube' ? $vt->getEmbedUrl() : asset('storage/' . $vt->video_path) }}'; activeVideoType = '{{ $vt->type }}'; activeVideoTitle = '{{ $vt->title }}'" 
+                         class="group cursor-pointer relative bg-white rounded-[3rem] overflow-hidden border border-stone-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col h-full">
+                        
+                        <!-- Thumbnail/Preview Area -->
+                        <div class="relative aspect-video w-full bg-stone-900 overflow-hidden">
+                            @if($vt->thumbnail_path)
+                                <img src="{{ asset('storage/' . $vt->thumbnail_path) }}" alt="{{ $vt->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 brightness-[0.85] group-hover:brightness-[0.75]">
+                            @elseif($vt->type === 'youtube')
+                                <img src="https://img.youtube.com/vi/{{ $vt->getYoutubeId() }}/hqdefault.jpg" alt="{{ $vt->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 brightness-[0.85] group-hover:brightness-[0.75]">
+                            @else
+                                <div class="absolute inset-0 flex items-center justify-center bg-stone-900">
+                                    <i class="fas fa-video text-white/20 text-5xl"></i>
+                                </div>
+                            @endif
+
+                            <!-- Glow Ring Play Button Overlay -->
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="relative h-16 w-16 flex items-center justify-center">
+                                    <div class="absolute inset-0 rounded-full bg-gold-400/30 scale-100 animate-ping group-hover:scale-110"></div>
+                                    <div class="h-16 w-16 rounded-full bg-gold-400 text-white flex items-center justify-center shadow-lg shadow-gold-500/30 transition-transform duration-500 group-hover:scale-110">
+                                        <i class="fas fa-play text-lg ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Duration or Badge Overlay -->
+                            <div class="absolute bottom-4 left-6">
+                                <span class="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-wider border border-white/10 flex items-center gap-1.5">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-gold-400"></span>
+                                    {{ $vt->type === 'youtube' ? 'YouTube Video' : 'Video Upload' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Testimonial Details -->
+                        <div class="p-8 flex-1 flex flex-col justify-between">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex gap-0.5 text-gold-400">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <i class="{{ $i <= $vt->rating ? 'fas fa-star' : 'far fa-star text-stone-200' }} text-xs"></i>
+                                        @endfor
+                                    </div>
+                                    <span class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">{{ $vt->created_at->translatedFormat('d M Y') }}</span>
+                                </div>
+                                <h3 class="font-serif text-2xl font-bold text-choco-900 group-hover:text-gold-500 transition-colors duration-300 line-clamp-1">{{ $vt->title }}</h3>
+                                <p class="text-stone-400 text-sm font-light leading-relaxed line-clamp-2 italic">"{{ $vt->description }}"</p>
+                            </div>
+
+                            <!-- Author details -->
+                            <div class="mt-8 pt-6 border-t border-stone-50 flex items-center gap-4">
+                                <div class="h-12 w-12 rounded-full overflow-hidden bg-gradient-to-tr from-gold-100 to-gold-200 flex items-center justify-center text-gold-600 font-bold border border-gold-300 shrink-0">
+                                    @if($vt->user->profile_image)
+                                        <img src="{{ asset('storage/' . $vt->user->profile_image) }}" class="w-full h-full object-cover" alt="{{ $vt->user->name }}">
+                                    @else
+                                        {{ strtoupper(substr($vt->user->name, 0, 1)) }}
+                                    @endif
+                                </div>
+                                <div class="truncate">
+                                    <h5 class="font-bold text-choco-900 text-sm tracking-wide truncate">{{ $vt->user->name }}</h5>
+                                    <p class="text-[10px] text-stone-400 font-bold uppercase tracking-wider mt-0.5 truncate">
+                                        {{ $vt->order && $vt->order->package ? 'Paket ' . $vt->order->package->name : 'Happy Couple' }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-span-full bg-white rounded-[3rem] p-16 text-center border border-stone-100 shadow-sm">
+                        <div class="w-20 h-20 bg-gold-50 rounded-2xl flex items-center justify-center mx-auto mb-6 text-gold-400">
+                            <i class="fas fa-video-slash text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-serif font-bold text-choco-900 italic mb-2">Belum Ada Video Testimoni</h3>
+                        <p class="text-stone-400 text-sm max-w-sm mx-auto">Nantikan rangkuman kemeriahan dan kepuasan hari bahagia klien kami segera.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Video Lightbox Modal -->
+        <div x-show="activeVideo" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 scale-100"
+             x-transition:leave-end="opacity-0 scale-95"
+             class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+             x-cloak>
+            <!-- Backdrop -->
+            <div class="absolute inset-0 bg-stone-950/80 backdrop-blur-md" @click="activeVideo = null; activeVideoType = null"></div>
+
+            <!-- Modal Content -->
+            <div class="relative bg-stone-900 rounded-[2rem] overflow-hidden shadow-2xl w-full max-w-4xl z-10 border border-stone-800">
+                <!-- Header -->
+                <div class="flex items-center justify-between px-8 py-6 border-b border-stone-800/50">
+                    <h4 class="text-white font-serif text-lg font-bold truncate pr-4" x-text="activeVideoTitle">Detail Testimoni Video</h4>
+                    <button @click="activeVideo = null; activeVideoType = null" class="h-10 w-10 shrink-0 flex items-center justify-center rounded-full bg-white/5 hover:bg-gold-400 text-white/70 hover:text-white transition-all cursor-pointer">
+                        <i class="fas fa-times text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- Video Player Container -->
+                <div class="aspect-video bg-black w-full">
+                    <template x-if="activeVideoType === 'youtube' && activeVideo">
+                        <iframe :src="activeVideo + '?autoplay=1'" 
+                                class="w-full h-full border-0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen></iframe>
+                    </template>
+                    <template x-if="activeVideoType === 'upload' && activeVideo">
+                        <video :src="activeVideo" 
+                               class="w-full h-full" 
+                               controls 
+                               autoplay></video>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="py-24 bg-choco-900 text-white">
         <div class="max-w-7xl mx-auto px-8 grid lg:grid-cols-4 gap-20">

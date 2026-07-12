@@ -182,7 +182,7 @@
                             <x-luxury.button href="{{ route('customer.orders.paymentConfirm', $order->id) }}" variant="secondary" class="w-full justify-center">Konfirmasi Transfer</x-luxury.button>
                         @else
                             <x-luxury.button href="{{ route('customer.orders.payment', $order->id) }}" variant="primary" class="w-full justify-center">
-                                <i class="fas fa-credit-card mr-2"></i> Bayar Tahap Berikutnya
+                                <i class="fas fa-credit-card mr-2"></i> {{ $order->payment_scheme === 'full_payment' ? 'Bayar Sekarang' : 'Bayar Tahap Berikutnya' }}
                             </x-luxury.button>
                         @endif
                     </div>

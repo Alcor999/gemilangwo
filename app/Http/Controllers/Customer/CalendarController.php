@@ -73,9 +73,9 @@ class CalendarController extends Controller
         $startOfMonth = Carbon::createFromDate($year, $month, 1);
         $endOfMonth = $startOfMonth->copy()->endOfMonth();
 
-        // Get customer's confirmed orders
+        // Get customer's confirmed/active/completed orders
         $confirmedOrders = Order::where('user_id', $user->id)
-            ->where('status', 'confirmed')
+            ->whereIn('status', ['confirmed', 'in_progress', 'completed'])
             ->with('calendarEvent')
             ->get();
 
@@ -247,7 +247,7 @@ class CalendarController extends Controller
         $content .= "X-WR-TIMEZONE:Asia/Jakarta\r\n";
 
         $confirmedOrders = Order::where('user_id', $user->id)
-            ->where('status', 'confirmed')
+            ->whereIn('status', ['confirmed', 'in_progress', 'completed'])
             ->with('calendarEvent')
             ->get();
 

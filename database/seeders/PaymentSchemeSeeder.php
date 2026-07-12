@@ -24,7 +24,7 @@ class PaymentSchemeSeeder extends Seeder
                     ['percentage' => 20, 'label' => 'Uang Muka (DP)', 'days_before_event' => null],
                     ['percentage' => 80, 'label' => 'Pelunasan', 'days_before_event' => 14],
                 ],
-                'min_days_before_event' => 30,
+                'min_days_before_event' => 5,
                 'description' => 'DP 20% di awal, pelunasan sebelum H-14 acara.',
             ],
             [
@@ -34,7 +34,7 @@ class PaymentSchemeSeeder extends Seeder
                     ['percentage' => 30, 'label' => 'Uang Muka (DP)', 'days_before_event' => null],
                     ['percentage' => 70, 'label' => 'Pelunasan', 'days_before_event' => 14],
                 ],
-                'min_days_before_event' => 30,
+                'min_days_before_event' => 5,
                 'description' => 'DP 30% di awal, pelunasan sebelum H-14 acara.',
             ],
             [
@@ -44,7 +44,7 @@ class PaymentSchemeSeeder extends Seeder
                     ['percentage' => 40, 'label' => 'Uang Muka (DP)', 'days_before_event' => null],
                     ['percentage' => 60, 'label' => 'Pelunasan', 'days_before_event' => 14],
                 ],
-                'min_days_before_event' => 30,
+                'min_days_before_event' => 5,
                 'description' => 'DP 40% di awal, pelunasan sebelum H-14 acara.',
             ],
             [
@@ -54,7 +54,7 @@ class PaymentSchemeSeeder extends Seeder
                     ['percentage' => 50, 'label' => 'Uang Muka (DP)', 'days_before_event' => null],
                     ['percentage' => 50, 'label' => 'Pelunasan', 'days_before_event' => 14],
                 ],
-                'min_days_before_event' => 30,
+                'min_days_before_event' => 5,
                 'description' => 'DP 50% di awal, pelunasan sebelum H-14 acara.',
             ],
             [
@@ -65,7 +65,7 @@ class PaymentSchemeSeeder extends Seeder
                     ['percentage' => 30, 'label' => 'Cicilan ke-2', 'days_before_event' => 30],
                     ['percentage' => 30, 'label' => 'Cicilan ke-3', 'days_before_event' => 14],
                 ],
-                'min_days_before_event' => 60,
+                'min_days_before_event' => 5,
                 'description' => 'Pembayaran bertahap 40% + 30% + 30%.',
             ],
             [
@@ -78,7 +78,7 @@ class PaymentSchemeSeeder extends Seeder
                     ['percentage' => 15, 'label' => 'Cicilan ke-4', 'days_before_event' => 30],
                     ['percentage' => 15, 'label' => 'Cicilan ke-5', 'days_before_event' => 14],
                 ],
-                'min_days_before_event' => 90,
+                'min_days_before_event' => 5,
                 'description' => 'Pembayaran bertahap 30% + 20% + 20% + 15% + 15%.',
             ],
         ];

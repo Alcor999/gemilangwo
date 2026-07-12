@@ -243,9 +243,7 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
     });
 
     // Payment
-    Route::get('/orders/{order}/payment', [CustomerOrderController::class, 'payment'])->name('orders.payment');
     Route::get('/orders/payment/finish', [CustomerOrderController::class, 'paymentFinish'])->name('orders.paymentFinish');
-    Route::post('/orders/payment/notification', [CustomerOrderController::class, 'notification'])->name('orders.notification');
 });
 
 // Owner Routes

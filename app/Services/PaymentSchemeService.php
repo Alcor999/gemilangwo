@@ -34,33 +34,63 @@ class PaymentSchemeService
         $scheme = PaymentScheme::where('code', $schemeCode)->first();
         $breakdown = $scheme?->breakdown ?? $this->defaultBreakdown($schemeCode);
 
+        $today = now()->startOfDay()->addDay(); // Tomorrow as base for first payment due date
+        $lastIndex = count($breakdown) - 1;
+
+        // First compute all raw due dates
+        $dueDates = [];
+        foreach ($breakdown as $index => $item) {
+            if ($index === 0) {
+                $dueDates[0] = $today->copy();
+            } else {
+                $daysBefore = $item['days_before_event'] ?? 14;
+                $rawDate = $eventDate ? $eventDate->copy()->startOfDay()->subDays($daysBefore) : null;
+                $dueDates[$index] = $rawDate;
+            }
+        }
+
+        // Adjust to be sequential and in the future
+        $maxFinalDate = $eventDate ? $eventDate->copy()->startOfDay()->subDays(4) : null;
+        if ($maxFinalDate && $maxFinalDate->isBefore($today)) {
+            $maxFinalDate = $today->copy();
+        }
+
+        // If the final installment raw date is in the past, cap it at maxFinalDate
+        if ($eventDate && ($dueDates[$lastIndex] === null || $dueDates[$lastIndex]->isBefore($today))) {
+            $dueDates[$lastIndex] = $maxFinalDate->copy();
+        }
+
+        // Forward pass to space them out sequentially
+        for ($i = 1; $i <= $lastIndex; $i++) {
+            if ($dueDates[$i] === null || $dueDates[$i]->isBefore($dueDates[$i-1]->copy()->addDay())) {
+                $daysRemaining = $dueDates[$lastIndex]->diffInDays($dueDates[$i-1], false);
+                $stepsLeft = $lastIndex - $i + 1;
+                if ($stepsLeft > 0 && $daysRemaining < 0) {
+                    $increment = max(1, (int) round(abs($daysRemaining) / $stepsLeft));
+                    $dueDates[$i] = $dueDates[$i-1]->copy()->addDays($increment);
+                } else {
+                    $dueDates[$i] = $dueDates[$i-1]->copy()->addDay();
+                }
+            }
+        }
+
+        // Final check to make sure they do not exceed maxFinalDate
+        if ($maxFinalDate) {
+            for ($i = 1; $i <= $lastIndex; $i++) {
+                if ($dueDates[$i]->isAfter($maxFinalDate)) {
+                    $dueDates[$i] = $maxFinalDate->copy();
+                }
+            }
+        }
+
         $items = [];
         foreach ($breakdown as $index => $item) {
             $amount = round($totalPrice * ($item['percentage'] / 100), 2);
-            $dueDate = null;
-
-            if ($eventDate && ! empty($item['days_before_event'])) {
-                // Normalize to start-of-day so subDays is purely calendar-based
-                $dueDate = $eventDate->copy()->startOfDay()->subDays($item['days_before_event']);
-
-                // If computed due date is already in the past, use the earliest available
-                // date that is still before H-4 (the hard deadline before the event)
-                if ($dueDate->isBefore(now()->startOfDay())) {
-                    $maxDate = $eventDate->copy()->startOfDay()->subDays(4);
-                    $dueDate = now()->startOfDay()->addDay(); // start from tomorrow
-                    if ($dueDate->isAfter($maxDate)) {
-                        $dueDate = $maxDate; // cap at H-4 if tomorrow exceeds it
-                    }
-                }
-            } elseif ($index === 0) {
-                $dueDate = now()->startOfDay()->addDay();
-            }
-
             $items[] = [
                 'label' => $item['label'],
                 'percentage' => $item['percentage'],
                 'amount' => $amount,
-                'due_date' => $dueDate,
+                'due_date' => $dueDates[$index],
                 'installment_number' => null,
             ];
         }
