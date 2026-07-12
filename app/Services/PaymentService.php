@@ -109,10 +109,6 @@ class PaymentService
 
         $order->refresh();
 
-        // Automatically create calendar event when order is confirmed
-        if ($order->status === 'confirmed' && $oldStatus !== 'confirmed' && !$order->calendarEvent) {
-            \App\Models\CalendarEvent::createFromOrder($order);
-        }
         $notificationService = app(NotificationService::class);
 
         if ($payment->isDp()) {

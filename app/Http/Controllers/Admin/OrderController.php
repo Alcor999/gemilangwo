@@ -51,10 +51,7 @@ class OrderController extends Controller
         $oldStatus = $order->status;
         $order->update($validated);
 
-        // Automatically create calendar event when order is confirmed
-        if ($validated['status'] === 'confirmed' && $oldStatus !== 'confirmed' && !$order->calendarEvent) {
-            \App\Models\CalendarEvent::createFromOrder($order);
-        }
+
 
         return redirect()->back()
             ->with('success', 'Order status updated successfully');

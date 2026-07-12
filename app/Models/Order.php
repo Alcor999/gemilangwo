@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Mail\AdminNotificationMail;
 use App\Mail\OrderConfirmationMail;
 use App\Mail\OrderStatusMail;
+use App\Models\CalendarEvent;
 use App\Services\NotificationService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -64,6 +65,11 @@ class Order extends Model
                     \Log::warning('SMS notification failed: '.$e->getMessage());
                 }
             }
+
+            // Automatically manage calendar event
+            if (in_array($order->status, ['confirmed', 'completed', 'in_progress'])) {
+                CalendarEvent::createFromOrder($order);
+            }
         });
 
         static::updating(function (Order $order) {
@@ -85,6 +91,26 @@ class Order extends Model
                             \Log::warning('SMS notification failed: '.$e->getMessage());
                         }
                     }
+                }
+            }
+        });
+
+        static::updated(function (Order $order) {
+            $isConfirmed = in_array($order->status, ['confirmed', 'completed', 'in_progress']);
+
+            if ($isConfirmed) {
+                if (!$order->calendarEvent) {
+                    CalendarEvent::createFromOrder($order);
+                } else {
+                    if ($order->wasChanged('status')) {
+                        $order->calendarEvent->update([
+                            'status' => in_array($order->status, ['in_progress', 'completed']) ? $order->status : 'confirmed'
+                        ]);
+                    }
+                }
+            } else {
+                if ($order->calendarEvent) {
+                    $order->calendarEvent->delete();
                 }
             }
         });

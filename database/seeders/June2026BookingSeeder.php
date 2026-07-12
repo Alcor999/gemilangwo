@@ -231,6 +231,11 @@ class June2026BookingSeeder extends Seeder
                 ]
             );
 
+            // Ensure calendar event is created for confirmed bookings
+            if (in_array($order->status, ['confirmed', 'completed', 'in_progress']) && !$order->calendarEvent) {
+                \App\Models\CalendarEvent::createFromOrder($order);
+            }
+
             // Create payment records
             if (isset($data['installments'])) {
                 foreach ($data['installments'] as $inst) {
